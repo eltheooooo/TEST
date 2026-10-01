@@ -184,23 +184,24 @@ function makeJobBoard(sec, { intro, offers, pick, tapT, hired, salary }) {
 }
 
 // ---------- Années de travail : pile d'événements + salaire qui grimpe ----------
-function makeCareerStack(sec, { job, salary0, events }) {
+// value0/fmtValue/perLabel/plusFmt permettent d'afficher autre chose qu'un salaire (ex. relation famille).
+function makeCareerStack(sec, { job, salary0, events, value0 = salary0, fmtValue = v => fmt(v) + ' €', perLabel = 'par mois', plusFmt = d => `▲ +${d} €/mois` }) {
   sec.innerHTML = `<div class="c card k-job" style="width:940px;height:210px">
       <div class="bubble" style="position:absolute;left:34px;top:46px;width:116px;height:116px;background:${job.bg};font-size:66px">${job.emoji}</div>
       <div class="fd" style="position:absolute;left:174px;top:50px;font-size:42px;color:var(--navy)">${job.name}</div>
       <div style="position:absolute;left:176px;top:110px;font:700 24px Montserrat;color:var(--inkMute)">${job.sub}</div>
       <div class="fd k-sal" style="position:absolute;right:40px;top:40px;font-size:66px;color:var(--greenDark)"></div>
-      <div class="k-per" style="position:absolute;right:40px;top:122px;font:700 24px Montserrat;color:var(--inkMute)">par mois</div></div>
+      <div class="k-per" style="position:absolute;right:40px;top:122px;font:700 24px Montserrat;color:var(--inkMute)">${perLabel}</div></div>
     <div class="k-evs"></div>`;
   const evEls = events.map(e => html(q$(sec, '.k-evs'), `<div class="ev"><div class="eb" style="background:${e[2]}">${e[1]}</div><div style="min-width:0"><div class="et">${e[3]}</div><div class="es">${e[4]}</div></div><div class="pill ${e[6]}">${e[5]}</div></div>`));
   return u => {
     const jp = E.outBack(P(u, 0, .28), 1.5);
-    let sal = salary0, plus = null;
+    let sal = value0, plus = null;
     events.forEach(e => { if (e[7]) { sal += e[7] * E.outCubic(P(u, e[0] + .1, e[0] + .4)); if (u > e[0] + .05 && u < e[0] + .7) plus = [e[7], u - e[0] - .05]; } });
     const salEl = q$(sec, '.k-sal'), per = q$(sec, '.k-per');
-    salEl.textContent = fmt(sal) + ' €';
+    salEl.textContent = fmtValue(sal);
     salEl.style.transform = `scale(${1 + (plus ? Math.exp(-plus[1] * 7) * .25 : 0)})`; salEl.style.transformOrigin = '100% 50%';
-    per.textContent = plus ? `▲ +${plus[0]} €/mois` : 'par mois';
+    per.textContent = plus ? plusFmt(plus[0]) : perLabel;
     per.style.color = plus ? '#059669' : '';
     tf(q$(sec, '.k-job'), { y: 720, s: lerp(.85, 1, jp) * (1 + (plus ? Math.exp(-plus[1] * 6) * .05 : 0)), op: P(u, 0, .08) });
     evEls.forEach((el, k) => {

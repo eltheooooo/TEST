@@ -8,12 +8,13 @@ capturée avec Playwright puis encodée en MP4 avec une bande-son synthétisée.
 |---|---|---|
 | ✂️ Coiffure (salon · CAP Coiffure · carrière) | 29 s | `coiffure/DestinyLife_Capsule_Coiffure_9x16.mp4` |
 | 🔧 Mécano (métier · CAP Méca Auto · carrière) | 29 s | `mecano/DestinyLife_Capsule_Mecano_9x16.mp4` |
+| 👨‍👩‍👧‍👦 Famille (parents · fratrie · grands-parents · relations) | 29 s | `famille/DestinyLife_Capsule_Famille_9x16.mp4` |
 
 ## Socle commun (`common/`)
 - `dl.css` : tokens et composants du jeu (bleu nuit, or, vert, cartes arrondies, boutons 3D, pastilles…)
 - `dl.js` : fond animé, logo lettre par lettre, en-tête de scène, volets et whip pans, curseur de tap, confettis
 - `scenes.js` : scènes prêtes à l'emploi (logo + badge FOCUS, cartons de chapitre, orientation de 3ème, liste des 11 CAP,
-  diplôme, Pôle Emploi + embauche, pile d'événements de carrière, CTA) et le montage (`makeMontage`) — utilisé par Mécano
+  diplôme, Pôle Emploi + embauche, pile d'événements (salaire ou autre valeur), CTA) et le montage (`makeMontage`) — utilisé par Mécano et Famille
 - `sfx.py` : synthés de sound design (dont moteur, cliquet, rideau métallique, vérin, bips) + groove 120 BPM (`Mix`)
 - `capture.js` / `encode.sh` : capture et encodage
 - `fonts/` : Fredoka One (police du jeu) et Montserrat (à la place de Gotham)
@@ -63,4 +64,23 @@ scènes propres au thème (accroche + 4 scènes) et brancher les scènes partag�
 | 18–20,5 s | Pôle Emploi : Garage Dupont, Atelier Techno Cars, Garage Premium → embauche à 2 000 €/mois | `MECHANIC_OFFERS` |
 | 20,5–23 s | Formation diagnostic, augmentation +120 €, pourboire client prestige, concours régional, +400 €/mois | `job_mecanique` |
 | 23–25 s | « Marc te propose de gérer l'équipe » → promotion CHEF D'ÉQUIPE, +500 €/mois | `job_mecanique` : promotion |
+| 25–29 s | CTA « Quel sera ton destin ? » ▶ JOUER · recherche « Destiny Life » | — |
+
+## Capsule Famille — découpage (120 BPM)
+| Temps | Plan | Source dans le jeu |
+|---|---|---|
+| 0–1,6 s | « UNE FAMILLE. UN DESTIN. » sur un album de polaroïds, « Souriez ! », déclic de l'appareil | — |
+| 1,5–3,5 s | Logo + « 👨‍👩‍👧‍👦 FOCUS FAMILLE » | — |
+| 3,5–4,5 s | Chapitre 01 · Ta famille | — |
+| 4,5–7 s | Dé → mère et père tirés au sort (prénom, âge, métier, économies) → naissance de Léo + phrase de naissance | `CharacterFactory`, `buildBirthStory` |
+| 7–9 s | « Un petit frère ! » (la cigogne repasse) → titre de grand frère, relation 64 | `EventsData.age0`, `SIBLING_INTROS` |
+| 9–10,5 s | Visite des grands-parents : Mamie Rose et Papi Louis, cadeaux | `EventsData` (visite des grands-parents) |
+| 10,5–11,5 s | Chapitre 02 · Les relations | — |
+| 11,5–13,5 s | Fiche de maman : Parler, Câlin (+17), Jouer ensemble (+8), Secret, Se moquer | `RELATION_INTERACTIONS` |
+| 13,5–15 s | « Demander de l'argent » à papi : 9 € mais −10 relation | `RelationAskMoney` |
+| 15–17 s | Les années passent : −5 par an sans nouvelles, sauf avec ceux à qui on parle | `decayRelations` |
+| 17–18 s | Chapitre 03 · Les moments | — |
+| 18–20,5 s | Examen du frère, 50 ans de papa, enveloppe des grands-parents, question du tonton, vacances en famille | `EventsData` (adultes) |
+| 20,5–22,5 s | « Famille ou amis ? » → la famille : +10 famille, +3 bonheur | `EventsData` (choix) |
+| 22,5–25 s | Arbre de famille : grands-parents, parents, oncle, frère, cousine | relations du personnage |
 | 25–29 s | CTA « Quel sera ton destin ? » ▶ JOUER · recherche « Destiny Life » | — |

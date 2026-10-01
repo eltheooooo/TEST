@@ -188,3 +188,36 @@ def knock(n=4, gap=.11):
 def screech(d=.35):
     t = tt(d); x = t / d
     return lp(hp(noise(d), 2500), 6000) * np.sin(2 * np.pi * (1800 - 600 * x) * t) * np.sin(np.pi * x) * .5
+
+
+# ---------- Famille ----------
+def musicbox(notes, gap=.09, d=1.0):
+    """Boîte à musique : clochettes aiguës et douces."""
+    out = np.zeros(int((d + gap * len(notes)) * SR))
+    for k, m in enumerate(notes):
+        t = tt(d); f = note(m)
+        b = (np.sin(2 * np.pi * f * t) + .3 * np.sin(2 * np.pi * f * 4 * t) * np.exp(-t * 8)) * np.exp(-t * 4) * .3
+        i = int(k * gap * SR); out[i:i + len(b)] += b
+    return out
+def slide_whistle(f0=1500, f1=400, d=.5):
+    t = tt(d); x = t / d
+    f = f0 * (f1 / f0) ** x * (1 + .01 * np.sin(2 * np.pi * 6 * t))
+    return _sweep(f) * np.minimum(1, t * 40) * np.minimum(1, (d - t) * 20) * .3
+def boing(f=160, d=.45):
+    t = tt(d); return _sweep(f * (1 + .35 * np.sin(2 * np.pi * 9 * t) * np.exp(-t * 6))) * np.exp(-t * 7) * .6
+def shutter():
+    out = np.zeros(int(.25 * SR))
+    for d, g in ((0, 1), (.07, .7)):
+        t = tt(.05); c = hp(noise(.05), 1800) * np.exp(-t * 120) * g + np.sin(2 * np.pi * 900 * t) * np.exp(-t * 90) * .3 * g
+        i = int(d * SR); out[i:i + len(c)] += c
+    return out * .8
+def dice_roll(d=.35):
+    out = np.zeros(int((d + .05) * SR)); k = 0; tpos = 0.0
+    while tpos < d:
+        t = tt(.03); c = hp(noise(.03), 1200) * np.exp(-t * 200) + np.sin(2 * np.pi * (700 + 400 * (k % 3)) * t) * np.exp(-t * 160) * .4
+        i = int(tpos * SR); out[i:i + len(c)] += c[: len(out) - i]
+        tpos += .018 + .05 * (tpos / d) ** 2; k += 1
+    return out * .55
+def womp(f0=420, f1=160, d=.4):
+    t = tt(d); x = t / d
+    return _sweep(f0 * (f1 / f0) ** x) * np.exp(-t * 3) * np.minimum(1, t * 60) * .35

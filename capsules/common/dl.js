@@ -40,7 +40,9 @@ const pop = (u, a, d = .3, s = 2.4) => { const q = P(u, a, a + d); return q > 0 
 // l'échelle (data-fit) pour tenir dans maxW.
 function setText(el, text, maxW = 980) {
   if (el.dataset.txt === text) return;
-  el.dataset.txt = text; el.textContent = text; el.dataset.fit = 1;
+  el.textContent = text; el.dataset.fit = 1;
+  // Ne mémorise la mesure qu'une fois les polices chargées (sinon on mesurerait la police de secours).
+  if (!document.fonts || document.fonts.status === 'loaded') el.dataset.txt = text;
   const w = el.scrollWidth; el.dataset.fit = w > maxW ? maxW / w : 1;
 }
 

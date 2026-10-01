@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Capsule Famille</title>
+<link rel="stylesheet" href="../common/fonts.css">
+<link rel="stylesheet" href="../common/dl.css">
+<style>
+#hbg{background:radial-gradient(circle at 50% 45%,rgba(244,114,182,.45) 0%,transparent 55%),linear-gradient(160deg,#4A044E 0%,#2A1850 50%,#10233F 100%)}
+.polaroid{position:absolute;left:0;top:0;width:290px;height:340px;background:#fff;border-radius:14px;padding:16px 16px 0;box-shadow:0 20px 40px rgba(0,0,0,.45)}
+.polaroid .ph{height:240px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:140px}
+.polaroid .cap{font:400 34px 'Fredoka One';color:#10233F;text-align:center;margin-top:14px}
+.pcard{position:absolute;width:450px;height:380px;border-radius:44px;background:#fff;box-shadow:0 14px 0 #9FB0CF,0 40px 70px rgba(3,8,25,.5);overflow:hidden}
+.reel{position:absolute;left:28px;right:28px;top:232px;height:80px;border-radius:24px;background:var(--sheet);overflow:hidden}
+.reel .it{height:80px;display:flex;align-items:center;justify-content:center;gap:14px;font:400 40px 'Fredoka One';color:#10233F}
+.node{position:absolute;left:0;top:0;width:150px;height:150px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:90px;box-shadow:0 10px 0 rgba(7,18,36,.35)}
+.nlab{position:absolute;left:0;top:0;font:400 34px 'Fredoka One';color:#fff;white-space:nowrap;text-shadow:0 4px 0 #071224}
+.rbtn{position:absolute;height:100px;border-radius:32px}
+.rbtn .face{font:400 32px 'Fredoka One';color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.15)}
+.lrow{position:absolute;left:30px;right:30px;height:120px;border-radius:32px;background:rgba(255,255,255,.08);display:flex;align-items:center;gap:22px;padding:0 24px}
+.lrow .lb{width:88px;height:88px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:54px;flex:none}
+.lrow .ln{font:400 38px 'Fredoka One';color:#fff;width:170px}
+.lrow .lt{flex:1;height:26px;border-radius:13px;background:rgba(255,255,255,.15);overflow:hidden}
+.lrow .lt i{display:block;height:100%;border-radius:13px}
+.lrow .lv{font:400 40px 'Fredoka One';color:#fff;width:70px;text-align:right}
+</style>
+</head>
+<body>
+<div id="root">
+  <div id="cam" class="abs" style="width:1080px;height:1920px;transform-origin:540px 960px">
+    <section class="scene" id="s1"></section>
+
+    <!-- 0 · Accroche : album photo puis déclic de l'appareil -->
+    <section class="scene" id="s0">
+      <div id="hbg" class="abs" style="inset:0"></div>
+      <div id="pols"></div>
+      <div id="k1" class="c title" style="font-size:140px">UNE FAMILLE.</div>
+      <div id="k2" class="c title" style="font-size:140px;color:#F5B942">UN DESTIN.</div>
+      <div id="smile" class="c sticker gold" style="font-size:46px">📸 Souriez !</div>
+      <div id="iris" class="abs" style="inset:0"></div>
+    </section>
+
+    <section class="scene" id="ch"></section>
+
+    <!-- A1 · Parents tirés au sort -->
+    <section class="scene" id="a1">
+      <div id="a1dice" class="c emo" style="font-size:170px">🎲</div>
+      <svg class="abs" width="1080" height="1920"><path id="a1l0" fill="none" stroke="#FDE68A" stroke-width="8" stroke-linecap="round"/><path id="a1l1" fill="none" stroke="#FDE68A" stroke-width="8" stroke-linecap="round"/></svg>
+      <div id="a1m" class="pcard c">
+        <div style="position:absolute;left:30px;top:26px;font:800 24px Montserrat;letter-spacing:6px;color:#EC4899">MÈRE</div>
+        <div class="bubble" style="position:absolute;left:28px;top:66px;width:130px;height:130px;border-radius:50%;background:#FCE7F3;font-size:84px">👩</div>
+        <div class="fd" style="position:absolute;left:178px;top:76px;font-size:52px;color:var(--navy)">Camille</div>
+        <div style="position:absolute;left:180px;top:142px;font:700 28px Montserrat;color:var(--inkMute)">31 ans</div>
+        <div class="reel"><div class="ri"></div></div>
+        <div style="position:absolute;left:30px;top:328px;font:700 24px Montserrat;color:var(--inkSoft)">💰 Économies : 42 000 €</div>
+      </div>
+      <div id="a1f" class="pcard c">
+        <div style="position:absolute;left:30px;top:26px;font:800 24px Montserrat;letter-spacing:6px;color:#19A9E8">PÈRE</div>
+        <div class="bubble" style="position:absolute;left:28px;top:66px;width:130px;height:130px;border-radius:50%;background:#E0F2FE;font-size:84px">👨</div>
+        <div class="fd" style="position:absolute;left:178px;top:76px;font-size:52px;color:var(--navy)">Hugo</div>
+        <div style="position:absolute;left:180px;top:142px;font:700 28px Montserrat;color:var(--inkMute)">34 ans</div>
+        <div class="reel"><div class="ri"></div></div>
+        <div style="position:absolute;left:30px;top:328px;font:700 24px Montserrat;color:var(--inkSoft)">💰 Économies : 27 000 €</div>
+      </div>
+      <div id="a1baby" class="c bubble" style="width:220px;height:220px;border-radius:50%;background:#fff;box-shadow:0 0 0 12px #F5B942,0 16px 30px rgba(0,0,0,.4);font-size:130px">👶</div>
+      <div id="a1name" class="c pill glass" style="font:400 44px 'Fredoka One'">Léo Moreau · 🇫🇷</div>
+      <div id="a1hearts"></div>
+      <div id="a1q" class="c glasscard" style="width:940px;height:190px;border-radius:44px;display:flex;align-items:center;padding:0 40px;font:600 30px/1.45 Montserrat;color:#fff">« Son père Hugo, qui a plutôt l'habitude de survoler les nuages, vient de vivre la naissance de son fils. »</div>
+    </section>
+
+    <!-- A2 · Un petit frère ! -->
+    <section class="scene" id="a2">
+      <div id="a2card" class="c card" style="width:900px;height:470px;overflow:hidden">
+        <div style="position:absolute;left:0;right:0;top:0;height:170px;background:linear-gradient(120deg,#F472B6,#FB923C)"></div>
+        <div class="bubble" style="position:absolute;left:40px;top:30px;width:110px;height:110px;background:rgba(255,255,255,.25);font-size:66px">👶</div>
+        <div class="fd" style="position:absolute;left:176px;top:46px;font-size:66px;color:#fff;text-shadow:0 5px 0 rgba(0,0,0,.15)">Un petit frère !</div>
+        <div style="position:absolute;left:44px;right:44px;top:200px;font:600 31px/1.45 Montserrat;color:var(--navy)">« La cigogne repasse : Noah débarque. Léo hérite officiellement du titre de grand frère, avec toutes les corvées que ça implique. »</div>
+      </div>
+      <div id="a2rope" class="abs" style="width:6px;background:rgba(255,255,255,.7);border-radius:3px"></div>
+      <div id="a2leo" class="c bubble" style="width:180px;height:180px;border-radius:50%;background:#fff;box-shadow:0 0 0 10px #19A9E8;font-size:110px">👦</div>
+      <div id="a2noah" class="c bubble" style="width:180px;height:180px;border-radius:50%;background:#fff;box-shadow:0 0 0 10px #FB923C;font-size:110px">👶</div>
+      <div id="a2rel" class="c pill glass" style="font-size:30px">💞 Relation avec Noah : 64</div>
+      <div id="a2title" class="c sticker gold" style="font-size:44px">🏅 Nouveau titre : grand frère</div>
+    </section>
+
+    <!-- A3 · Visite des grands-parents -->
+    <section class="scene" id="a3">
+      <div id="a3gifts"></div>
+      <div id="a3mamie" class="c emo" style="font-size:270px">👵</div>
+      <div id="a3papi" class="c emo" style="font-size:270px">👴</div>
+      <div id="a3t0" class="c pill purple" style="font-size:32px">Mamie Rose · 💞 92</div>
+      <div id="a3t1" class="c pill purple" style="font-size:32px">Papi Louis · 💞 85</div>
+      <div id="a3q" class="c glasscard" style="width:940px;height:200px;border-radius:44px;display:flex;align-items:center;padding:0 40px;font:600 30px/1.45 Montserrat;color:#fff">« Tes grands-parents débarquent avec des cadeaux inutiles mais attendrissants. Ils gâtent Léo sans limites. »</div>
+    </section>
+
+    <!-- B1 · Interactions avec maman -->
+    <section class="scene" id="b1">
+      <div id="b1card" class="c card" style="width:920px;height:720px">
+        <div class="bubble" style="position:absolute;left:40px;top:36px;width:140px;height:140px;border-radius:50%;background:#FCE7F3;font-size:92px">👩</div>
+        <div class="fd" style="position:absolute;left:210px;top:46px;font-size:56px;color:var(--navy)">Camille</div>
+        <div style="position:absolute;left:212px;top:116px;font:700 26px Montserrat;color:var(--inkMute)">Mère · infirmière · 43 ans</div>
+        <div style="position:absolute;left:40px;top:206px;font:800 28px Montserrat;color:var(--navy)">💞 Relation</div>
+        <div id="b1val" class="fd" style="position:absolute;right:40px;top:196px;font-size:44px;color:#EC4899">64/100</div>
+        <div style="position:absolute;left:40px;right:40px;top:256px;height:30px;border-radius:15px;background:var(--line);overflow:hidden"><i id="b1bar" style="display:block;height:100%;border-radius:15px;background:linear-gradient(90deg,#F9A8D4,#EC4899)"></i></div>
+      </div>
+      <div id="b1toast" class="c sticker" style="background:#fff;color:var(--navy);font-size:38px"></div>
+      <div id="b1hearts"></div>
+    </section>
+
+    <!-- B2 · Demander de l'argent à papi -->
+    <section class="scene" id="b2">
+      <div id="b2card" class="c card" style="width:920px;height:520px">
+        <div class="bubble" style="position:absolute;left:40px;top:36px;width:140px;height:140px;border-radius:50%;background:#EDE9FE;font-size:92px">👴</div>
+        <div class="fd" style="position:absolute;left:210px;top:46px;font-size:56px;color:var(--navy)">Louis</div>
+        <div style="position:absolute;left:212px;top:116px;font:700 26px Montserrat;color:var(--inkMute)">Grand-père · 74 ans</div>
+        <div style="position:absolute;left:40px;top:206px;font:800 28px Montserrat;color:var(--navy)">💞 Relation</div>
+        <div id="b2val" class="fd" style="position:absolute;right:40px;top:196px;font-size:44px;color:#6D4AFF">85/100</div>
+        <div style="position:absolute;left:40px;right:40px;top:256px;height:30px;border-radius:15px;background:var(--line);overflow:hidden"><i id="b2bar" style="display:block;height:100%;border-radius:15px;background:linear-gradient(90deg,#C4B5FD,#6D4AFF)"></i></div>
+        <div id="b2btn" class="btn3d" style="left:40px;right:40px;top:330px;height:130px;border-radius:44px"><div class="lip" style="background:#B45309"></div><div class="face fd" style="background:linear-gradient(120deg,#FDE68A,#F5B942);font-size:48px;color:var(--navy)">💰 Demander de l'argent</div></div>
+      </div>
+      <div id="b2coins"></div>
+      <div id="b2res" class="c card" style="width:900px;height:200px;display:flex;align-items:center;gap:26px;padding:0 36px">
+        <div class="bubble" style="width:110px;height:110px;background:#FEF3C7;font-size:64px;flex:none">💰</div>
+        <div><div class="fd" style="font-size:40px;color:var(--navy)">Demander de l'argent</div><div style="font:600 30px Montserrat;color:var(--inkSoft);margin-top:6px">Louis te donne 9 € (mais −10 relation).</div></div>
+      </div>
+      <div id="b2s0" class="c sticker good" style="font-size:42px">💰 +9 €</div>
+      <div id="b2s1" class="c sticker bad" style="font-size:42px">💔 Relation −10</div>
+    </section>
+
+    <!-- B3 · Les relations s'effacent sans nouvelles -->
+    <section class="scene" id="b3">
+      <div id="b3panel" class="c glasscard" style="width:940px;height:880px">
+        <div class="fd" style="position:absolute;left:40px;top:36px;font-size:46px;color:#fff">📅 Les années passent…</div>
+        <div id="b3age" class="fd" style="position:absolute;right:40px;top:28px;font-size:60px;color:var(--gold)">12 ans</div>
+      </div>
+      <div id="b3minus"></div>
+      <div id="b3tip" class="c sticker gold" style="font-size:40px">💡 Sans nouvelles : −5 par an</div>
+    </section>
+
+    <section class="scene" id="c1"></section>
+
+    <!-- C2 · Famille ou amis ? -->
+    <section class="scene" id="c2">
+      <div id="c2l" class="c bubble" style="width:320px;height:320px;border-radius:50%;background:linear-gradient(150deg,#F9A8D4,#EC4899);box-shadow:0 0 0 12px #10233F;font-size:150px">👨‍👩‍👦‍👦</div>
+      <div id="c2r" class="c bubble" style="width:320px;height:320px;border-radius:50%;background:linear-gradient(150deg,#C4B5FD,#6D4AFF);box-shadow:0 0 0 12px #10233F;font-size:150px">🎉</div>
+      <div id="c2vs" class="c fd bubble" style="width:130px;height:130px;border-radius:50%;background:var(--gold);color:var(--navy);font-size:58px;box-shadow:0 0 0 8px #10233F">VS</div>
+      <div id="c2card" class="c card" style="width:940px;height:440px">
+        <div class="bubble" style="position:absolute;left:36px;top:32px;width:100px;height:100px;background:#FEF3C7;font-size:60px">🍽️</div>
+        <div class="fd" style="position:absolute;left:160px;top:46px;font-size:52px;color:var(--navy)">Famille ou amis ?</div>
+        <div style="position:absolute;left:40px;right:40px;top:150px;font:600 30px/1.4 Montserrat;color:var(--inkSoft)">Repas de famille et soirée entre amis le même dimanche pour Léo.</div>
+        <div id="c2o0" class="btn3d" style="left:36px;width:420px;top:278px;height:120px;border-radius:38px"><div class="lip" style="background:#9D174D"></div><div class="face fd" style="background:linear-gradient(120deg,#F472B6,#EC4899);font-size:40px;color:#fff">👨‍👩‍👧 La famille</div></div>
+        <div id="c2o1" class="btn3d" style="left:484px;width:420px;top:278px;height:120px;border-radius:38px"><div class="lip" style="background:#4C1D95"></div><div class="face fd" style="background:linear-gradient(120deg,#8B5CF6,#6D4AFF);font-size:40px;color:#fff">🎉 Les amis</div></div>
+      </div>
+      <div id="c2s0" class="c sticker good" style="font-size:42px">💞 Famille +10</div>
+      <div id="c2s1" class="c sticker good" style="font-size:42px">😊 Bonheur +3</div>
+    </section>
+
+    <!-- C3 · L'arbre de famille -->
+    <section class="scene" id="c3">
+      <svg class="abs" width="1080" height="1920"><g id="c3lines" fill="none" stroke="#FDE68A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></g></svg>
+      <div id="c3nodes"></div>
+      <div id="c3you" class="c sticker gold" style="font-size:28px;padding:8px 20px;border-width:4px">TOI</div>
+      <div id="c3ban" class="c pill glass" style="font-size:30px">Parents · fratrie · grands-parents · oncles · cousins</div>
+    </section>
+
+    <section class="scene" id="s8"></section>
+
+    <div id="head" class="abs" style="inset:0;display:none">
+      <div id="hchip" class="c chip"></div>
+      <div id="ht1" class="c title" style="font-size:120px"></div>
+      <div id="ht2" class="c title" style="font-size:120px"></div>
+    </div>
+    <div id="fx" class="abs" style="inset:0"></div>
+  </div>
+</div>
+
+<script src="../common/dl.js"></script>
+<script src="../common/scenes.js"></script>
+<script>
+// =====================================================================
+// Capsule « Famille » : parents, frères et sœurs, grands-parents, relations et moments de famille.
+// Contenus tirés du jeu : CharacterFactory (parents, aîné), GameData.buildBirthStory, SIBLING_INTROS,
+// EventsData (petit frère, visite des grands-parents, 50 ans, enveloppe, tonton, vacances, famille ou amis),
+// GameData.RELATION_INTERACTIONS, RelationAskMoney, decayRelations.
+// =====================================================================
+const END = 29.0;
+initOverlay();
+initBackground(['👶', '👨‍👩‍👧', '👵', '👴', '🎂', '💞', '🏠', '🎁', '🍼', '📸', '🎈', '💌', '🏖️', '🧸', '👑', '🐶']);
+
+// ---------- Accroche : polaroïds + déclic ----------
+const POLS = [['👶', 'Naissance', '#FCE7F3', 230, 400, -12, 0], ['🎂', 'Anniv', '#FEF3C7', 850, 380, 9, .1],
+  ['👨‍👩‍👦', 'Famille', '#E0F2FE', 200, 1500, 7, .2], ['🏖️', 'Vacances', '#DCFCE7', 540, 1580, -4, .32], ['👵', 'Mamie', '#EDE9FE', 880, 1500, -10, .44]];
+const pols = POLS.map(p => html($('#pols'), `<div class="polaroid"><div class="ph" style="background:${p[2]}">${p[0]}</div><div class="cap">${p[1]}</div></div>`));
+function hook(t) {
+  setText($('#k1'), 'UNE FAMILLE.', 990);
+  pols.forEach((el, i) => {
+    const [, , , x, y, r, d] = POLS[i], q = P(t, d, d + .35);
+    tf(el, { x: x + Math.sin(t * 2 + i) * 6, y: y + (1 - E.outCubic(q)) * (i < 2 ? -600 : 600), s: q > 0 ? lerp(1.6, 1, E.outBack(q, 1.6)) : 0, r: r + (1 - q) * 40, op: q > 0 ? 1 : 0 });
+  });
+  const s1 = E.outExpo(P(t, .5, .76)), s2 = E.outExpo(P(t, .95, 1.2));
+  tf($('#k1'), { y: 860, s: lerp(2.4, 1, s1), op: P(t, .5, .56), b: (1 - s1) * 24, r: lerp(-7, -2, s1) });
+  tf($('#k2'), { y: 1065, s: lerp(2.4, 1, s2), op: P(t, .95, 1.01), b: (1 - s2) * 24, r: lerp(7, 2, s2) });
+  tf($('#smile'), { y: 1240, s: pop(t, 1.12, .2, 3), r: -5, op: t > 1.12 ? 1 : 0 });
+  // Diaphragme de l'appareil photo qui se ferme.
+  const R = lerp(1300, 0, E.inCubic(P(t, 1.3, 1.56)));
+  $('#iris').style.background = `radial-gradient(circle at 540px 960px,transparent ${R}px,#071224 ${R + 2}px)`;
+  const kick = (t > .5 ? Math.exp(-(t - .5) * 9) * .04 : 0) + (t > .95 ? Math.exp(-(t - .95) * 9) * .05 : 0);
+  return { cam: { s: 1 + kick + P(t, 1.2, 1.56) * .06, r: Math.sin(t * 25) * kick * 30 }, accent: '#EC4899' };
+}
+
+// ---------- A1 : les parents tirés au sort (GameData.JOBS) ----------
+const MJ = ['🥖 Boulangère', '⚖️ Avocate', '📚 Professeure', '🍳 Cuisinière', '💻 Informaticienne', '👮‍♀️ Policière', '📐 Architecte', '✂️ Coiffeuse', '🦷 Dentiste'];
+const FJ = ['🔧 Plombier', '📰 Journaliste', '📊 Comptable', '🔩 Mécanicien', '🍽️ Serveur', '🚜 Agriculteur', '⚡ Électricien', '🛍️ Vendeur', '🏥 Infirmier'];
+const reel = (el, list, last) => { const items = []; for (let i = 0; i < 16; i++) items.push(list[i % list.length]); items.push(last, list[0]); el.innerHTML = items.map(x => `<div class="it">${x}</div>`).join(''); return items.length - 2; };
+const RM = reel($('#a1m .ri'), MJ, '🏥 Infirmière'), RF = reel($('#a1f .ri'), FJ, '✈️ Pilote');
+const a1hearts = Array.from({ length: 8 }, (_, i) => html($('#a1hearts'), `<div class="emo" style="font-size:${50 + (i % 3) * 16}px">${['💖', '💕', '✨'][i % 3]}</div>`));
+function spinReel(el, u, a, b, n) {
+  const q = P(u, a, b), idx = n * E.outBack(q, .8), vel = q > 0 && q < 1 ? 1 - q : 0;
+  el.style.transform = `translateY(${-idx * 80}px)`; el.style.filter = vel > .1 ? `blur(${vel * 5}px)` : '';
+}
+function a1(u) {
+  const dq = P(u, 0, .32);
+  tf($('#a1dice'), { y: 830 - Math.abs(Math.sin(dq * Math.PI * 2)) * 140 * (1 - dq), r: u * 900, s: (dq > 0 ? 1 : 0) * (1 - P(u, .3, .4)), op: 1 - P(u, .32, .4) });
+  [['#a1m', 285, .15], ['#a1f', 795, .22]].forEach(([id, x, d]) => {
+    const q = P(u, d, d + .35);
+    tf($(id), { x: lerp(540, x, E.outCubic(q)), y: 830, sx: q > 0 ? E.outBack(q, 1.8) : 0, sy: q > 0 ? lerp(.6, 1, E.outCubic(q)) : 0, r: (1 - q) * (x < 540 ? -10 : 10), op: q > 0 ? 1 : 0 });
+  });
+  spinReel($('#a1m .ri'), u, .35, 1.05, RM);
+  spinReel($('#a1f .ri'), u, .45, 1.2, RF);
+  // Lignes vers le bébé, puis le bébé.
+  const lq = E.inOutCubic(P(u, 1.15, 1.4));
+  [['#a1l0', 285], ['#a1l1', 795]].forEach(([id, x]) => {
+    const ex = lerp(x, 540, lq), ey = lerp(1020, 1110, lq);
+    $(id).setAttribute('d', `M${x} 1020 Q ${x} 1110 ${ex} ${ey}`); $(id).style.opacity = lq > 0 ? 1 : 0;
+  });
+  const bq = P(u, 1.3, 1.6);
+  tf($('#a1baby'), { y: 1200, s: bq > 0 ? E.outBack(bq, 2.6) * (1 + .03 * Math.sin(u * 9)) : 0, op: bq > 0 ? 1 : 0 });
+  tf($('#a1name'), { y: 1365, s: pop(u, 1.45, .25), op: u > 1.45 ? 1 : 0 });
+  a1hearts.forEach((h, i) => {
+    const a = i / 8 * Math.PI * 2, q = P(u, 1.35 + (i % 3) * .04, 2.0);
+    tf(h, { x: 540 + Math.cos(a) * (130 + 120 * E.outCubic(q)), y: 1200 + Math.sin(a) * (130 + 120 * E.outCubic(q)), s: Math.sin(q * Math.PI) * 1.2, op: q > 0 && q < 1 ? 1 : 0 });
+  });
+  tf($('#a1q'), { y: 1545, s: pop(u, 1.6, .3, 1.8), op: u > 1.6 ? 1 : 0 });
+}
+
+// ---------- A2 : un petit frère ! ----------
+function a2(u) {
+  const cp = E.outBack(P(u, .02, .32), 1.5);
+  tf($('#a2card'), { y: 880, s: lerp(.8, 1, cp), r: lerp(-6, 0, cp), op: P(u, .02, .1) });
+  tf($('#a2leo'), { x: 370, y: 1330, s: pop(u, .3, .25), op: u > .3 ? 1 : 0 });
+  // Noah arrive suspendu à un fil (la cigogne n'est jamais loin) et se balance.
+  const dq = P(u, .45, .95), ny = lerp(-250, 1330, E.outBounce(dq)), sw = Math.sin(u * 7) * 10 * (1 - P(u, .95, 1.4));
+  tf($('#a2noah'), { x: 710, y: ny, r: sw, op: dq > 0 ? 1 : 0 });
+  const rope = $('#a2rope');
+  rope.style.height = Math.max(0, ny - 90) + 'px'; rope.style.transform = `translate(707px,0) rotate(${-sw * .3}deg)`; rope.style.transformOrigin = '50% 0';
+  rope.style.opacity = dq > 0 ? 1 - P(u, 1.0, 1.2) : 0;
+  tf($('#a2rel'), { y: 1490, s: pop(u, 1.05, .25), op: u > 1.05 ? 1 : 0 });
+  const tq = P(u, 1.3, 1.55);
+  tf($('#a2title'), { y: 1630, s: tq > 0 ? E.outBack(tq, 3) : 0, r: -4 + (1 - tq) * 20, op: tq > 0 ? 1 : 0 });
+}
+
+// ---------- A3 : visite des grands-parents ----------
+const gifts = Array.from({ length: 10 }, (_, i) => ({ el: html($('#a3gifts'), `<div class="emo" style="font-size:${70 + (i % 3) * 25}px">${['🎁', '🧸', '🎁', '🍬', '🎁'][i % 5]}</div>`), x: 80 + (i * 113) % 920, d: (i % 5) * .12, r: (i % 2 ? 1 : -1) * (120 + i * 25) }));
+function a3(u) {
+  gifts.forEach(g => { const dt = u - g.d; tf(g.el, { x: g.x, y: -120 + dt * 700 + 600 * dt * dt, r: g.r * dt, op: dt > 0 ? .95 : 0 }); });
+  const m = E.outBack(P(u, .05, .4), 1.8), p = E.outBack(P(u, .12, .47), 1.8);
+  tf($('#a3mamie'), { x: lerp(-250, 300, m), y: 960 - Math.abs(Math.sin(u * 8)) * 25 * P(u, .4, .5), r: lerp(-30, -6, m) });
+  tf($('#a3papi'), { x: lerp(1330, 780, p), y: 960 - Math.abs(Math.sin(u * 8 + 1)) * 25 * P(u, .47, .57), r: lerp(30, 6, p) });
+  tf($('#a3t0'), { x: 300, y: 1150, s: pop(u, .45, .25), op: u > .45 ? 1 : 0 });
+  tf($('#a3t1'), { x: 780, y: 1150, s: pop(u, .52, .25), op: u > .52 ? 1 : 0 });
+  tf($('#a3q'), { y: 1400, s: pop(u, .62, .3, 1.8), op: u > .62 ? 1 : 0 });
+}
+
+// ---------- B1 : câlin et jeu avec maman (RELATION_INTERACTIONS) ----------
+const BTNS = [['💬 Parler', 40, 320, 266], ['🤗 Câlin', 327, 320, 266], ['🎮 Jouer', 614, 320, 266], ['🤫 Partager un secret', 40, 440, 553], ['😏 Se moquer', 614, 440, 266], ['💰 Demander de l\'argent', 40, 560, 840]];
+const b1btns = BTNS.map(([lab, x, y, w], k) => html($('#b1card'), `<div class="btn3d rbtn" style="left:${x}px;top:${y}px;width:${w}px"><div class="lip" style="background:${k === 4 ? '#C2410C' : k === 5 ? '#B45309' : '#9D174D'}"></div><div class="face" style="background:${k === 4 ? 'linear-gradient(120deg,#FB923C,#F97316)' : k === 5 ? 'linear-gradient(120deg,#FDE68A,#F5B942)' : 'linear-gradient(120deg,#F472B6,#EC4899)'};${k === 5 ? 'color:#10233F;text-shadow:none' : ''}">${lab}</div></div>`));
+const b1hearts = Array.from({ length: 10 }, (_, i) => html($('#b1hearts'), `<div class="emo" style="font-size:${46 + (i % 3) * 14}px">${['💖', '💕', '💗'][i % 3]}</div>`));
+const TAP_CALIN = 11.5 + .55, TAP_JOUER = 11.5 + 1.2;
+function b1(u, t) {
+  const cp = E.outBack(P(u, .02, .32), 1.5);
+  tf($('#b1card'), { y: 1060, s: lerp(.85, 1, cp), op: P(u, .02, .1) });
+  const v = 64 + 17 * E.outCubic(P(t, TAP_CALIN + .1, TAP_CALIN + .5)) + 8 * E.outCubic(P(t, TAP_JOUER + .1, TAP_JOUER + .5));
+  $('#b1val').textContent = Math.round(v) + '/100'; $('#b1bar').style.width = v + '%';
+  b1btns.forEach((b, k) => {
+    const tap = k === 1 ? TAP_CALIN : k === 2 ? TAP_JOUER : null;
+    const done = tap && t > tap + .15;
+    const f = b.querySelector('.face');
+    f.style.transform = `translateY(${-10 + (tap ? pressAt(t, tap) * 8 : 0)}px)`;
+    // Bouton grisé une fois utilisé (1 fois par an), sans état mémorisé : chaque image est indépendante.
+    if (tap) {
+      f.style.background = done ? '#E6EBF2' : 'linear-gradient(120deg,#F472B6,#EC4899)';
+      f.style.color = done ? '#98A6BC' : '#fff'; f.style.textShadow = done ? 'none' : '';
+      b.querySelector('.lip').style.background = done ? '#CDD6E3' : '#9D174D';
+    }
+    b.style.transform = `scale(${pop(u, .15 + k * .04, .25, 2)})`;
+  });
+  const toast = $('#b1toast'), second = t > TAP_JOUER;
+  const tq = second ? P(t, TAP_JOUER + .1, TAP_JOUER + .3) : P(t, TAP_CALIN + .1, TAP_CALIN + .3);
+  toast.textContent = second ? '🎮 Jouer ensemble — Camille · 💞 +8' : '🤗 Câlin — Camille · 💞 +17';
+  tf(toast, { y: 1520, s: tq > 0 ? E.outBack(tq, 2.6) : 0, r: second ? 3 : -3, op: tq > 0 ? 1 : 0 });
+  b1hearts.forEach((h, i) => {
+    const t0 = (i < 6 ? TAP_CALIN : TAP_JOUER) + .08 + (i % 3) * .04, q = P(t, t0, t0 + .8), x0 = i < 6 ? 540 : 827;
+    tf(h, { x: x0 + Math.sin(i * 2.3) * 140 * q, y: 1070 - q * 380, s: Math.sin(q * Math.PI) * 1.3, op: q > 0 && q < 1 ? 1 : 0 });
+  });
+}
+
+// ---------- B2 : demander de l'argent à papi (RelationAskMoney : relation/100 × 10 €) ----------
+const coins = Array.from({ length: 4 }, (_, i) => html($('#b2coins'), `<div class="emo" style="font-size:${80 + i * 10}px">🪙</div>`));
+const TAP_ARGENT = 13.5 + .45;
+function b2(u, t) {
+  const cp = E.outBack(P(u, .02, .3), 1.5);
+  tf($('#b2card'), { y: 1000, s: lerp(.85, 1, cp), op: P(u, .02, .1) });
+  const after = P(t, TAP_ARGENT + .2, TAP_ARGENT + .5), v = 85 - 10 * E.outCubic(after);
+  $('#b2val').textContent = Math.round(v) + '/100'; $('#b2bar').style.width = v + '%';
+  $('#b2val').style.color = after > 0 && after < 1 ? '#EF4444' : '#6D4AFF';
+  $('#b2btn').querySelector('.face').style.transform = `translateY(${-12 + pressAt(t, TAP_ARGENT) * 10}px)`;
+  coins.forEach((c, i) => { const q = P(t, TAP_ARGENT + .05 + i * .06, TAP_ARGENT + .55 + i * .06); tf(c, { x: 380 + i * 110, y: lerp(1100, 1420, E.outBounce(q)), r: q * 360, op: q > 0 ? 1 - P(q, .85, 1) : 0 }); });
+  tf($('#b2res'), { y: 1430, s: pop(u, .62, .3, 2), op: u > .62 ? 1 : 0 });
+  tf($('#b2s0'), { x: 310, y: 1630, s: pop(u, .85, .25, 2.8), r: -4, op: u > .85 ? 1 : 0 });
+  tf($('#b2s1'), { x: 760, y: 1635, s: pop(u, .93, .25, 2.8), r: 4, op: u > .93 ? 1 : 0 });
+}
+
+// ---------- B3 : sans nouvelles, -5 par an (decayRelations) ----------
+const PEOPLE = [['👩', 'Camille', 89, true], ['👨', 'Hugo', 70], ['👶', 'Noah', 64], ['👵', 'Rose', 92], ['👴', 'Louis', 75]];
+const lrows = PEOPLE.map((p, i) => html($('#b3panel'), `<div class="lrow" style="top:${140 + i * 140}px"><div class="lb">${p[0]}</div><div class="ln">${p[1]}${p[3] ? ' 💬' : ''}</div><div class="lt"><i></i></div><div class="lv"></div></div>`));
+const minus = PEOPLE.map(() => html($('#b3minus'), '<div class="c fd" style="font-size:44px;color:#FCA5A5;text-shadow:0 4px 0 #071224">−5</div>'));
+const YEARS = [.35, .65, .95, 1.25];
+function b3(u) {
+  tf($('#b3panel'), { y: 1110, s: lerp(.85, 1, E.outBack(P(u, .02, .32), 1.5)), op: P(u, .02, .1) });
+  const passed = YEARS.reduce((n, y) => n + E.outCubic(P(u, y, y + .15)), 0);
+  $('#b3age').textContent = (12 + Math.round(passed)) + ' ans';
+  $('#b3age').style.transform = `scale(${1 + .2 * Math.max(...YEARS.map(y => Math.exp(-Math.max(0, u - y) * 12) * (u > y ? 1 : 0)))})`;
+  lrows.forEach((r, i) => {
+    const kept = PEOPLE[i][3], v = PEOPLE[i][2] - (kept ? 0 : 5 * passed);
+    const bar = r.querySelector('i');
+    bar.style.width = v + '%';
+    bar.style.background = kept ? 'linear-gradient(90deg,#6EE7B7,#10B981)' : v < 50 ? 'linear-gradient(90deg,#FDBA74,#EF4444)' : 'linear-gradient(90deg,#F9A8D4,#EC4899)';
+    r.querySelector('.lv').textContent = Math.round(v);
+    r.style.transform = `translateX(${(1 - E.outCubic(P(u, .08 + i * .04, .3 + i * .04))) * 900}px)`;
+    // « −5 » qui s'envole à chaque année passée.
+    const last = YEARS.filter(y => u >= y).pop(), q = last !== undefined ? P(u, last, last + .28) : 0;
+    tf(minus[i], { x: 905, y: 1110 - 440 + 140 + i * 140 + 60 - q * 50, op: !kept && q > 0 && q < 1 ? 1 - q : 0, s: 1 + .3 * (1 - q) });
+  });
+  const tq = P(u, 1.45, 1.7);
+  tf($('#b3tip'), { y: 1650, s: tq > 0 ? E.outBack(tq, 3) : 0, r: -3, op: tq > 0 ? 1 : 0 });
+}
+
+// ---------- C2 : famille ou amis ? ----------
+const TAP_FAM = 20.5 + .9;
+function c2(u, t) {
+  const pick = E.outCubic(P(t, TAP_FAM + .1, TAP_FAM + .4));
+  tf($('#c2l'), { x: lerp(-200, 300, E.outBack(P(u, .02, .3), 1.6)), y: 820, s: 1 + .18 * pick, r: -4 });
+  tf($('#c2r'), { x: lerp(1280, 780, E.outBack(P(u, .06, .34), 1.6)), y: 820, s: 1 - .2 * pick, op: 1 - .55 * pick, r: 4 });
+  tf($('#c2vs'), { y: 820, s: pop(u, .3, .25, 3) * (1 - pick), r: Math.sin(u * 10) * 8 });
+  tf($('#c2card'), { y: 1290, s: lerp(.8, 1, E.outBack(P(u, .2, .5), 1.5)), op: P(u, .2, .28) });
+  $('#c2o0').querySelector('.face').style.transform = `translateY(${-12 + pressAt(t, TAP_FAM) * 10}px)`;
+  $('#c2o1').style.opacity = 1 - .6 * P(t, TAP_FAM + .05, TAP_FAM + .2);
+  tf($('#c2s0'), { x: 310, y: 1640, s: pop(u, 1.15, .25, 2.8), r: -4, op: u > 1.15 ? 1 : 0 });
+  tf($('#c2s1'), { x: 770, y: 1645, s: pop(u, 1.23, .25, 2.8), r: 4, op: u > 1.23 ? 1 : 0 });
+}
+
+// ---------- C3 : l'arbre de famille ----------
+const NODES = [ // [emoji, prénom, relation, x, y, couleur, début]
+  ['👵', 'Rose', 92, 410, 760, '#6D4AFF', .1], ['👴', 'Louis', 75, 670, 760, '#6D4AFF', .16],
+  ['👩', 'Camille', 89, 300, 1050, '#EC4899', .45], ['👨', 'Hugo', 70, 540, 1050, '#19A9E8', .51], ['👨', 'Antoine', 60, 820, 1050, '#94A3B8', .57],
+  ['👦', 'Léo', null, 300, 1340, '#F5B942', .85], ['👶', 'Noah', 64, 540, 1340, '#FB923C', .91], ['👧', 'Jade', 55, 820, 1340, '#94A3B8', .97]];
+const nodeEls = NODES.map(n => ({
+  c: html($('#c3nodes'), `<div class="node" style="box-shadow:0 0 0 9px ${n[5]},0 12px 0 9px rgba(7,18,36,.35)">${n[0]}</div>`),
+  l: html($('#c3nodes'), `<div class="nlab">${n[1]}</div>`),
+  p: n[2] ? html($('#c3nodes'), `<div class="c pill" style="font-size:24px;padding:6px 16px;background:#fff;color:#EC4899">💞 ${n[2]}</div>`) : null }));
+const LINES = [['M485 760 L595 760 M540 760 L540 905 M540 905 L820 905 M540 905 L540 975 M820 905 L820 975', .3, .55],
+  ['M375 1050 L465 1050 M420 1050 L420 1195 M300 1195 L540 1195 M300 1195 L300 1265 M540 1195 L540 1265 M820 1125 L820 1265', .62, .9]];
+const lineEls = LINES.map(l => html($('#c3lines'), `<path d="${l[0]}" pathLength="1" stroke-dasharray="1 1"/>`));
+function c3(u) {
+  lineEls.forEach((el, i) => { const q = E.inOutCubic(P(u, LINES[i][1], LINES[i][2])); el.setAttribute('stroke-dashoffset', 1 - q); el.style.opacity = q > 0 ? 1 : 0; });
+  nodeEls.forEach((n, i) => {
+    const [, , , x, y, , d] = NODES[i], q = pop(u, d, .3, 2.4);
+    tf(n.c, { x, y: y + Math.sin(u * 4 + i) * 4, s: q * (i === 5 ? 1.1 + .04 * Math.sin(u * 8) : 1), op: u > d ? 1 : 0 });
+    tf(n.l, { x, y: y + 105, op: P(u, d + .1, d + .25) });
+    if (n.p) tf(n.p, { x, y: y + 150, s: pop(u, 1.1 + i * .04, .25, 2.6), op: u > 1.1 + i * .04 ? 1 : 0 });
+  });
+  tf($('#c3you'), { x: 300, y: 1255, s: pop(u, 1.05, .25, 3), r: -6, op: u > 1.05 ? 1 : 0 });
+  tf($('#c3ban'), { y: 1650, s: pop(u, 1.55, .3, 1.8), op: u > 1.55 ? 1 : 0 });
+  return { cam: null, rays: .6 * P(u, .9, 1.3), raysY: 1340 };
+}
+
+// ---------- Scènes partagées ----------
+const CHAP = [
+  { n: '01', t: 'Ta famille', s: 'Parents · fratrie · grands-parents', acc: '#EC4899' },
+  { n: '02', t: 'Les relations', s: 'Parler · câlins · secrets · argent', acc: '#6D4AFF' },
+  { n: '03', t: 'Les moments', s: 'Anniversaires · vacances · repas', acc: '#F97316' },
+];
+const FOCUS_BG = 'linear-gradient(120deg,#F472B6,#F97316)';
+const logo = makeLogoScene($('#s1'), { focus: '👨‍👩‍👧‍👦 FOCUS FAMILLE', focusBg: FOCUS_BG });
+const chapter = makeChapter($('#ch'), CHAP);
+const c1 = makeCareerStack($('#c1'), {
+  job: { emoji: '👨‍👩‍👦‍👦', bg: '#FCE7F3', name: 'Famille Moreau', sub: 'Parents · frère · grands-parents' },
+  value0: 78, fmtValue: v => '💞 ' + Math.round(v), perLabel: 'relation famille', plusFmt: d => `▲ +${d} pour toute la famille`,
+  events: [ // [u, emoji, fond, titre, sous-titre, pastille, style, +relation famille]
+    [.12, '🎓', '#E0F2FE', 'Noah réussit son examen', 'Toute la famille fête ça !', '💞 +5', 'good', 5],
+    [.55, '🎈', '#FCE7F3', 'Les 50 ans de papa', 'Une surprise en famille', '💞 Papa +10', 'purple', 0],
+    [1.0, '💌', '#FEF3C7', 'Enveloppe des grands-parents', '« Pour t\'aider dans ta nouvelle vie. »', '💰 +100 €', 'special', 0],
+    [1.45, '🤨', '#EDE9FE', 'La question du tonton', '« Tu fais quoi de ta vie ? »', '😅 +5', 'neutral', 0],
+    [1.9, '🏖️', '#DCFCE7', 'Vacances en famille', 'Une semaine tous ensemble', '💞 +10', 'good', 10],
+  ],
+});
+const TAP_CTA = 25.0 + 1.3;
+const cta = makeCTA($('#s8'), { tag: '👨‍👩‍👧‍👦 FOCUS FAMILLE', tagBg: FOCUS_BG, tapT: TAP_CTA });
+
+// =================== Montage ===================
+const ACTS = [
+  { chip: '<b>01/03</b>👶 TA FAMILLE', col: '#F472B6', acc: '#EC4899' },
+  { chip: '<b>02/03</b>💞 LES RELATIONS', col: '#C4B5FD', acc: '#6D4AFF' },
+  { chip: '<b>03/03</b>🎈 LES MOMENTS', col: '#FB923C', acc: '#F97316' },
+];
+const render = makeMontage({
+  END, flash: 1.6, acts: ACTS,
+  scenes: [
+    { id: 's1', a: 1.55, b: 3.5, fn: logo },
+    { id: 's0', a: 0, b: 1.6, fn: (u, t) => hook(t) },
+    { id: 'ch', a: 3.5, b: 4.5, fn: u => chapter(0, u) },
+    { id: 'a1', a: 4.5, b: 7.0, act: 0, t1: 'Ta famille', t2: 'tirée au sort !', fn: a1 },
+    { id: 'a2', a: 7.0, b: 9.0, act: 0, t1: 'Surprise :', t2: 'un petit frère !', fn: a2 },
+    { id: 'a3', a: 9.0, b: 10.5, act: 0, t1: 'Les grands-parents', t2: 'débarquent !', fn: a3 },
+    { id: 'ch', a: 10.5, b: 11.5, fn: u => chapter(1, u) },
+    { id: 'b1', a: 11.5, b: 13.5, act: 1, t1: 'Câlins, jeux,', t2: 'secrets…', fn: b1 },
+    { id: 'b2', a: 13.5, b: 15.0, act: 1, t1: 'Demande', t2: 'de l\'argent !', fn: b2 },
+    { id: 'b3', a: 15.0, b: 17.0, act: 1, t1: 'Entretiens', t2: 'tes liens !', fn: b3 },
+    { id: 'ch', a: 17.0, b: 18.0, fn: u => chapter(2, u) },
+    { id: 'c1', a: 18.0, b: 20.5, act: 2, t1: 'La vie', t2: 'en famille', fn: c1 },
+    { id: 'c2', a: 20.5, b: 22.5, act: 2, t1: 'Famille', t2: 'ou amis ?', fn: c2 },
+    { id: 'c3', a: 22.5, b: 25.0, act: 2, t1: 'Toute ta', t2: 'famille !', fn: c3 },
+    { id: 's8', a: 25.0, b: 29.0, fn: cta },
+  ],
+  cuts: [[3.5, '#EC4899', '#9D174D'], [10.5, '#6D4AFF', '#2E1065'], [17.0, '#F97316', '#C2410C'], [25.0, '#10B981', '#065F46']],
+  taps: [[TAP_CALIN, 540, 1070], [TAP_JOUER, 827, 1070], [TAP_ARGENT, 540, 1135], [TAP_FAM, 316, 1408], [TAP_CTA, ...cta.tap]],
+});
+addConfetti(50, 41, 4.5 + 1.32, 540, 1200, .9);   // naissance
+addConfetti(40, 42, 7.0 + .95, 710, 1330, .8);    // petit frère
+addConfetti(50, 43, TAP_FAM + .1, 300, 820, .9);  // famille
+addConfetti(70, 44, 22.5 + 1.2, 300, 1340);       // arbre
+addConfetti(90, 45, TAP_CTA, 540, 1150, 1.2);     // CTA
+window.render = render;
+window.DURATION = END;
+render(0);
+</script>
+</body>
+</html>
