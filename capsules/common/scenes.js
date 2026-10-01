@@ -47,7 +47,7 @@ function makeChapter(sec, chapters) {
 }
 
 // ---------- Orientation de fin de 3ème (tap sur la voie pro) ----------
-function makeOrientation(sec, { avg, subjects, tapT }) {
+function makeOrientation(sec, { avg, subjects, tapT, pick = 2 }) {
   sec.innerHTML = `<div class="c card k-card" style="width:900px;height:880px">
     <div class="bubble" style="position:absolute;left:40px;top:36px;width:110px;height:110px;background:#FEF3C7;font-size:64px">🎓</div>
     <div class="fd" style="position:absolute;left:174px;top:44px;font-size:56px;color:var(--navy)">Orientation</div>
@@ -63,15 +63,15 @@ function makeOrientation(sec, { avg, subjects, tapT }) {
     tf(q$(sec, '.k-card'), { y: 1090, s: lerp(.85, 1, cp), op: P(u, .02, .1) });
     q$(sec, '.k-avg').textContent = (avg * E.outCubic(P(u, .15, .6))).toFixed(1).replace('.', ',');
     opts.forEach((el, k) => {
-      const q = E.outBack(P(u, .22 + k * .08, .5 + k * .08), 2), dim = k < 2 ? P(u, 1.0, 1.15) : 0;
-      el.style.transform = `translateX(${(1 - q) * (k % 2 ? 900 : -900)}px) scale(${k === 2 ? 1 + .03 * P(u, 1.0, 1.1) : 1})`;
+      const q = E.outBack(P(u, .22 + k * .08, .5 + k * .08), 2), dim = k !== pick ? P(u, 1.0, 1.15) : 0;
+      el.style.transform = `translateX(${(1 - q) * (k % 2 ? 900 : -900)}px) scale(${k === pick ? 1 + .03 * P(u, 1.0, 1.1) : 1})`;
       el.style.opacity = 1 - dim * .65;
-      q$(el, '.face').style.transform = `translateY(${-12 + (k === 2 ? pressAt(t, tapT) * 10 : 0)}px)`;
+      q$(el, '.face').style.transform = `translateY(${-12 + (k === pick ? pressAt(t, tapT) * 10 : 0)}px)`;
     });
     q$(sec, '.k-sh').style.left = lerp(-200, 1000, P(u, .6, .9)) + 'px';
   };
 }
-const ORIENTATION_TAP = [790, 1392];
+const ORIENTATION_TAP = [790, 1392]; // voie pro ; voie générale : [790, 1002], techno : [790, 1197]
 
 // ---------- Liste des 11 CAP (GameData.CAP_FILIERES) ----------
 const CAP_LIST = [['aepe', '🧸', 'CAP AEPE', 'Petite enfance', 1500, '#FEF3C7'], ['commerce', '🛒', 'CAP Commerce', 'Équipier magasin', 1400, '#E0F2FE'],

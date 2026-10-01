@@ -9,6 +9,7 @@ capturée avec Playwright puis encodée en MP4 avec une bande-son synthétisée.
 | ✂️ Coiffure (salon · CAP Coiffure · carrière) | 29 s | `coiffure/DestinyLife_Capsule_Coiffure_9x16.mp4` |
 | 🔧 Mécano (métier · CAP Méca Auto · carrière) | 29 s | `mecano/DestinyLife_Capsule_Mecano_9x16.mp4` |
 | 👨‍👩‍👧‍👦 Famille (parents · fratrie · grands-parents · relations) | 29 s | `famille/DestinyLife_Capsule_Famille_9x16.mp4` |
+| 🎓 École (primaire · collège · lycée & BAC) | 29 s | `ecole/DestinyLife_Capsule_Ecole_9x16.mp4` |
 
 ## Socle commun (`common/`)
 - `dl.css` : tokens et composants du jeu (bleu nuit, or, vert, cartes arrondies, boutons 3D, pastilles…)
@@ -84,3 +85,19 @@ scènes propres au thème (accroche + 4 scènes) et brancher les scènes partag�
 | 20,5–22,5 s | « Famille ou amis ? » → la famille : +10 famille, +3 bonheur | `EventsData` (choix) |
 | 22,5–25 s | Arbre de famille : grands-parents, parents, oncle, frère, cousine | relations du personnage |
 | 25–29 s | CTA « Quel sera ton destin ? » ▶ JOUER · recherche « Destiny Life » | — |
+
+## Capsule École — découpage (120 BPM)
+| Temps | Plan | Source dans le jeu |
+|---|---|---|
+| 0–2 s | « UN BAC. UN DESTIN. » sur une page de cahier, crayon, 20/20 entouré, la page se tourne | — |
+| 1,5–3,5 s | Logo + « 🎓 FOCUS ÉCOLE » | — |
+| 4,5–6,5 s | Chemin Maternelle → CP → … → CM2 → 6ème, rentrée au CP | rentrées (GameServer), `GRADES` |
+| 6,5–9 s | Réviser à la maison (3/an) : +3 / +1, l'intelligence passe les seuils CP 15 … 6ème 19 | Maison « Réviser », `critIntel` |
+| 9–10,5 s | Bulletin de CP 10,5/20 « Ça passe, de justesse » → PASSAGE (sinon redoublement) | bulletin, `schoolAverage` |
+| 11,5–13 s | Rentrée au collège + premier téléphone | rentrée au collège |
+| 13–15 s | Délégué, test réussi, contrôle raté, réussite éclatante, sortie de fin d'année (intelligence 30 → 45) | `EventsData` collège |
+| 15–17 s | Orientation : moyenne 13,4 → voie générale (12 requis) | orientation, `GENERAL_MIN_AVG` |
+| 18–20 s | 12 spécialités : 3 en 1ère, 2 gardées en Terminale | `SPECIALTIES` |
+| 20–22,5 s | Copie du BAC : Maths 15, Info 16, Philo 15 → 15,3 → Mention Bien | `SCHOOL.bac` |
+| 22,5–25 s | « BAC obtenu — Mention Bien ! », Bonheur +25, parents +15 | `SCHOOL.bac` |
+| 25–29 s | CTA | — |

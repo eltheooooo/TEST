@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Capsule École</title>
+<link rel="stylesheet" href="../common/fonts.css">
+<link rel="stylesheet" href="../common/dl.css">
+<style>
+#paper{background:linear-gradient(90deg,transparent 138px,#F87171 138px,#F87171 144px,transparent 144px),repeating-linear-gradient(180deg,#FBFDFF 0 46px,#BFDBFE 46px 48px);box-shadow:0 0 80px rgba(0,0,0,.6);transform-origin:0 0}
+.gnode{position:absolute;left:0;top:0;width:170px;height:170px;border-radius:50%;background:#1A3157;border:8px solid rgba(255,255,255,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.gnode .ge{font-size:56px;line-height:1}.gnode .gl{font:400 32px 'Fredoka One';color:#fff}
+.subj{position:absolute;height:120px;border-radius:36px}
+.subj .face{font:400 36px 'Fredoka One';color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.15)}
+.spec{position:absolute;left:0;top:0;width:290px;height:165px;border-radius:34px;background:rgba(255,255,255,.1);border:3px solid rgba(255,255,255,.16);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.spec .se{font-size:54px;line-height:1}.spec .sl{font:400 28px 'Fredoka One';color:#fff;white-space:nowrap}.spec .sd{font-size:16px;letter-spacing:2px}
+.spec .ck{position:absolute;right:-12px;top:-12px;width:62px;height:62px;border-radius:50%;background:#10B981;color:#fff;display:flex;align-items:center;justify-content:center;font:400 36px 'Fredoka One';box-shadow:0 5px 0 #065F46}
+.mark{display:flex;align-items:center;font:700 34px Montserrat;color:#10233F;height:96px;border-bottom:3px dashed #BFDBFE}
+.mark .mv{margin-left:auto;font:400 60px 'Fredoka One';color:#DC2626;transform-origin:50% 50%}
+</style>
+</head>
+<body>
+<div id="root">
+  <div id="cam" class="abs" style="width:1080px;height:1920px;transform-origin:540px 960px">
+    <section class="scene" id="s1"></section>
+
+    <!-- 0 · Accroche : page de cahier qui se tourne -->
+    <section class="scene" id="s0">
+      <div id="paper" class="abs" style="width:1080px;height:1920px">
+        <div id="doodles"></div>
+        <div id="k1" class="c title" style="font-size:190px">UN BAC.</div>
+        <div id="k2" class="c title" style="font-size:150px;color:#F5B942">UN DESTIN.</div>
+        <svg class="abs" width="1080" height="1920"><path id="under" d="M250 1190 C 420 1175 640 1205 830 1180" fill="none" stroke="#2563EB" stroke-width="14" stroke-linecap="round" pathLength="1" stroke-dasharray="1 1"/>
+          <ellipse id="ring20" cx="780" cy="1420" rx="190" ry="120" fill="none" stroke="#DC2626" stroke-width="12" pathLength="1" stroke-dasharray="1 1" transform="rotate(-8 780 1420)"/></svg>
+        <div id="note20" class="c fd" style="font-size:130px;color:#DC2626">20/20</div>
+        <div id="pencil" class="c emo" style="font-size:170px">✏️</div>
+      </div>
+    </section>
+
+    <section class="scene" id="ch"></section>
+
+    <!-- A1 · De la maternelle au CM2 -->
+    <section class="scene" id="a1">
+      <svg class="abs" width="1080" height="1920"><path id="a1path" d="M200 760 L880 760 C 1010 760 1010 1060 880 1060 L200 1060 C 70 1060 70 1360 200 1360 L540 1360" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+        <path id="a1prog" d="M200 760 L880 760 C 1010 760 1010 1060 880 1060 L200 1060 C 70 1060 70 1360 200 1360 L540 1360" fill="none" stroke="#F5B942" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1"/></svg>
+      <div id="a1nodes"></div>
+      <div id="a1kid" class="c emo" style="font-size:110px">🧒</div>
+      <div id="a1card" class="c pill glass" style="font-size:32px">🏫 Rentrée au CP · école « Jules Ferry »</div>
+    </section>
+
+    <!-- A2 · Réviser à la maison -->
+    <section class="scene" id="a2">
+      <div id="a2card" class="c card" style="width:920px;height:440px">
+        <div class="bubble" style="position:absolute;left:36px;top:30px;width:100px;height:100px;background:#E0F2FE;font-size:58px">🏠</div>
+        <div class="fd" style="position:absolute;left:158px;top:34px;font-size:50px;color:var(--navy)">Réviser</div>
+        <div style="position:absolute;left:160px;top:96px;font:700 25px Montserrat;color:var(--inkMute)">Maison · 3 fois par an</div>
+        <div id="a2left" class="pill neutral" style="position:absolute;right:36px;top:44px;font-size:28px">3/3</div>
+      </div>
+      <div id="a2toast" class="c sticker" style="font-size:38px"></div>
+      <div id="a2gauge" class="c glasscard" style="width:920px;height:250px;border-radius:44px">
+        <div style="position:absolute;left:36px;top:26px;font:800 28px Montserrat;color:#fff">🧠 Intelligence</div>
+        <div id="a2iv" class="fd" style="position:absolute;right:36px;top:14px;font-size:54px;color:var(--gold)">14</div>
+        <div style="position:absolute;left:36px;right:36px;top:110px;height:34px;border-radius:17px;background:rgba(255,255,255,.15);overflow:hidden"><i id="a2bar" style="display:block;height:100%;border-radius:17px;background:linear-gradient(90deg,#FDE68A,#F5B942)"></i></div>
+        <div id="a2ticks"></div>
+      </div>
+    </section>
+
+    <!-- A3 · Bulletin -->
+    <section class="scene" id="a3">
+      <div id="a3card" class="c card" style="width:900px;height:620px;overflow:hidden">
+        <div style="position:absolute;left:0;right:0;top:0;height:170px;background:linear-gradient(120deg,#38BDF8,#19A9E8)"></div>
+        <div class="bubble" style="position:absolute;left:40px;top:30px;width:110px;height:110px;background:rgba(255,255,255,.25);font-size:64px">📊</div>
+        <div class="fd" style="position:absolute;left:176px;top:46px;font-size:64px;color:#fff;text-shadow:0 5px 0 rgba(0,0,0,.15)">Bulletin de CP</div>
+        <div style="position:absolute;left:44px;top:210px;font:800 26px Montserrat;color:var(--inkMute);letter-spacing:3px">MOYENNE GÉNÉRALE</div>
+        <div class="fd" style="position:absolute;left:44px;top:250px;font-size:120px;color:var(--navy)"><span id="a3avg">0</span><span style="font-size:56px;color:var(--inkMute)">/20</span></div>
+        <div style="position:absolute;left:44px;right:44px;top:410px;font:600 32px/1.4 Montserrat;color:var(--inkSoft)">« Ça passe, de justesse. »</div>
+        <div class="pill good" style="position:absolute;left:44px;top:500px;font-size:30px">✅ Passage en CE1</div>
+      </div>
+      <div id="a3stamp" class="c fd" style="font-size:96px;color:#059669;border:11px solid #059669;border-radius:26px;padding:0 30px;line-height:1.15;background:rgba(220,252,231,.6)">PASSAGE !</div>
+      <div id="a3warn" class="c pill glass" style="font-size:30px">Sous le seuil d'intelligence ? ⚠️ Redoublement</div>
+    </section>
+
+    <!-- B1 · Rentrée au collège -->
+    <section class="scene" id="b1">
+      <div id="b1card" class="c card" style="width:920px;height:520px;overflow:hidden">
+        <div style="position:absolute;left:0;right:0;top:0;height:170px;background:linear-gradient(120deg,#8B5CF6,#6D4AFF)"></div>
+        <div class="bubble" style="position:absolute;left:40px;top:30px;width:110px;height:110px;background:rgba(255,255,255,.25);font-size:64px">🎒</div>
+        <div class="fd" style="position:absolute;left:176px;top:46px;font-size:62px;color:#fff;text-shadow:0 5px 0 rgba(0,0,0,.15)">Rentrée au collège</div>
+        <div style="position:absolute;left:44px;right:44px;top:205px;font:600 32px/1.45 Montserrat;color:var(--navy)">Zoé entre au collège « Victor Hugo » en 6ème ! De nouveaux profs, de nouvelles matières, un nouveau monde.</div>
+        <div class="pill purple" style="position:absolute;left:44px;top:420px;font-size:28px">🏫 Collège « Victor Hugo »</div>
+      </div>
+      <div id="b1subj"></div>
+      <div id="b1phone" class="c emo" style="font-size:230px">📱</div>
+      <div id="b1ph" class="c sticker gold" style="font-size:44px">📱 Ton premier téléphone !</div>
+    </section>
+
+    <section class="scene" id="b2"></section>
+    <section class="scene" id="b3"></section>
+
+    <!-- C1 · Spécialités -->
+    <section class="scene" id="c1">
+      <div id="c1panel" class="c glasscard" style="width:960px;height:860px">
+        <div class="fd" style="position:absolute;left:36px;top:24px;font-size:40px;color:#fff">🎯 Spécialités de 1ère</div>
+        <div id="c1cnt" class="pill gold" style="position:absolute;right:30px;top:20px;font-size:30px">0/3</div>
+      </div>
+      <div id="c1keep" class="c sticker gold" style="font-size:42px">En Terminale : garde-en 2 !</div>
+    </section>
+
+    <!-- C2 · Les épreuves du BAC -->
+    <section class="scene" id="c2">
+      <div id="c2sheet" class="c" style="width:900px;height:880px;border-radius:30px;background:linear-gradient(90deg,transparent 96px,#FCA5A5 96px,#FCA5A5 100px,transparent 100px),#FBFDFF;box-shadow:0 16px 0 #9FB0CF,0 50px 90px rgba(3,8,25,.5)">
+        <div style="position:absolute;left:130px;top:46px;font:800 26px Montserrat;letter-spacing:6px;color:#2563EB">BACCALAURÉAT GÉNÉRAL</div>
+        <div class="fd" style="position:absolute;left:130px;top:88px;font-size:52px;color:var(--navy)">Zoé Petit</div>
+        <div id="c2marks" style="position:absolute;left:130px;right:50px;top:190px"></div>
+        <div style="position:absolute;left:130px;right:50px;top:530px;display:flex;align-items:center;font:800 34px Montserrat;color:var(--navy)">Moyenne<span id="c2avg" class="fd" style="margin-left:auto;font-size:84px;color:var(--greenDark)">0</span><span class="fd" style="font-size:44px;color:var(--inkMute)">/20</span></div>
+      </div>
+      <div id="c2pen" class="c emo" style="font-size:150px">🖊️</div>
+      <div id="c2ment" class="c fd" style="font-size:84px;color:#fff;background:linear-gradient(120deg,#F5B942,#F97316);border-radius:26px;padding:6px 40px;box-shadow:0 10px 0 #92400E;white-space:nowrap">Mention Bien</div>
+    </section>
+
+    <!-- C3 · BAC obtenu -->
+    <section class="scene" id="c3">
+      <div id="c3caps"></div>
+      <div id="c3card" class="c card" style="width:920px;height:560px;overflow:hidden">
+        <div style="position:absolute;left:0;right:0;top:0;height:200px;background:linear-gradient(120deg,#34D399,#047857)"></div>
+        <div class="bubble" style="position:absolute;left:40px;top:40px;width:120px;height:120px;background:rgba(255,255,255,.25);font-size:72px">🎓</div>
+        <div class="fd" style="position:absolute;left:186px;top:38px;font-size:66px;color:#fff;line-height:1.05;text-shadow:0 5px 0 rgba(0,0,0,.15)">BAC obtenu —<br>Mention Bien !</div>
+        <div style="position:absolute;left:44px;right:44px;top:236px;font:600 32px/1.45 Montserrat;color:var(--navy)">📐 Maths 15 · 💻 Info 16 · 💭 Philo 15. Félicitations, les études supérieures s'ouvrent à elle !</div>
+        <div style="position:absolute;left:44px;top:440px;display:flex;gap:14px"><div class="pill good" style="font-size:28px">😊 Bonheur +25</div><div class="pill purple" style="font-size:28px">💞 Relation parents +15</div></div>
+      </div>
+      <div id="c3big" class="c emo" style="font-size:230px">🎓</div>
+    </section>
+
+    <section class="scene" id="s8"></section>
+
+    <div id="head" class="abs" style="inset:0;display:none">
+      <div id="hchip" class="c chip"></div>
+      <div id="ht1" class="c title" style="font-size:120px"></div>
+      <div id="ht2" class="c title" style="font-size:120px"></div>
+    </div>
+    <div id="fx" class="abs" style="inset:0"></div>
+  </div>
+</div>
+
+<script src="../common/dl.js"></script>
+<script src="../common/scenes.js"></script>
+<script>
+// =====================================================================
+// Capsule « École » : primaire, collège, lycée et BAC.
+// Contenus tirés du jeu : GameData.GRADES (seuils), schoolAverage, Maison « Réviser », bulletin /
+// redoublement (GameServer), rentrées, EventsData (collège), orientation, SPECIALTIES, SCHOOL.bac.
+// =====================================================================
+const END = 29.0;
+initOverlay();
+initBackground(['🎒', '📚', '✏️', '📐', '🧮', '🎓', '📝', '🏫', '🔬', '🌍', '📖', '⭐', '👑', '🧠', '📜', '🖍️']);
+
+// ---------- Accroche ----------
+const DOODLES = [['📐', 240, 330, -15], ['📚', 860, 300, 10], ['⭐', 900, 620, 0], ['🧮', 230, 1560, 8], ['🎒', 880, 1700, -6]];
+const doodles = DOODLES.map(d => html($('#doodles'), `<div class="c emo" style="font-size:110px;opacity:.55">${d[0]}</div>`));
+function hook(t) {
+  doodles.forEach((e, i) => { const d = DOODLES[i]; tf(e, { x: d[1], y: d[2] + Math.sin(t * 3 + i) * 6, r: d[3], s: pop(t, i * .05, .3) }); });
+  const s1 = E.outExpo(P(t, .15, .42)), s2 = E.outExpo(P(t, .62, .88));
+  tf($('#k1'), { y: 880, s: lerp(2.6, 1, s1), op: P(t, .15, .2), b: (1 - s1) * 24, r: lerp(-8, -3, s1) });
+  tf($('#k2'), { y: 1080, s: lerp(2.4, 1, s2), op: P(t, .62, .68), b: (1 - s2) * 24, r: lerp(7, 2, s2) });
+  // Le crayon souligne, puis le stylo rouge entoure un 20/20.
+  const u1 = E.inOutCubic(P(t, .85, 1.1)), u2 = E.inOutCubic(P(t, 1.05, 1.35));
+  $('#under').setAttribute('stroke-dashoffset', 1 - u1);
+  $('#ring20').setAttribute('stroke-dashoffset', 1 - u2);
+  tf($('#note20'), { x: 780, y: 1420, s: pop(t, 1.0, .25, 3), r: -8, op: t > 1.0 ? 1 : 0 });
+  const px = t < 1.1 ? lerp(250, 830, u1) : 780 + 190 * Math.cos(u2 * Math.PI * 2 - 1.6), py = t < 1.1 ? 1185 - 10 * Math.sin(u1 * 9) : 1420 + 120 * Math.sin(u2 * Math.PI * 2 - 1.6);
+  tf($('#pencil'), { x: px + 50, y: py - 70, r: 0, op: P(t, .78, .85) * (1 - P(t, 1.38, 1.45)) });
+  // La page se tourne et dévoile le logo.
+  const fp = E.inCubic(P(t, 1.5, 1.98));
+  $('#paper').style.transform = `rotate(${-100 * fp}deg)`;
+  const kick = (t > .15 ? Math.exp(-(t - .15) * 9) * .04 : 0) + (t > .62 ? Math.exp(-(t - .62) * 9) * .05 : 0);
+  return { cam: { s: 1 + kick, r: Math.sin(t * 25) * kick * 30 }, accent: '#19A9E8' };
+}
+
+// ---------- A1 : de la maternelle au CM2 ----------
+const GN = [['🧸', 'Mater.', 200, 760], ['✏️', 'CP', 540, 760], ['📘', 'CE1', 880, 760], ['📗', 'CE2', 880, 1060], ['📙', 'CM1', 540, 1060], ['📕', 'CM2', 200, 1060], ['🏫', '6ème', 540, 1360]];
+const gnodes = GN.map(g => html($('#a1nodes'), `<div class="gnode"><div class="ge">${g[0]}</div><div class="gl">${g[1]}</div></div>`));
+const PATH = $('#a1prog'), PLEN = $('#a1path').getTotalLength();
+// Longueur du chemin au niveau de chaque classe (point du tracé le plus proche du nœud).
+const NODE_LEN = GN.map(g => { let best = 0, bd = 1e9; for (let l = 0; l <= PLEN; l += 4) { const q = $('#a1path').getPointAtLength(l), d = Math.hypot(q.x - g[2], q.y - g[3]); if (d < bd) { bd = d; best = l; } } return best; });
+function a1(u) {
+  const pp = E.inOutCubic(P(u, .3, 1.6));
+  PATH.setAttribute('stroke-dashoffset', 1 - pp);
+  const pt = $('#a1path').getPointAtLength(PLEN * pp);
+  gnodes.forEach((n, i) => {
+    const reached = pp * PLEN >= NODE_LEN[i] - 5;
+    tf(n, { x: GN[i][2], y: GN[i][3], s: pop(u, .05 + i * .05, .25, 2.2) * (reached ? 1.06 : 1) });
+    n.style.background = reached ? (i === 6 ? '#6D4AFF' : '#F5B942') : '#1A3157';
+    n.querySelector('.gl').style.color = reached ? '#10233F' : '#fff';
+    if (i === 6 && reached) n.querySelector('.gl').style.color = '#fff';
+  });
+  tf($('#a1kid'), { x: pt.x, y: pt.y - 110 - Math.abs(Math.sin(u * 14)) * 22, s: pop(u, .2, .2), r: Math.sin(u * 14) * 8 });
+  tf($('#a1card'), { y: 1600, s: pop(u, .5, .3, 2), op: u > .5 ? 1 : 0 });
+}
+
+// ---------- A2 : réviser à la maison (+3 / +1 / +0 d'intelligence) ----------
+const SUBJ = [['📖 Le français', 36, 166, '#38BDF8', '#0E7AC4'], ['🔢 Les maths', 476, 166, '#F472B6', '#9D174D'], ['🧪 Les sciences', 36, 300, '#34D399', '#047857'], ['🌍 L\'histoire-géo', 476, 300, '#FB923C', '#C2410C']];
+const subjEls = SUBJ.map(s => html($('#a2card'), `<div class="btn3d subj" style="left:${s[1]}px;top:${s[2]}px;width:408px"><div class="lip" style="background:${s[4]}"></div><div class="face" style="background:${s[3]}">${s[0]}</div></div>`));
+const THRESH = [['CP', 15], ['CE1', 16], ['CE2', 17], ['CM1/CM2', 18], ['6ème', 19]];
+const GMAX = 30, GX = v => 36 + (848 * v / GMAX);
+THRESH.forEach(([l, v], i) => html($('#a2ticks'), `<div style="position:absolute;left:${GX(v) - 3}px;top:96px;width:6px;height:62px;border-radius:3px;background:#fff;opacity:.8"></div><div style="position:absolute;left:${GX(v) - 60}px;width:120px;top:${i % 2 ? 196 : 164}px;text-align:center;font:800 20px Montserrat;color:var(--onDarkSoft)">${l} ${v}</div>`));
+const REV = [[6.5 + .5, 1, '🌟 Révision productive · 🧠 +3', 'good', 3], [6.5 + 1.15, 0, '📚 Révision normale · 🧠 +1', 'neutral', 1], [6.5 + 1.8, 2, '🌟 Révision productive · 🧠 +3', 'good', 3]];
+function a2(u, t) {
+  tf($('#a2card'), { y: 880, s: lerp(.85, 1, E.outBack(P(u, .02, .3), 1.5)), op: P(u, .02, .1) });
+  tf($('#a2gauge'), { y: 1330, s: lerp(.85, 1, E.outBack(P(u, .12, .4), 1.5)), op: P(u, .12, .2) });
+  let iv = 14, cur = null;
+  REV.forEach(r => { iv += r[4] * E.outCubic(P(t, r[0] + .1, r[0] + .45)); if (t > r[0] + .05) cur = r; });
+  $('#a2iv').textContent = Math.round(iv); $('#a2bar').style.width = (iv / GMAX * 100) + '%';
+  $('#a2left').textContent = (3 - REV.filter(r => t > r[0] + .05).length) + '/3';
+  subjEls.forEach((el, k) => {
+    const used = REV.find(r => r[1] === k && t > r[0] + .15), tap = REV.find(r => r[1] === k);
+    el.querySelector('.face').style.transform = `translateY(${-10 + (tap ? pressAt(t, tap[0]) * 8 : 0)}px)`;
+    el.style.opacity = used ? .45 : 1;
+  });
+  const toast = $('#a2toast');
+  if (cur) { toast.textContent = cur[2]; toast.className = 'c sticker ' + cur[3]; const q = P(t, cur[0] + .08, cur[0] + .3); tf(toast, { y: 1130, s: E.outBack(q, 2.6), r: -3, op: 1 }); }
+  else toast.style.opacity = 0;
+}
+
+// ---------- A3 : bulletin (schoolAverage : 8 + intelligence × 0,12) ----------
+function a3(u) {
+  tf($('#a3card'), { y: 1020, s: lerp(.8, 1, E.outBack(P(u, .02, .32), 1.5)), r: lerp(-5, 0, E.outCubic(P(u, 0, .3))), op: P(u, .02, .1) });
+  $('#a3avg').textContent = (10.5 * E.outCubic(P(u, .2, .6))).toFixed(1).replace('.', ',');
+  const sq = P(u, .62, .74);
+  tf($('#a3stamp'), { x: 720, y: 1230, s: lerp(3, 1, E.inCubic(sq)), r: -12, op: sq > 0 ? 1 : 0 });
+  tf($('#a3warn'), { y: 1520, s: pop(u, .95, .3, 1.8), op: u > .95 ? 1 : 0 });
+  return { kick: u > .74 ? Math.exp(-(u - .74) * 9) * .05 : 0 };
+}
+
+// ---------- B1 : rentrée au collège + premier téléphone ----------
+const subj = ['🇬🇧', '🔬', '🧮', '🎨', '⚽', '🎵'].map(e => html($('#b1subj'), `<div class="c emo" style="font-size:90px">${e}</div>`));
+function b1(u) {
+  tf($('#b1card'), { y: 860, s: lerp(.8, 1, E.outBack(P(u, .02, .32), 1.5)), op: P(u, .02, .1) });
+  subj.forEach((e, i) => { const q = P(u, .3 + i * .05, .9 + i * .05), a = -2.6 + i * .42; tf(e, { x: 540 + Math.cos(a) * 470 * E.outCubic(q), y: 1350 + Math.sin(a) * 200 * E.outCubic(q) + 100, s: Math.sin(Math.min(q, .99) * Math.PI) * 1.1 + (q >= 1 ? 0 : 0), op: q > 0 && q < 1 ? 1 : 0, r: q * 90 }); });
+  const pq = P(u, .7, 1.0);
+  tf($('#b1phone'), { y: lerp(1900, 1340, E.outBack(pq, 1.8)), r: lerp(25, -8, pq) + Math.sin(u * 30) * 4 * P(u, 1.0, 1.1) * (1 - P(u, 1.3, 1.4)), op: pq > 0 ? 1 : 0 });
+  tf($('#b1ph'), { y: 1610, s: pop(u, 1.0, .25, 3), r: -4, op: u > 1.0 ? 1 : 0 });
+}
+
+// ---------- C1 : spécialités (3 en 1ère, 2 gardées en Terminale) ----------
+const SPECS = [['📐', 'Maths', 3], ['⚛️', 'Physique-Chimie', 3], ['🧬', 'SVT', 2], ['📖', 'Lettres', 1], ['🗺️', 'Histoire-Géo', 1], ['💭', 'Philosophie', 2],
+  ['💼', 'Économie', 1], ['🗣️', 'Langues', 1], ['🎨', 'Arts plastiques', 0], ['🎭', 'Théâtre', 1], ['💻', 'Informatique', 3], ['⚖️', 'Droit / Sc. po', 1]];
+const DOTS = { 0: '🟢🟢🟡', 1: '🟡🟡🟡', 2: '🟠🟠🟡', 3: '🔴🔴🔴' };
+const SX = c => 245 + c * 310, SY = r => 870 + r * 185;
+const specEls = SPECS.map(s => html($('#c1panel').parentNode, `<div class="spec"><div class="se">${s[0]}</div><div class="sl">${s[1]}</div><div class="sd">${DOTS[s[2]]}</div><div class="ck">✓</div></div>`));
+const PICKS = [[0, 18.0 + .45], [10, 18.0 + .75], [2, 18.0 + 1.05]], DROP = 2, DROP_T = 18.0 + 1.6;
+function c1(u, t) {
+  tf($('#c1panel'), { y: 1130, s: lerp(.85, 1, E.outBack(P(u, .02, .3), 1.5)), op: P(u, .02, .1) });
+  const n = PICKS.filter(p => t > p[1] + .05).length;
+  $('#c1cnt').textContent = (t > DROP_T + .1 ? '2/2' : n + '/3');
+  specEls.forEach((el, i) => {
+    const pk = PICKS.find(p => p[0] === i), on = pk && t > pk[1] + .05, dropped = i === DROP && t > DROP_T + .05;
+    const sel = on && !dropped;
+    tf(el, { x: SX(i % 3), y: SY(Math.floor(i / 3)), s: pop(u, .08 + i * .025, .25, 2) * (sel ? 1.05 : 1) * (pk ? 1 - pressAt(t, pk[1]) * .06 : 1), op: dropped ? .45 : (t > DROP_T && !sel ? .55 : 1) });
+    el.style.background = sel ? 'rgba(16,185,129,.28)' : 'rgba(255,255,255,.1)';
+    el.style.borderColor = sel ? '#6EE7B7' : 'rgba(255,255,255,.16)';
+    el.querySelector('.ck').style.transform = `scale(${sel ? E.outBack(P(t, pk[1] + .05, pk[1] + .2), 3) : 0})`;
+  });
+  tf($('#c1keep'), { y: 1640, s: pop(u, 1.3, .25, 3), r: -3, op: u > 1.3 ? 1 : 0 });
+}
+
+// ---------- C2 : les notes du BAC ----------
+const MARKS = [['📐 Mathématiques', 15, .35], ['💻 Informatique', 16, .7], ['💭 Philosophie', 15, 1.05]];
+const markEls = MARKS.map(m => html($('#c2marks'), `<div class="mark">${m[0]}<span class="mv">${m[1]}/20</span></div>`));
+function c2(u) {
+  tf($('#c2sheet'), { y: 1110, s: lerp(.85, 1, E.outBack(P(u, .02, .32), 1.5)), r: lerp(4, -1, E.outCubic(P(u, 0, .4))), op: P(u, .02, .1) });
+  markEls.forEach((el, i) => {
+    const q = P(u, MARKS[i][2], MARKS[i][2] + .2), v = el.querySelector('.mv');
+    v.style.transform = `scale(${q > 0 ? lerp(2.2, 1, E.outCubic(q)) : 0}) rotate(-6deg)`;
+    el.style.opacity = P(u, .15 + i * .08, .3 + i * .08);
+  });
+  const k = MARKS.findIndex(m => u < m[2] + .15), target = k < 0 ? null : MARKS[k];
+  const penY = target ? 1110 - 440 + 190 + k * 99 + 40 : 1110 - 440 + 560;
+  tf($('#c2pen'), { x: 860 + Math.sin(u * 30) * 10, y: penY - 50, r: -20, op: P(u, .2, .3) * (1 - P(u, 1.7, 1.8)) });
+  $('#c2avg').textContent = (15.3 * E.outCubic(P(u, 1.35, 1.8))).toFixed(1).replace('.', ',');
+  const mq = P(u, 1.85, 2.1);
+  tf($('#c2ment'), { y: 1620, s: mq > 0 ? E.outBack(mq, 3) : 0, r: -5 + (1 - mq) * 20, op: mq > 0 ? 1 : 0 });
+}
+
+// ---------- C3 : BAC obtenu ----------
+const caps = Array.from({ length: 9 }, (_, i) => ({ el: html($('#c3caps'), `<div class="emo" style="font-size:${90 + (i % 3) * 30}px">🎓</div>`), x: 120 + i * 105, vy: 1500 + (i % 4) * 250, vr: (i % 2 ? 1 : -1) * (300 + i * 40) }));
+function c3(u) {
+  tf($('#c3big'), { y: lerp(1900, 880, E.outBack(P(u, 0, .35), 1.6)) - Math.max(0, u - .45) * 0, r: u * 40, s: 1 - P(u, .45, .6) * .4, op: 1 - P(u, .5, .65) });
+  caps.forEach((c, i) => { const dt = u - .5 - (i % 3) * .05; tf(c.el, { x: c.x, y: 1500 - c.vy * dt + 1400 * dt * dt, r: c.vr * dt, op: dt > 0 && dt < 1.3 ? 1 : 0 }); });
+  tf($('#c3card'), { y: 1130, s: pop(u, .55, .35, 2), r: lerp(-6, 0, E.outCubic(P(u, .55, .9))), op: u > .55 ? 1 : 0 });
+  return { rays: .9 * P(u, .5, .8), raysY: 1130 };
+}
+
+// ---------- Scènes partagées ----------
+const CHAP = [
+  { n: '01', t: 'Le primaire', s: 'Maternelle · CP → CM2', acc: '#19A9E8' },
+  { n: '02', t: 'Le collège', s: '6ème → 3ème · orientation', acc: '#6D4AFF' },
+  { n: '03', t: 'Lycée & BAC', s: 'Spécialités · épreuves · mention', acc: '#10B981' },
+];
+const FOCUS_BG = 'linear-gradient(120deg,#38BDF8,#6D4AFF)';
+const logo = makeLogoScene($('#s1'), { focus: '🎓 FOCUS ÉCOLE', focusBg: FOCUS_BG });
+const chapter = makeChapter($('#ch'), CHAP);
+const b2 = makeCareerStack($('#b2'), {
+  job: { emoji: '🏫', bg: '#EDE9FE', name: 'Collège Victor Hugo', sub: 'Zoé · de la 6ème à la 3ème' },
+  value0: 30, fmtValue: v => '🧠 ' + Math.round(v), perLabel: 'intelligence', plusFmt: d => `▲ +${d} intelligence`,
+  events: [ // [u, emoji, fond, titre, sous-titre, pastille, style, +intelligence]
+    [.1, '🎓', '#FEF3C7', 'Délégué de classe !', 'Élue pour représenter la classe', '🧠 +4', 'special', 4],
+    [.45, '✅', '#DCFCE7', 'Test réussi !', '« Bravo, belle progression ! »', '🧠 +5', 'good', 5],
+    [.8, '📉', '#FEE2E2', 'Contrôle catastrophique', '4/20… les parents signent la copie', '😟 −6', 'bad', 0],
+    [1.15, '🏆', '#FEF3C7', 'Réussite éclatante', 'Contrôle difficile : écrasé !', '🧠 +6', 'gold', 6],
+    [1.5, '🎢', '#EDE9FE', 'Sortie de fin d\'année', 'Parc d\'attractions avec la classe', '😊 +10', 'purple', 0],
+  ],
+});
+const TAP_B3 = 15.0 + .95;
+const b3 = makeOrientation($('#b3'), { avg: 13.4, subjects: ['📖 Français 13', '📊 Maths 14', '🗣️ Anglais 14'], tapT: TAP_B3, pick: 0 });
+const TAP_CTA = 25.0 + 1.3;
+const cta = makeCTA($('#s8'), { tag: '🎓 FOCUS ÉCOLE', tagBg: FOCUS_BG, tapT: TAP_CTA });
+
+// =================== Montage ===================
+const ACTS = [
+  { chip: '<b>01/03</b>✏️ LE PRIMAIRE', col: '#38BDF8', acc: '#19A9E8' },
+  { chip: '<b>02/03</b>🎒 LE COLLÈGE', col: '#C4B5FD', acc: '#6D4AFF' },
+  { chip: '<b>03/03</b>🎓 LYCÉE & BAC', col: '#6EE7B7', acc: '#10B981' },
+];
+const render = makeMontage({
+  END, flash: 1.98, acts: ACTS,
+  scenes: [
+    { id: 's1', a: 1.55, b: 3.5, fn: logo },
+    { id: 's0', a: 0, b: 2.0, fn: (u, t) => hook(t) },
+    { id: 'ch', a: 3.5, b: 4.5, fn: u => chapter(0, u) },
+    { id: 'a1', a: 4.5, b: 6.5, act: 0, t1: 'De la maternelle', t2: 'au CM2', fn: a1 },
+    { id: 'a2', a: 6.5, b: 9.0, act: 0, t1: 'Révise', t2: 'à la maison !', fn: a2 },
+    { id: 'a3', a: 9.0, b: 10.5, act: 0, t1: 'Le bulletin', t2: 'tombe !', fn: a3 },
+    { id: 'ch', a: 10.5, b: 11.5, fn: u => chapter(1, u) },
+    { id: 'b1', a: 11.5, b: 13.0, act: 1, t1: 'Rentrée', t2: 'au collège !', fn: b1 },
+    { id: 'b2', a: 13.0, b: 15.0, act: 1, t1: 'Vie de', t2: 'collégienne', fn: b2 },
+    { id: 'b3', a: 15.0, b: 17.0, act: 1, t1: 'Fin de 3ème :', t2: 'choisis ta voie', fn: b3 },
+    { id: 'ch', a: 17.0, b: 18.0, fn: u => chapter(2, u) },
+    { id: 'c1', a: 18.0, b: 20.0, act: 2, t1: 'Choisis tes', t2: 'spécialités', fn: c1 },
+    { id: 'c2', a: 20.0, b: 22.5, act: 2, t1: 'Les épreuves', t2: 'du BAC', fn: c2 },
+    { id: 'c3', a: 22.5, b: 25.0, act: 2, t1: 'BAC', t2: 'en poche !', fn: c3 },
+    { id: 's8', a: 25.0, b: 29.0, fn: cta },
+  ],
+  cuts: [[3.5, '#19A9E8', '#0369A1'], [10.5, '#6D4AFF', '#2E1065'], [17.0, '#10B981', '#065F46'], [25.0, '#10B981', '#065F46']],
+  taps: [...REV.map(r => [r[0], 80 + SUBJ[r[1]][1] + 204, 880 - 220 + SUBJ[r[1]][2] + 60]), [TAP_B3, 790, 1002],
+    ...PICKS.map(p => [p[1], SX(p[0] % 3), SY(Math.floor(p[0] / 3))]), [TAP_CTA, ...cta.tap]],
+});
+addConfetti(50, 51, 9.0 + .74, 720, 1230, .9);    // passage
+addConfetti(40, 52, 15.0 + 1.0, 540, 1002, .8);   // voie générale
+addConfetti(60, 53, 20.0 + 1.9, 540, 1620);       // mention
+addConfetti(90, 54, 22.5 + .55, 540, 1100, 1.2);  // BAC
+addConfetti(90, 55, TAP_CTA, 540, 1150, 1.2);     // CTA
+window.render = render;
+window.DURATION = END;
+render(0);
+</script>
+</body>
+</html>

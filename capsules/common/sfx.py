@@ -221,3 +221,15 @@ def dice_roll(d=.35):
 def womp(f0=420, f1=160, d=.4):
     t = tt(d); x = t / d
     return _sweep(f0 * (f1 / f0) ** x) * np.exp(-t * 3) * np.minimum(1, t * 60) * .35
+
+
+# ---------- École ----------
+def school_bell(d=.9):
+    t = tt(d); trem = (np.sin(2 * np.pi * 22 * t) > 0).astype(float) * .7 + .3
+    return (np.sin(2 * np.pi * 1250 * t) + .5 * np.sin(2 * np.pi * 2610 * t)) * trem * np.exp(-t * 1.5) * np.minimum(1, (d - t) * 10) * .22
+def scribble(d=.4):
+    t = tt(d); env = (.6 + .4 * np.sin(2 * np.pi * 9 * t)) * np.minimum(1, t * 30) * np.minimum(1, (d - t) * 30)
+    return lp(hp(noise(d), 2500), 7000) * env * .35
+def page_flip(d=.45):
+    t = tt(d); x = t / d
+    return (lp(noise(d), 600 + 5000 * x) * np.sin(np.pi * x) ** 2 * 1.4 + hp(noise(d), 3000) * np.exp(-((x - .8) * 12) ** 2) * .6) * .8
