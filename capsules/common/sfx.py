@@ -150,3 +150,41 @@ class Mix:
         out = np.tanh(out / np.max(np.abs(out)) * 1.6) / np.tanh(1.6) * .89
         w = wave.open(path, 'wb'); w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
         w.writeframes((out * 32767).astype('<i2').tobytes()); w.close()
+
+
+# ---------- Atelier / voitures ----------
+def engine(d=.5, f0=55, f1=110, g=1.0):
+    """Moteur qui monte en régime (dent de scie filtrée + grondement)."""
+    t = tt(d); x = t / d
+    f = f0 + (f1 - f0) * np.sin(np.pi * x * .5) ** 2
+    ph = np.cumsum(f) / SR
+    saw = 2 * (ph % 1) - 1
+    s = lp(saw + .5 * np.sign(np.sin(2 * np.pi * ph * .5)), 900 + 2500 * x) + lp(noise(d), 300) * .4
+    return np.tanh(1.5 * s) * np.sin(np.pi * x) ** .6 * .5 * g
+def ratchet(n=8, gap=.028):
+    out = np.zeros(int((n * gap + .05) * SR))
+    for k in range(n):
+        t = tt(.02); c = hp(noise(.02), 2500) * np.exp(-t * 300) + np.sin(2 * np.pi * 3200 * t) * np.exp(-t * 250) * .4
+        i = int(k * gap * SR); out[i:i + len(c)] += c
+    return out * .6
+def door_roll(d=.5):
+    t = tt(d); x = t / d
+    rattle = np.zeros_like(t)
+    for k in range(int(d / .035)):
+        i = int(k * .035 * SR); c = hp(noise(.025), 1500) * np.exp(-tt(.025) * 160)
+        rattle[i:i + len(c)] += c[: len(rattle) - i]
+    return (lp(noise(d), 180) * 1.6 + rattle * .5) * np.minimum(1, x * 6) * np.minimum(1, (1 - x) * 4) * .8
+def hydraulic(d=.5):
+    t = tt(d); x = t / d
+    return (lp(hp(noise(d), 1500), 5000) * .35 + np.sin(2 * np.pi * (90 + 40 * x) * t) * .3) * np.minimum(1, x * 10) * np.minimum(1, (1 - x) * 8)
+def beep(f=1800, d=.08):
+    t = tt(d); return np.sign(np.sin(2 * np.pi * f * t)) * .18 * np.minimum(1, t * 400) * np.minimum(1, (d - t) * 400)
+def knock(n=4, gap=.11):
+    out = np.zeros(int((n * gap + .2) * SR))
+    for k in range(n):
+        t = tt(.15); c = np.tanh(3 * _sweep(70 + 60 * np.exp(-t * 40))) * np.exp(-t * 25) + hp(noise(.15), 2000) * np.exp(-t * 60) * .3
+        i = int(k * gap * SR); out[i:i + len(c)] += c
+    return out * .6
+def screech(d=.35):
+    t = tt(d); x = t / d
+    return lp(hp(noise(d), 2500), 6000) * np.sin(2 * np.pi * (1800 - 600 * x) * t) * np.sin(np.pi * x) * .5

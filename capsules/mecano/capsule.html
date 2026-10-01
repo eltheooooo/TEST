@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Capsule Mécano</title>
+<link rel="stylesheet" href="../common/fonts.css">
+<link rel="stylesheet" href="../common/dl.css">
+<style>
+#door{background:linear-gradient(180deg,rgba(7,18,36,.15),rgba(7,18,36,.55)),repeating-linear-gradient(180deg,#2E4366 0 86px,#22385A 86px 92px,#3A5078 92px 96px)}
+.hazard{background:repeating-linear-gradient(45deg,#F5B942 0 40px,#10233F 40px 80px)}
+.post{position:absolute;width:52px;border-radius:14px;background:linear-gradient(90deg,#64748B,#CBD5E1 45%,#94A3B8);box-shadow:0 0 0 5px #10233F}
+.part{position:absolute;width:270px;height:300px;border-radius:40px;background:rgba(255,255,255,.1);border:3px solid rgba(255,255,255,.16);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.part .pe{font-size:110px;line-height:1}
+.part .pl{font:400 36px 'Fredoka One';color:#fff}
+.part .pb{position:absolute;right:-14px;top:-14px;width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 6px 0 rgba(7,18,36,.3)}
+.diag{display:flex;align-items:center;gap:14px;font:700 30px Montserrat;color:var(--navy)}
+.diag .st{margin-left:auto;font-size:34px}
+</style>
+</head>
+<body>
+<div id="root">
+  <div id="cam" class="abs" style="width:1080px;height:1920px;transform-origin:540px 960px">
+    <section class="scene" id="s1"></section>
+
+    <!-- 0 · Accroche : rideau de garage qui se lève -->
+    <section class="scene" id="s0">
+      <div id="door" class="abs" style="inset:0">
+        <div id="gear" class="c emo" style="font-size:640px;opacity:.14">⚙️</div>
+        <div id="wrench" class="c emo" style="font-size:250px">🔧</div>
+        <div id="k1" class="c title" style="font-size:146px">UN MOTEUR.</div>
+        <div id="k2" class="c title" style="font-size:146px;color:#F5B942">UN DESTIN.</div>
+        <div class="abs hazard" style="top:auto;bottom:0;width:1080px;height:70px;box-shadow:0 -10px 0 #10233F"></div>
+        <div class="abs" style="top:auto;bottom:110px;left:440px;width:200px;height:28px;border-radius:14px;background:#94A3B8;box-shadow:0 0 0 5px #10233F"></div>
+      </div>
+      <div id="speed"></div>
+      <div id="hcar" class="c" style="width:620px;height:232px"></div>
+    </section>
+
+    <section class="scene" id="ch"></section>
+
+    <!-- A1 · Pont élévateur + valise de diagnostic -->
+    <section class="scene" id="a1">
+      <div class="abs hazard" style="top:1330px;width:1080px;height:22px;opacity:.9"></div>
+      <div class="abs" style="top:1352px;width:1080px;height:600px;background:linear-gradient(180deg,rgba(7,18,36,.55),transparent)"></div>
+      <div id="a1p0" class="post c" style="height:650px"></div>
+      <div id="a1p1" class="post c" style="height:650px"></div>
+      <div id="a1car" class="c emo" style="font-size:380px">🚙</div>
+      <div id="a1arm" class="c" style="width:800px;height:30px;border-radius:15px;background:#F5B942;box-shadow:0 0 0 5px #10233F"></div>
+      <svg id="a1cable" class="abs" width="1080" height="1920" style="pointer-events:none"><path id="a1path" fill="none" stroke="#FDE68A" stroke-width="8" stroke-dasharray="18 14" stroke-linecap="round"/></svg>
+      <div id="a1tab" class="c card" style="width:920px;height:330px;border-radius:48px">
+        <div class="fd" style="position:absolute;left:40px;top:30px;font-size:44px;color:var(--navy)">📟 Diagnostic</div>
+        <div id="a1go" class="btn3d" style="right:40px;top:24px;width:230px;height:80px;border-radius:40px"><div class="lip" style="background:#047857"></div><div class="face fd" style="background:linear-gradient(120deg,#34D399,#10B981);font-size:36px;color:#fff">▶ Scanner</div></div>
+        <div id="a1pct" class="fd" style="position:absolute;right:44px;top:26px;font-size:54px;color:var(--greenDark)">0 %</div>
+        <div style="position:absolute;left:40px;right:40px;top:112px;height:20px;border-radius:10px;background:var(--line);overflow:hidden"><i id="a1bar" style="display:block;height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,#6EE7B7,#10B981)"></i></div>
+        <div id="a1rows" style="position:absolute;left:40px;right:40px;top:160px;display:grid;grid-template-columns:1fr 1fr;gap:18px 40px"></div>
+      </div>
+      <div id="a1noise" class="c sticker bad" style="font-size:46px">🔊 …mais un bruit étrange !</div>
+    </section>
+
+    <!-- A2 · Chasse à la panne -->
+    <section class="scene" id="a2">
+      <div id="a2panel" class="c glasscard" style="width:940px;height:930px">
+        <div class="fd" style="position:absolute;left:44px;top:34px;font-size:46px;color:#fff">🔧 Inspection moteur</div>
+        <div style="position:absolute;left:46px;top:96px;font:600 26px Montserrat;color:var(--onDarkSoft)">« Une voiture fait un bruit étrange… »</div>
+      </div>
+      <div id="a2lens" class="c emo" style="font-size:200px">🔍</div>
+      <div id="a2dim" class="abs" style="inset:0;background:rgba(7,18,36,.55)"></div>
+      <div id="a2res" class="c card" style="width:880px;height:440px;overflow:hidden">
+        <div style="position:absolute;left:0;right:0;top:0;height:170px;background:linear-gradient(120deg,#FBBF24,#F97316)"></div>
+        <div class="bubble" style="position:absolute;left:40px;top:30px;width:110px;height:110px;background:rgba(255,255,255,.25);font-size:64px">💡</div>
+        <div class="fd" style="position:absolute;left:176px;top:30px;font-size:52px;color:#fff;line-height:1.05;text-shadow:0 4px 0 rgba(0,0,0,.15)">Moteur mystère<br>résolu !</div>
+        <div style="position:absolute;left:44px;right:44px;top:196px;font:600 30px/1.4 Montserrat;color:var(--navy)">Bague de cylindre usée ! « C'est ça, tu l'as trouvé ! »</div>
+        <div style="position:absolute;left:44px;top:330px;display:flex;gap:12px">
+          <div class="pill good" style="font-size:26px;padding:12px 22px">😊 Bonheur +20</div>
+          <div class="pill neutral" style="font-size:26px;padding:12px 22px">🧠 Intel. +8</div>
+          <div class="pill purple" style="font-size:26px;padding:12px 22px">💞 Patron +20</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- A3 · Voiture de prestige -->
+    <section class="scene" id="a3">
+      <div id="a3cone" class="abs" style="left:140px;top:560px;width:800px;height:760px;clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(253,230,138,.35),rgba(253,230,138,.04))"></div>
+      <div id="a3floor" class="c" style="width:960px;height:120px;border-radius:50%;background:radial-gradient(ellipse,rgba(253,230,138,.45),transparent 70%)"></div>
+      <div id="a3car" class="c" style="width:900px;height:337px"></div>
+      <div id="a3sp"></div>
+      <div id="a3q" class="c glasscard" style="width:920px;height:170px;border-radius:44px;display:flex;align-items:center;gap:24px;padding:0 30px">
+        <div class="bubble" style="width:104px;height:104px;background:linear-gradient(150deg,#FDE68A,#F5B942);font-size:60px;flex:none">🌟</div>
+        <div><div class="fd" style="font-size:42px;color:var(--goldSoft)">Voiture de prestige</div><div style="font:600 28px Montserrat;color:#fff;margin-top:6px">« Une voiture de rêve arrive au garage ! »</div></div>
+      </div>
+      <div id="a3s0" class="c sticker good" style="font-size:32px;padding:16px 26px">😊 Bonheur +15</div>
+      <div id="a3s1" class="c sticker special" style="font-size:32px;padding:16px 26px">✨ Beauté +3</div>
+      <div id="a3s2" class="c sticker neutral" style="font-size:32px;padding:16px 26px">🧠 Intel. +5</div>
+    </section>
+
+    <section class="scene" id="b1"></section>
+    <section class="scene" id="b2"></section>
+    <section class="scene" id="b3"></section>
+    <section class="scene" id="c1"></section>
+    <section class="scene" id="c2"></section>
+
+    <!-- C3 · Promotion chef d'équipe -->
+    <section class="scene" id="c3">
+      <div id="c3card" class="c card" style="width:940px;height:430px">
+        <div class="bubble" style="position:absolute;left:36px;top:34px;width:100px;height:100px;background:#E0E7FF;font-size:60px">👨‍💼</div>
+        <div class="fd" style="position:absolute;left:158px;top:36px;font-size:40px;color:var(--navy);line-height:1.1">Marc te propose de<br>gérer l'équipe</div>
+        <div style="position:absolute;left:44px;right:44px;top:150px;font:600 28px/1.4 Montserrat;color:var(--inkSoft)">« T'es la meilleure. Tu veux prendre la responsabilité de l'équipe ? »</div>
+        <div id="c3o0" class="btn3d" style="left:36px;width:560px;top:268px;height:120px;border-radius:38px"><div class="lip" style="background:#047857"></div><div class="face fd" style="background:linear-gradient(120deg,#34D399,#10B981);font-size:40px;color:#fff">✅ Accepter la promotion !</div></div>
+        <div id="c3o1" class="btn3d" style="left:620px;width:284px;top:268px;height:120px;border-radius:38px"><div class="lip" style="background:#4C1D95"></div><div class="face fd" style="background:linear-gradient(120deg,#8B5CF6,#6D4AFF);font-size:40px;color:#fff">🤝 Négocier</div></div>
+      </div>
+      <div id="c3medal" class="c bubble" style="width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FDE68A,#F5B942 55%,#B45309);box-shadow:0 0 0 14px #10233F,0 16px 0 18px rgba(7,18,36,.35);font-size:180px">👩‍🔧</div>
+      <div id="c3rib" class="c fd" style="font-size:52px;color:var(--gold);background:#10233F;border-radius:999px;padding:14px 44px;box-shadow:0 0 0 6px #F5B942;white-space:nowrap">CHEF D'ÉQUIPE</div>
+      <div id="c3m0" class="c emo" style="font-size:150px">🧑‍🔧</div>
+      <div id="c3m1" class="c emo" style="font-size:150px">👨‍🔧</div>
+      <div id="c3s0" class="c sticker gold" style="font-size:42px">📈 +500 €/mois</div>
+      <div id="c3s1" class="c sticker good" style="font-size:42px">😊 Bonheur +30</div>
+    </section>
+
+    <section class="scene" id="s8"></section>
+
+    <div id="head" class="abs" style="inset:0;display:none">
+      <div id="hchip" class="c chip"></div>
+      <div id="ht1" class="c title" style="font-size:120px"></div>
+      <div id="ht2" class="c title" style="font-size:120px"></div>
+    </div>
+    <div id="fx" class="abs" style="inset:0"></div>
+  </div>
+</div>
+
+<script src="../common/dl.js"></script>
+<script src="../common/scenes.js"></script>
+<script>
+// =====================================================================
+// Capsule « Mécano » : le métier de mécanicienne, le CAP Méca Auto, la carrière au garage.
+// Contenus tirés du jeu : EventsData.job_mecanique, GameData.CAP_FILIERES (meca),
+// ActivitiesData.MECHANIC_OFFERS, Job « accept » (GameServer).
+// =====================================================================
+const END = 29.0;
+initOverlay();
+initBackground(['🔧', '⚙️', '🚗', '🔩', '🛢️', '🧰', '🏁', '🪛', '🔋', '🎓', '📜', '💼', '💰', '⭐', '👑', '🚙']);
+
+// Voiture de sport dessinée (SVG) : utilisée dans l'accroche et la scène « prestige ».
+function sportsCar(color = ['#F87171', '#EF4444', '#991B1B'], id = 'c') {
+  const wheel = x => `<g transform="translate(${x} 190)"><circle r="54" fill="#0F172A"/><circle r="44" fill="#111827"/><circle r="27" fill="#CBD5E1"/>
+    <g class="spk" stroke="#64748B" stroke-width="7" stroke-linecap="round">${[0, 72, 144, 216, 288].map(a => `<line x1="0" y1="0" x2="${(22 * Math.sin(a * Math.PI / 180)).toFixed(1)}" y2="${(-22 * Math.cos(a * Math.PI / 180)).toFixed(1)}"/>`).join('')}</g><circle r="8" fill="#334155"/></g>`;
+  return `<svg viewBox="0 0 640 240" width="100%" height="100%">
+    <defs><linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color[0]}"/><stop offset=".55" stop-color="${color[1]}"/><stop offset="1" stop-color="${color[2]}"/></linearGradient>
+    <linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#BAE6FD"/><stop offset="1" stop-color="#1E3A5F"/></linearGradient></defs>
+    <ellipse cx="320" cy="226" rx="300" ry="14" fill="rgba(0,0,0,.4)"/>
+    <path d="M30 170 C34 140 70 124 130 118 L210 112 C250 80 300 62 370 62 C430 62 470 82 505 108 L570 118 C605 124 622 142 622 168 L622 182 C622 190 616 194 608 194 L44 194 C36 194 30 188 30 180 Z" fill="url(#${id}b)" stroke="#450A0A" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M232 112 C262 88 300 76 360 76 L366 112 Z" fill="url(#${id}g)"/><path d="M382 76 C430 78 462 92 490 112 L388 112 Z" fill="url(#${id}g)"/>
+    <path d="M76 150 L590 140" stroke="#fff" stroke-opacity=".45" stroke-width="7" stroke-linecap="round"/>
+    <path d="M374 116 L374 186" stroke="#450A0A" stroke-width="4" opacity=".5"/>
+    <path d="M598 130 L621 138 L618 152 L596 148 Z" fill="#FEF3C7"/><rect x="30" y="140" width="16" height="14" rx="4" fill="#FCA5A5"/>
+    ${wheel(150)}${wheel(500)}</svg>`;
+}
+
+// ---------- Accroche ----------
+$('#hcar').innerHTML = sportsCar(undefined, 'h');
+const speedLines = Array.from({ length: 14 }, (_, i) => html($('#speed'), `<div class="c" style="height:${6 + (i % 3) * 4}px;width:${300 + (i * 97) % 400}px;border-radius:6px;background:rgba(255,255,255,.75)"></div>`));
+const puffs = Array.from({ length: 6 }, () => html($('#speed'), '<div class="c emo" style="font-size:110px">💨</div>'));
+function hook(t) {
+  const sc = E.outExpo(P(t, 0, .35)), up = E.inOutCubic(P(t, .32, .6));
+  const s1 = E.outExpo(P(t, .4, .66)), s2 = E.outExpo(P(t, .9, 1.16));
+  tf($('#gear'), { y: 900, r: t * 60, s: 1 + .03 * Math.sin(t * 6) });
+  tf($('#wrench'), { y: lerp(960, 520, up), s: lerp(3.2, 1, sc) * lerp(1, .72, up), r: lerp(-260, -20, sc) + Math.sin(t * 16) * 8 * up, op: P(t, 0, .08) });
+  tf($('#k1'), { y: 860, s: lerp(2.4, 1, s1), op: P(t, .4, .46), b: (1 - s1) * 24, r: lerp(-7, -2, s1) });
+  tf($('#k2'), { y: 1065, s: lerp(2.4, 1, s2), op: P(t, .9, .96), b: (1 - s2) * 24, r: lerp(7, 2, s2) });
+  // La voiture traverse l'écran en trombe.
+  const cp = P(t, 1.0, 1.4), cx = lerp(-500, 1600, E.inOutCubic(cp));
+  tf($('#hcar'), { x: cx, y: 1440, op: cp > 0 && cp < 1 ? 1 : 0, r: -1.5 });
+  $('#hcar').querySelectorAll('.spk').forEach(g => g.setAttribute('transform', `rotate(${cx * 1.2})`));
+  speedLines.forEach((l, i) => {
+    const q = P(t, 1.0 + i * .012, 1.5 + i * .012);
+    tf(l, { x: lerp(1500, -600, q) + (i * 53) % 200, y: 1340 + (i * 37) % 200, op: q > 0 && q < 1 ? Math.sin(q * Math.PI) : 0 });
+  });
+  puffs.forEach((p, i) => {
+    const t0 = 1.05 + i * .05, q = P(t, t0, t0 + .6);
+    tf(p, { x: lerp(-500, 1600, E.inOutCubic(P(t0, 1.0, 1.4))) - 260, y: 1490 - q * 60, s: .5 + q, op: q > 0 ? (1 - q) * .8 : 0 });
+  });
+  // Le rideau se lève et dévoile le logo.
+  const dp = E.inCubic(P(t, 1.55, 2.0));
+  $('#door').style.transform = `translateY(${-1980 * dp}px)`;
+  const kick = (t > .4 ? Math.exp(-(t - .4) * 9) * .04 : 0) + (t > .9 ? Math.exp(-(t - .9) * 9) * .05 : 0);
+  const shake = t > 1.0 && t < 1.45 ? Math.sin(t * 90) * 6 : 0;
+  return { cam: { s: 1 + kick, r: Math.sin(t * 25) * kick * 30, y: shake }, accent: '#19A9E8' };
+}
+
+// ---------- A1 : diagnostic sur le pont élévateur ----------
+const DIAG = [['🔋', 'Batterie'], ['🛑', 'Freins'], ['💧', 'Huile'], ['🔌', 'Électronique']];
+const diagRows = DIAG.map(d => html($('#a1rows'), `<div class="diag"><span style="font-size:40px">${d[0]}</span>${d[1]}<span class="st">⏳</span></div>`));
+const TAP_A1 = 4.5 + .5;
+function a1(u, t) {
+  const lp = E.inOutCubic(P(u, .08, .55)), platY = lerp(1290, 1110, lp);
+  tf($('#a1p0'), { x: 150, y: 1005, s: E.outBack(P(u, 0, .25), 1.6) });
+  tf($('#a1p1'), { x: 930, y: 1005, s: E.outBack(P(u, .04, .29), 1.6) });
+  const jit = u > 1.45 ? Math.sin(u * 120) * 5 : 0;
+  tf($('#a1arm'), { y: platY, s: E.outBack(P(u, 0, .25), 1.6) });
+  tf($('#a1car'), { x: 540 + jit, y: platY - 150, s: E.outBack(P(u, 0, .3), 1.5), r: jit * .3 });
+  const tp = E.outBack(P(u, .15, .45), 1.5);
+  tf($('#a1tab'), { y: 1520, s: lerp(.7, 1, tp), op: P(u, .15, .22) });
+  const go = $('#a1go'), started = t >= TAP_A1 + .12;
+  go.style.opacity = started ? 0 : 1;
+  go.querySelector('.face').style.transform = `translateY(${-10 + pressAt(t, TAP_A1) * 8}px)`;
+  const sp = P(u, .62, 1.5);
+  $('#a1pct').style.opacity = started ? 1 : 0;
+  $('#a1pct').textContent = Math.round(sp * 100) + ' %';
+  $('#a1bar').style.width = (sp * 100) + '%';
+  diagRows.forEach((r, k) => {
+    const done = sp >= (k + 1) / 4 - .001, st = r.querySelector('.st');
+    st.textContent = done ? '✅' : '⏳';
+    st.style.transform = `scale(${done ? 1 + .5 * Math.exp(-(sp - (k + 1) / 4) * 30) : 1})`;
+  });
+  // Câble de la valise vers la voiture.
+  const cq = P(u, .45, .6);
+  $('#a1path').setAttribute('d', `M300 ${1355} C 260 ${1250} ${420} ${platY - 30} ${470} ${platY - 70}`);
+  $('#a1path').style.opacity = cq;
+  $('#a1path').setAttribute('stroke-dashoffset', -u * 120);
+  const nq = P(u, 1.55, 1.8);
+  tf($('#a1noise'), { y: 700, s: nq > 0 ? E.outBack(nq, 3) : 0, r: -4 + Math.sin(u * 40) * 2 * nq, op: nq > 0 ? 1 : 0 });
+}
+
+// ---------- A2 : la panne mystère ----------
+const PARTS = [['🔋', 'Batterie'], ['🛑', 'Freins'], ['💧', 'Huile'], ['🔌', 'Électronique'], ['⚙️', 'Cylindre'], ['🔩', 'Suspension']];
+const partEls = PARTS.map((p, i) => html($('#a2panel'), `<div class="part" style="left:${40 + (i % 3) * 290}px;top:${160 + Math.floor(i / 3) * 320}px"><div class="pe">${p[0]}</div><div class="pl">${p[1]}</div><div class="pb"></div></div>`));
+const PC = i => [245 + (i % 3) * 290, 965 + Math.floor(i / 3) * 320];
+const ROUTE = [0, 1, 2, 5, 3, 4], STEP = .22, R0 = .3; // la loupe finit sur le cylindre
+function a2(u) {
+  const pp = E.outBack(P(u, 0, .3), 1.4);
+  tf($('#a2panel'), { y: 1120, s: lerp(.85, 1, pp), op: P(u, 0, .08) });
+  partEls.forEach((el, i) => { el.style.transform = `scale(${pop(u, .08 + i * .04, .28, 2.2)})`; });
+  // Trajet de la loupe de pièce en pièce.
+  const k = clamp(Math.floor((u - R0) / STEP), -1, ROUTE.length - 1);
+  let pos;
+  if (u < R0) pos = [lerp(1200, PC(0)[0], E.outCubic(P(u, .1, R0))), PC(0)[1]];
+  else {
+    const a = PC(ROUTE[Math.max(0, k)]), b = PC(ROUTE[Math.min(ROUTE.length - 1, k + 1)]);
+    const f = k >= ROUTE.length - 1 ? 0 : E.inOutCubic(clamp(((u - R0) % STEP) / STEP * 1.6));
+    pos = [lerp(a[0], b[0], f), lerp(a[1], b[1], f)];
+  }
+  const lensOut = P(u, 1.8, 1.95);
+  tf($('#a2lens'), { x: pos[0] + 30, y: pos[1] + 20, s: 1 + .08 * Math.sin(u * 20), r: -15 + Math.sin(u * 8) * 10, op: P(u, .1, .2) * (1 - lensOut) });
+  ROUTE.forEach((pi, j) => {
+    const arrive = (j ? R0 + (j - 1) * STEP + STEP / 1.6 : R0) + .08, el = partEls[pi], b = el.querySelector('.pb');
+    const on = u >= arrive, bad = pi === 4;
+    b.textContent = on ? (bad ? '⚠️' : '✅') : '';
+    b.style.background = bad ? '#FEE2E2' : '#DCFCE7';
+    b.style.transform = `scale(${on ? E.outBack(P(u, arrive, arrive + .15), 3) : 0})`;
+    el.style.borderColor = on ? (bad ? '#EF4444' : 'rgba(110,231,183,.7)') : 'rgba(255,255,255,.16)';
+    if (bad && on) {
+      const pulse = .5 + .5 * Math.sin((u - arrive) * 24);
+      el.style.background = `rgba(239,68,68,${.25 + .25 * pulse})`;
+      el.style.transform = `scale(${1.06 + .04 * pulse}) translateX(${Math.sin(u * 90) * 6 * (1 - P(u, arrive + .3, arrive + .5))}px)`;
+    }
+  });
+  $('#a2dim').style.opacity = P(u, 1.85, 2.0);
+  const rq = P(u, 1.88, 2.15);
+  tf($('#a2res'), { y: 1150, s: rq > 0 ? E.outBack(rq, 2.2) : 0, r: lerp(-8, 0, E.outCubic(rq)), op: rq > 0 ? 1 : 0 });
+}
+
+// ---------- A3 : voiture de prestige ----------
+$('#a3car').innerHTML = sportsCar(undefined, 'p');
+const a3sp = Array.from({ length: 7 }, (_, i) => html($('#a3sp'), `<div class="emo" style="font-size:${56 + (i % 3) * 22}px">✨</div>`));
+function a3(u) {
+  $('#a3cone').style.opacity = .4 + .6 * P(u, 0, .3) + .1 * Math.sin(u * 9);
+  tf($('#a3floor'), { y: 1235, s: 1 + .03 * Math.sin(u * 6), op: P(u, 0, .3) });
+  const cp = E.outCubic(P(u, 0, .45)), cx = lerp(1700, 540, cp);
+  const settle = u > .45 ? Math.sin((u - .45) * 20) * Math.exp(-(u - .45) * 8) * 2 : 0;
+  tf($('#a3car'), { x: cx, y: 1100, b: (1 - cp) * 14, r: settle, sx: 1 + (1 - cp) * .08 });
+  $('#a3car').querySelectorAll('.spk').forEach(g => g.setAttribute('transform', `rotate(${-cx * 1.2})`));
+  // Phares + reflet qui balaie la carrosserie.
+  const hl = P(u, .5, .55) * (1 - P(u, .62, .75));
+  $('#a3car').style.filter = (hl > 0 ? `drop-shadow(0 0 ${40 * hl}px rgba(254,243,199,${hl}))` : '') + ((1 - cp) * 14 > .1 ? ` blur(${(1 - cp) * 14}px)` : '');
+  a3sp.forEach((e, i) => {
+    const q = P(u, .5 + i * .05, .95 + i * .05);
+    tf(e, { x: 160 + (i * 131) % 780, y: 980 + ((i * 89) % 220) - q * 40, s: Math.sin(q * Math.PI) * 1.2, r: q * 120, op: q > 0 && q < 1 ? 1 : 0 });
+  });
+  tf($('#a3q'), { y: 1420, s: pop(u, .45, .3, 2), op: u > .45 ? 1 : 0 });
+  [['#a3s0', 200, 1590, -5], ['#a3s1', 540, 1600, 3], ['#a3s2', 875, 1590, -3]].forEach(([id, x, y, r], k) => {
+    const q = pop(u, .7 + k * .07, .28, 2.8);
+    tf($(id), { x, y, s: q, r, op: q > 0 ? 1 : 0 });
+  });
+}
+
+// ---------- C3 : promotion chef d'équipe ----------
+const TAP_C3 = 23.0 + .85;
+function c3(u, t) {
+  const cp = E.outBack(P(u, .02, .32), 1.5), shrink = E.inOutCubic(P(u, 1.0, 1.25));
+  tf($('#c3card'), { y: lerp(885, 820, shrink), s: lerp(.85, 1, cp) * lerp(1, .82, shrink), op: P(u, .02, .1) * lerp(1, .55, shrink) });
+  $('#c3o0').querySelector('.face').style.transform = `translateY(${-12 + pressAt(t, TAP_C3) * 10}px)`;
+  $('#c3o1').style.opacity = 1 - .6 * P(u, .9, 1.0);
+  const mp = P(u, 1.05, 1.35);
+  tf($('#c3medal'), { y: 1290, s: mp > 0 ? E.outBack(mp, 2.6) * (1 + .03 * Math.sin(u * 8)) : 0, r: lerp(-30, 0, E.outCubic(mp)), op: mp > 0 ? 1 : 0 });
+  const rq = P(u, 1.2, 1.45);
+  tf($('#c3rib'), { y: 1480, s: rq > 0 ? E.outBack(rq, 2.4) : 0, op: rq > 0 ? 1 : 0, r: -2 });
+  [['#c3m0', 175], ['#c3m1', 905]].forEach(([id, x], k) => {
+    const q = P(u, 1.25 + k * .06, 1.5 + k * .06);
+    tf($(id), { x, y: 1300 - Math.abs(Math.sin((u - 1.25) * 9 + k)) * 40 * (q > 0 ? 1 : 0), s: q > 0 ? E.outBack(q, 2.4) : 0, r: (k ? 8 : -8), op: q > 0 ? 1 : 0 });
+  });
+  [['#c3s0', 310, 1650, -4], ['#c3s1', 780, 1655, 4]].forEach(([id, x, y, r], k) => {
+    const q = pop(u, 1.45 + k * .08, .28, 2.8);
+    tf($(id), { x, y, s: q, r, op: q > 0 ? 1 : 0 });
+  });
+  return { rays: .8 * P(u, 1.05, 1.35), raysY: 1290 };
+}
+
+// ---------- Scènes partagées ----------
+const CHAP = [
+  { n: '01', t: 'Le métier', s: 'Atelier · diagnostics · réparations', acc: '#19A9E8' },
+  { n: '02', t: 'Le CAP', s: 'Orientation · fin de 3ème', acc: '#F97316' },
+  { n: '03', t: 'La carrière', s: 'Pôle Emploi · dès 18 ans', acc: '#4F46E5' },
+];
+const logo = makeLogoScene($('#s1'), { focus: '🔧 FOCUS MÉCANO', focusBg: 'linear-gradient(120deg,#38BDF8,#4F46E5)' });
+const chapter = makeChapter($('#ch'), CHAP);
+const TAP_B1 = 11.5 + .95, TAP_B2 = 13.0 + 1.35, TAP_C1 = 18.0 + 1.0, TAP_CTA = 25.0 + 1.3, STAMP = 15.0 + 1.08;
+const b1 = makeOrientation($('#b1'), { avg: 13.8, subjects: ['📊 Maths 15', '🧪 Sciences 14', '🗣️ Anglais 12'], tapT: TAP_B1 });
+const b2 = makeCapList($('#b2'), { pick: 'meca', pickDesc: 'Mécanicien, Responsable atelier', color: '#19A9E8', okText: '🔧 Inscrite en CAP Méca Auto', tapT: TAP_B2 });
+const b3 = makeDiploma($('#b3'), { cap: 'CAP Méca Auto', name: 'Inès Garcia', avg: 15, nodes: [['🔧', '15 ans'], ['🚗', '16 ans'], ['📝', '17 ans · examen']], stampT: STAMP });
+const c1 = makeJobBoard($('#c1'), {
+  intro: 'Tu as un CAP Méca Auto. Voici les garages qui recrutent :', pick: 2, tapT: TAP_C1, salary: 2000,
+  hired: 'Inès est embauchée comme <b>mécanicienne</b> chez <b>Garage Premium</b> (Centre-ville) !',
+  offers: [['🔧', 'Garage Dupont', 'Réparation générale · Quartier résidentiel', 1650, 'Traditionnel, un peu vieillot', '#E2E8F0'],
+    ['🏢', 'Atelier Techno Cars', 'Garage moderne · Zone industrielle', 1800, 'Professionnel, diagnostic informatique', '#E0F2FE'],
+    ['🌟', 'Garage Premium', 'Garage haut de gamme · Centre-ville', 2000, 'Exigeant qualité, clients VIP', '#FEF3C7']],
+});
+const c2 = makeCareerStack($('#c2'), {
+  job: { emoji: '🌟', bg: '#FEF3C7', name: 'Garage Premium', sub: 'Mécanicienne · Centre-ville' }, salary0: 2000,
+  events: [ // [u, emoji, fond, titre, sous-titre, pastille, style, +salaire]
+    [.12, '🎓', '#E0F2FE', 'Formation diagnostic', 'Nouveau système informatique', '🧠 +10', 'neutral', 0],
+    [.55, '💰', '#DCFCE7', 'Augmentation surprise', '« T\'as été très bonne ! »', '📈 +120 €/mois', 'good', 120],
+    [1.0, '😊', '#FEF3C7', 'Client prestige ravi', 'Pourboire surprise !', '💰 +100 €', 'special', 0],
+    [1.45, '🏆', '#FEF3C7', 'Concours régional', 'Diagnostic le plus rapide : top 1 !', '💰 +500 €', 'gold', 0],
+    [1.9, '💰', '#EDE9FE', 'Salaire augmenté', '« Les clients te demandent ! »', '📈 +400 €/mois', 'good', 400],
+  ],
+});
+const cta = makeCTA($('#s8'), { tag: '🔧 FOCUS MÉCANO', tagBg: 'linear-gradient(120deg,#38BDF8,#4F46E5)', tapT: TAP_CTA });
+
+// =================== Montage ===================
+const ACTS = [
+  { chip: '<b>01/03</b>🔧 LE MÉTIER', col: '#38BDF8', acc: '#19A9E8' },
+  { chip: '<b>02/03</b>🎓 LE CAP', col: '#FB923C', acc: '#F97316' },
+  { chip: '<b>03/03</b>💼 LA CARRIÈRE', col: '#F5B942', acc: '#4F46E5' },
+];
+const render = makeMontage({
+  END, flash: 1.62,
+  acts: ACTS,
+  scenes: [
+    { id: 's1', a: 1.55, b: 3.5, fn: logo },
+    { id: 's0', a: 0, b: 2.0, fn: (u, t) => hook(t) }, // après le logo : sa caméra prime tant que le rideau monte
+    { id: 'ch', a: 3.5, b: 4.5, fn: u => chapter(0, u) },
+    { id: 'a1', a: 4.5, b: 6.5, act: 0, t1: 'Diagnostic', t2: 'complet !', fn: a1 },
+    { id: 'a2', a: 6.5, b: 9.0, act: 0, t1: 'Moteur', t2: 'mystère…', fn: a2 },
+    { id: 'a3', a: 9.0, b: 10.5, act: 0, t1: 'Voiture', t2: 'de prestige !', fn: a3 },
+    { id: 'ch', a: 10.5, b: 11.5, fn: u => chapter(1, u) },
+    { id: 'b1', a: 11.5, b: 13.0, act: 1, t1: 'Fin de 3ème :', t2: 'choisis ta voie', fn: b1 },
+    { id: 'b2', a: 13.0, b: 15.0, act: 1, t1: '11 CAP', t2: 'au choix', fn: b2 },
+    { id: 'b3', a: 15.0, b: 17.0, act: 1, t1: 'Diplômée', t2: 'en 2 ans !', fn: b3 },
+    { id: 'ch', a: 17.0, b: 18.0, fn: u => chapter(2, u) },
+    { id: 'c1', a: 18.0, b: 20.5, act: 2, t1: 'Les garages', t2: 'recrutent !', fn: c1 },
+    { id: 'c2', a: 20.5, b: 23.0, act: 2, t1: 'Fais grimper', t2: 'ton salaire', fn: c2 },
+    { id: 'c3', a: 23.0, b: 25.0, act: 2, t1: 'Chef', t2: 'd\'équipe ?', fn: c3 },
+    { id: 's8', a: 25.0, b: 29.0, fn: cta },
+  ],
+  cuts: [[3.5, '#19A9E8', '#0369A1'], [10.5, '#F97316', '#C2410C'], [17.0, '#4F46E5', '#1E1B4B'], [25.0, '#10B981', '#065F46']],
+  taps: [[TAP_A1, 845, 1419], [TAP_B1, ...ORIENTATION_TAP], [TAP_B2, ...CAPLIST_TAP], [TAP_C1, ...c1.tap], [TAP_C3, 386, 998], [TAP_CTA, ...cta.tap]],
+});
+addConfetti(40, 31, 6.5 + 1.95, 540, 1150, .9); // panne trouvée
+addConfetti(70, 32, STAMP, 740, 1390);          // CAP obtenu
+addConfetti(70, 33, 19.42, 540, 950);           // nouveau job
+addConfetti(80, 34, 23.0 + 1.1, 540, 1290);     // promotion
+addConfetti(90, 35, TAP_CTA, 540, 1150, 1.2);   // CTA
+window.render = render;
+window.DURATION = END;
+render(0);
+</script>
+</body>
+</html>
