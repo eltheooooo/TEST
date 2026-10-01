@@ -7,11 +7,14 @@ capturée avec Playwright puis encodée en MP4 avec une bande-son synthétisée.
 | Capsule | Durée | Fichier |
 |---|---|---|
 | ✂️ Coiffure (salon · CAP Coiffure · carrière) | 29 s | `coiffure/DestinyLife_Capsule_Coiffure_9x16.mp4` |
+| 🔧 Mécano (métier · CAP Méca Auto · carrière) | 29 s | `mecano/DestinyLife_Capsule_Mecano_9x16.mp4` |
 
 ## Socle commun (`common/`)
 - `dl.css` : tokens et composants du jeu (bleu nuit, or, vert, cartes arrondies, boutons 3D, pastilles…)
 - `dl.js` : fond animé, logo lettre par lettre, en-tête de scène, volets et whip pans, curseur de tap, confettis
-- `sfx.py` : synthés de sound design + groove 120 BPM (`Mix`)
+- `scenes.js` : scènes prêtes à l'emploi (logo + badge FOCUS, cartons de chapitre, orientation de 3ème, liste des 11 CAP,
+  diplôme, Pôle Emploi + embauche, pile d'événements de carrière, CTA) et le montage (`makeMontage`) — utilisé par Mécano
+- `sfx.py` : synthés de sound design (dont moteur, cliquet, rideau métallique, vérin, bips) + groove 120 BPM (`Mix`)
 - `capture.js` / `encode.sh` : capture et encodage
 - `fonts/` : Fredoka One (police du jeu) et Montserrat (à la place de Gotham)
 
@@ -23,8 +26,8 @@ pip install numpy && python3 sound.py                                           
 bash ../common/encode.sh /tmp/frames sound.wav DestinyLife_Capsule_Coiffure_9x16.mp4 jpg 60  # MP4
 ```
 Astuce : lancer `capture.js` sur plusieurs plages (`0-435`, `435-870`…) en parallèle accélère le rendu.
-Pour une nouvelle capsule : copier `coiffure/`, garder le montage (`SCENES`, `CUTS`, `TAPS`) et
-remplacer les scènes.
+Pour une nouvelle capsule : partir de `mecano/` (qui s'appuie sur `common/scenes.js`), écrire seulement les
+scènes propres au thème (accroche + 4 scènes) et brancher les scènes partagées avec les données du jeu.
 
 ## Capsule Coiffure — découpage (120 BPM)
 | Temps | Plan | Source dans le jeu |
@@ -43,4 +46,21 @@ remplacer les scènes.
 | 18–20,5 s | Pôle Emploi : 6 salons → embauche au Salon de Dorothée, 1 830 €/mois | `SALON_OFFERS`, Job « accept » |
 | 20,5–23 s | Événements : client célèbre, pourboire, formation ombré hair, augmentation, offre d'un autre salon | `EventsData.job_coiffure` |
 | 23–25 s | « Rêve d'ouvrir ton salon » → Économiser | `EventsData.job_coiffure` |
+| 25–29 s | CTA « Quel sera ton destin ? » ▶ JOUER · recherche « Destiny Life » | — |
+
+## Capsule Mécano — découpage (120 BPM)
+| Temps | Plan | Source dans le jeu |
+|---|---|---|
+| 0–2 s | « UN MOTEUR. UN DESTIN. » sur un rideau de garage, une voiture passe, le rideau se lève | — |
+| 1,5–3,5 s | Logo + « 🔧 FOCUS MÉCANO » | — |
+| 3,5–4,5 s | Chapitre 01 · Le métier | — |
+| 4,5–6,5 s | Pont élévateur + valise de diagnostic (batterie, freins, huile, électronique) → « un bruit étrange » | `job_mecanique` : Premier diagnostic |
+| 6,5–9 s | Inspection à la loupe → bague de cylindre usée : « Moteur mystère résolu ! » | `job_mecanique` : Moteur mystère résolu |
+| 9–10,5 s | Voiture de prestige au garage (Bonheur +15, Beauté +3, Intelligence +5) | `job_mecanique` : Voiture de prestige |
+| 10,5–11,5 s | Chapitre 02 · Le CAP | — |
+| 11,5–17 s | Orientation → CAP Méca Auto (Mécanicien, Responsable atelier · ~1 700 €) → diplôme ADMIS | `CAP_FILIERES`, `SCHOOL.bac` |
+| 17–18 s | Chapitre 03 · La carrière | — |
+| 18–20,5 s | Pôle Emploi : Garage Dupont, Atelier Techno Cars, Garage Premium → embauche à 2 000 €/mois | `MECHANIC_OFFERS` |
+| 20,5–23 s | Formation diagnostic, augmentation +120 €, pourboire client prestige, concours régional, +400 €/mois | `job_mecanique` |
+| 23–25 s | « Marc te propose de gérer l'équipe » → promotion CHEF D'ÉQUIPE, +500 €/mois | `job_mecanique` : promotion |
 | 25–29 s | CTA « Quel sera ton destin ? » ▶ JOUER · recherche « Destiny Life » | — |
