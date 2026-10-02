@@ -233,3 +233,18 @@ def scribble(d=.4):
 def page_flip(d=.45):
     t = tt(d); x = t / d
     return (lp(noise(d), 600 + 5000 * x) * np.sin(np.pi * x) ** 2 * 1.4 + hp(noise(d), 3000) * np.exp(-((x - .8) * 12) ** 2) * .6) * .8
+
+
+# ---------- Prison ----------
+def siren(d=1.0, f0=650, f1=950, rate=2.0):
+    t = tt(d); f = f0 + (f1 - f0) * (.5 + .5 * np.sign(np.sin(2 * np.pi * rate * t)))
+    return lp(_sweep(f) + .3 * np.sign(_sweep(f)), 3000) * np.minimum(1, t * 20) * np.minimum(1, (d - t) * 6) * .22
+def bars_slam():
+    t = tt(1.2)
+    ring = sum(np.sin(2 * np.pi * f * t) * np.exp(-t * k) for f, k in ((220, 3), (347, 4), (512, 6), (790, 8)))
+    return (ring * .3 + thud()[: len(t)] if len(thud()) >= len(t) else ring * .3) * .9
+def gavel():
+    out = np.zeros(int(.6 * SR))
+    for d in (0, .18):
+        c = thud(); i = int(d * SR); out[i:i + len(c)] += c[: len(out) - i] * (.8 if d else 1)
+    return out

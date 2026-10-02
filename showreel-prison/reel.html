@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Destiny Life Prison</title>
+<link rel="stylesheet" href="../capsules/common/fonts.css">
+<link rel="stylesheet" href="../capsules/common/dl.css">
+<link rel="stylesheet" href="base.css">
+<style>
+.siren{position:absolute;width:1400px;height:1400px;border-radius:50%;filter:blur(60px);mix-blend-mode:screen;pointer-events:none}
+.bar{position:absolute;top:0;width:34px;height:100%;border-radius:17px;background:linear-gradient(90deg,#475569,#CBD5E1 45%,#64748B);box-shadow:0 0 0 4px #0F172A}
+.act{position:absolute;height:150px;border-radius:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#fff;font:400 26px 'Fredoka One'}
+.act .ae{font-size:52px;line-height:1}
+#gauge{position:absolute;left:0;top:0;width:940px;height:150px;border-radius:75px;overflow:hidden;box-shadow:0 0 0 10px #0F172A,0 30px 60px rgba(0,0,0,.5);display:flex}
+#gauge .g{display:flex;align-items:center;justify-content:center;font:400 40px 'Fredoka One';color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.25)}
+</style>
+</head>
+<body>
+<div id="root">
+  <div id="mesh"></div>
+  <div id="dots"></div>
+  <div id="rays" class="c" style="width:2600px;height:2600px;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(253,230,138,.2) 0deg 6deg,transparent 6deg 16deg);-webkit-mask-image:radial-gradient(circle,#000 0%,rgba(0,0,0,.5) 25%,transparent 60%)"></div>
+  <div id="bokeh" class="abs" style="inset:0"></div>
+  <div id="sirR" class="siren" style="background:radial-gradient(circle,rgba(239,68,68,.9),transparent 65%)"></div>
+  <div id="sirB" class="siren" style="background:radial-gradient(circle,rgba(59,130,246,.9),transparent 65%)"></div>
+
+  <div id="cam" class="abs" style="width:1080px;height:1920px;transform-origin:540px 960px">
+
+    <!-- 1 · Ouverture -->
+    <section class="scene" id="s0">
+      <div id="o1" class="word big" style="font-size:140px"></div>
+      <div id="o2" class="word big" style="font-size:140px"></div>
+      <svg class="abs" width="1080" height="1920"><circle id="oring" cx="540" cy="960" r="270" fill="none" stroke="#EF4444" stroke-width="14" pathLength="1" stroke-dasharray="1 1" transform="rotate(-90 540 960)"/>
+        <circle id="oring2" cx="540" cy="960" r="300" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="3" stroke-dasharray="4 18"/></svg>
+      <div id="odisk" class="c" style="width:500px;height:500px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#334155,#0F172A 70%);box-shadow:inset 0 0 0 6px rgba(255,255,255,.08),0 40px 90px rgba(0,0,0,.5)"></div>
+      <div id="oico" class="c emo" style="font-size:230px"></div>
+      <div id="olab" class="c cap" style="font-size:34px"></div>
+      <div id="orisk" class="c pill bad" style="font-size:34px"></div>
+      <div id="obits"></div>
+    </section>
+
+    <!-- 2 · Logo -->
+    <section class="scene" id="s1">
+      <div id="lcrown" class="c emo" style="font-size:190px">👑</div>
+      <div id="llogo" class="c" style="width:1040px;height:240px"></div>
+      <div id="ltag" class="c sticker" style="background:linear-gradient(120deg,#EF4444,#3B82F6);color:#fff;font-size:50px;letter-spacing:4px">🚔 FOCUS PRISON</div>
+      <div id="lslog" class="c fd" style="font-size:60px;color:#FDE68A;text-shadow:0 6px 0 #071224;white-space:nowrap">Chaque choix compte !</div>
+    </section>
+
+    <!-- 3 → 5 · Téléphone -->
+    <section class="scene" id="sd">
+      <div id="wcap" class="c cap"></div>
+      <div id="wbig" class="word big" style="font-size:210px"></div>
+      <div id="persp" class="abs" style="inset:0;perspective:2400px;perspective-origin:540px 1150px;z-index:1">
+        <div id="device">
+          <div id="screen">
+            <div id="notch"></div>
+            <!-- Tentation -->
+            <div class="scr" id="scrT">
+              <div style="position:absolute;left:18px;right:18px;top:110px;height:1000px;border-radius:48px;background:#fff;overflow:hidden;box-shadow:0 12px 0 #9FB0CF">
+                <div style="position:absolute;left:0;right:0;top:0;height:220px;background:linear-gradient(120deg,#1E293B,#7F1D1D)"></div>
+                <div class="bubble" style="position:absolute;left:30px;top:48px;width:124px;height:124px;background:rgba(255,255,255,.18);font-size:76px">🛍️</div>
+                <div class="pill" style="position:absolute;left:176px;top:54px;background:rgba(255,255,255,.18);color:#fff;font-size:24px;padding:10px 20px">🎂 24 ans · fin d'année</div>
+                <div style="position:absolute;left:178px;top:122px;font:800 22px Montserrat;color:#FCA5A5;letter-spacing:4px">TENTATION</div>
+                <div class="fd" style="position:absolute;left:30px;right:30px;top:250px;font-size:40px;line-height:1.05;color:#10233F">Une occasion... risquée</div>
+                <div style="position:absolute;left:30px;right:30px;top:330px;font:600 26px/1.42 Montserrat;color:#4A5B78">Une occasion se présente : voler dans un magasin. Ça pourrait rapporter... mais tu risques la prison si tu te fais prendre.</div>
+                <div style="position:absolute;left:30px;right:30px;top:530px;height:150px;border-radius:30px;background:#FEF2F2;border:3px solid #FECACA;padding:20px 24px">
+                  <div style="font:800 26px Montserrat;color:#B91C1C">⚠️ Risque de te faire prendre : <span class="fd" style="font-size:34px">45 %</span></div>
+                  <div style="margin-top:22px;height:26px;border-radius:13px;background:#FECACA;overflow:hidden"><i id="tRisk" style="display:block;height:100%;width:0;border-radius:13px;background:linear-gradient(90deg,#F87171,#DC2626)"></i></div>
+                </div>
+                <div id="tGo" class="btn3d chc" style="top:730px;height:104px"><div class="lip" style="background:#7F1D1D"></div><div class="face" style="background:linear-gradient(120deg,#F87171,#DC2626)">😈 Tenter le coup</div></div>
+                <div id="tNo" class="btn3d chc" style="top:860px;height:104px"><div class="lip" style="background:#065F46"></div><div class="face" style="background:linear-gradient(120deg,#34D399,#10B981);font-size:25px">😇 Renoncer (rester honnête)</div></div>
+              </div>
+            </div>
+            <!-- Pris en flagrant délit -->
+            <div class="scr" id="scrC">
+              <div style="position:absolute;left:18px;right:18px;top:200px;height:820px;border-radius:48px;background:#fff;overflow:hidden;box-shadow:0 12px 0 #9FB0CF">
+                <div style="position:absolute;left:0;right:0;top:0;height:230px;background:linear-gradient(120deg,#DC2626,#1D4ED8)"></div>
+                <div class="bubble" style="position:absolute;left:30px;top:54px;width:124px;height:124px;background:rgba(255,255,255,.2);font-size:78px">🚔</div>
+                <div class="fd" style="position:absolute;left:176px;top:60px;font-size:46px;line-height:1.05;color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.2)">Pris en flagrant<br>délit !</div>
+                <div style="position:absolute;left:30px;right:30px;top:270px;font:600 29px/1.45 Montserrat;color:#10233F">Hugo se fait prendre en flagrant délit (voler dans un magasin) et est condamné ! 2 ans de prison.</div>
+                <div class="pill bad" style="position:absolute;left:30px;top:520px;font-size:30px">🔒 Prison : 2 ans</div>
+                <div class="pill" style="position:absolute;left:30px;top:610px;font-size:26px;background:#F1F5F9;color:#334155">👮 Un gardien + 3 détenus</div>
+              </div>
+              <div id="bars" class="abs" style="inset:0;z-index:4"></div>
+            </div>
+            <!-- La vie en cellule -->
+            <div class="scr" id="scrJ" style="background:linear-gradient(170deg,#334155,#1E293B 55%,#0F172A)">
+              <div style="position:absolute;left:18px;right:18px;top:76px;height:118px;border-radius:36px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.14);display:flex;align-items:center;gap:16px;padding:0 18px">
+                <div class="bubble" style="width:84px;height:84px;border-radius:50%;background:#FB923C;font-size:52px;box-shadow:0 0 0 5px #F97316">👨</div>
+                <div><div class="fd" style="font-size:34px;color:#fff">Hugo Martin</div><div style="font:700 20px Montserrat;color:#CBD5E1;margin-top:4px">Détenu · cellule 12</div></div>
+              </div>
+              <div id="jYear" class="pill" style="position:absolute;left:18px;top:214px;background:#F97316;color:#fff;font-size:28px">🔒 PRISON · ANNÉE 1/2</div>
+              <div style="position:absolute;left:18px;right:18px;top:300px;display:flex;gap:12px">
+                <div style="flex:1;height:84px;border-radius:24px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;gap:10px;font:400 30px 'Fredoka One';color:#fff">😊 <span id="jBon">58</span></div>
+                <div style="flex:1;height:84px;border-radius:24px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;gap:10px;font:400 30px 'Fredoka One';color:#fff">❤️ <span id="jSan">71</span></div>
+                <div style="flex:1;height:84px;border-radius:24px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;gap:10px;font:400 30px 'Fredoka One';color:#fff">🧠 <span>44</span></div>
+              </div>
+              <div class="fd" style="position:absolute;left:24px;top:410px;font-size:30px;color:#CBD5E1">🏃 Activités (1×/an)</div>
+              <div id="jActs" style="position:absolute;left:18px;right:18px;top:460px;height:480px"></div>
+              <div id="jToast" class="pill good" style="position:absolute;left:50%;top:410px;transform:translateX(-50%);font-size:24px;opacity:0;z-index:3"></div>
+              <div id="jBtn" class="btn3d" style="left:18px;right:18px;top:990px;height:150px;border-radius:46px"><div class="lip" style="background:#7C2D12"></div>
+                <div class="face" style="background:linear-gradient(170deg,#FDBA74,#F97316 60%,#C2410C)"><div class="fd" style="font-size:52px;color:#fff;-webkit-text-stroke:4px #7C2D12;paint-order:stroke fill">⏭️ Passer l'année</div><div style="font:700 22px Montserrat;color:rgba(255,255,255,.9)">−10 😊 · −5 ❤️ · un événement</div></div></div>
+            </div>
+            <div id="glare"></div>
+          </div>
+        </div>
+      </div>
+      <div id="callouts" class="abs" style="inset:0;z-index:20"></div>
+      <div id="stamp" class="c fd" style="z-index:20;font-size:118px;color:#DC2626;border:12px solid #DC2626;border-radius:28px;padding:0 34px;line-height:1.15;background:rgba(254,226,226,.75)">CONDAMNÉ</div>
+    </section>
+
+    <!-- 6 · Carrousel des événements en cellule -->
+    <section class="scene" id="sf">
+      <div id="fcnt" class="c cap" style="font-size:30px"></div>
+      <div id="fpersp" class="abs" style="inset:0;perspective:1800px;perspective-origin:540px 780px">
+        <div id="fcardA" class="fcard"></div>
+        <div id="fcardB" class="fcard"></div>
+      </div>
+      <div id="fbars" class="abs" style="left:280px;top:520px;width:520px;height:520px;border-radius:130px;overflow:hidden;pointer-events:none"></div>
+      <div id="fprev" class="word fd" style="font-size:72px;color:rgba(255,255,255,.22)"></div>
+      <div id="fword" class="word big" style="font-size:130px"></div>
+      <div id="fnext" class="word fd" style="font-size:72px;color:rgba(255,255,255,.22)"></div>
+      <div id="fstat" class="c pill gold" style="font-size:36px;padding:18px 36px"></div>
+    </section>
+
+    <!-- 7 · Évasion -->
+    <section class="scene" id="se">
+      <div id="ecap" class="c cap" style="font-size:30px">04 <i>—</i> LE GRAND SAUT</div>
+      <div id="eword" class="word big" style="font-size:180px"></div>
+      <div id="edoor" class="c emo" style="font-size:260px">🚪</div>
+      <div id="gauge" class="c"><div class="g" style="width:35%;background:linear-gradient(120deg,#34D399,#059669)">35 %</div><div class="g" style="width:65%;background:linear-gradient(120deg,#F87171,#B91C1C)">65 %</div></div>
+      <div id="glab0" class="c pill good" style="font-size:28px">🏃 Évasion réussie</div>
+      <div id="glab1" class="c pill bad" style="font-size:28px">🚨 Ratée : +5 ans</div>
+      <div id="needle" class="c" style="width:70px;height:200px"><svg width="70" height="200" viewBox="0 0 70 200"><polygon points="35,190 6,10 64,10" fill="#fff" stroke="#0F172A" stroke-width="8" stroke-linejoin="round"/></svg></div>
+      <div id="efail" class="c sticker bad" style="font-size:56px">🚨 RATÉE ! +5 ans de peine</div>
+      <div id="efx" class="c pill glass" style="font-size:32px">😊 −50 · ❤️ −30</div>
+    </section>
+
+    <!-- 8 · Libération -->
+    <section class="scene" id="sr">
+      <div id="rcap" class="c cap" style="font-size:30px">05 <i>—</i> LA SORTIE</div>
+      <div id="rword" class="word big" style="font-size:200px"></div>
+      <div id="rlight" class="c" style="width:420px;height:620px;border-radius:30px 30px 0 0;background:linear-gradient(180deg,#FFFBEB,#FDE68A);box-shadow:0 0 160px 60px rgba(253,230,138,.55)"></div>
+      <div id="rdoorL" class="c" style="width:210px;height:620px;background:linear-gradient(90deg,#475569,#94A3B8);box-shadow:inset 0 0 0 8px #1E293B;transform-origin:0 50%"></div>
+      <div id="rwalk" class="c emo" style="font-size:200px">🚶</div>
+      <div id="rcard" class="c card" style="width:920px;height:430px;overflow:hidden">
+        <div style="position:absolute;left:0;right:0;top:0;height:150px;background:linear-gradient(120deg,#FBBF24,#F59E0B)"></div>
+        <div class="bubble" style="position:absolute;left:34px;top:24px;width:100px;height:100px;background:rgba(255,255,255,.3);font-size:60px">🚪</div>
+        <div class="fd" style="position:absolute;left:156px;top:38px;font-size:60px;color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.15)">Libération !</div>
+        <div style="position:absolute;left:36px;right:36px;top:172px;font:600 27px/1.42 Montserrat;color:#10233F">« Après 7 ans d'incarcération, la porte s'ouvre. Dehors, le monde a continué sans toi. Beaucoup t'ont oublié... »</div>
+        <div style="position:absolute;left:36px;top:330px;display:flex;gap:10px"><div class="pill bad" style="font-size:24px;padding:10px 18px">😊 −30</div><div class="pill bad" style="font-size:24px;padding:10px 18px">❤️ −10</div><div class="pill neutral" style="font-size:24px;padding:10px 18px">🧠 +10 maturité</div></div>
+      </div>
+      <div id="rlost" class="c pill glass" style="font-size:30px">💔 80 % de chance de perdre chaque contact</div>
+    </section>
+
+    <!-- 9 · CTA -->
+    <section class="scene" id="s8">
+      <div id="ctag" class="c sticker" style="background:linear-gradient(120deg,#EF4444,#3B82F6);color:#fff;font-size:36px;letter-spacing:4px;padding:14px 32px">🚔 FOCUS PRISON</div>
+      <div id="ccrown" class="c emo" style="font-size:160px">👑</div>
+      <div id="clogo" class="c" style="width:1040px;height:220px"></div>
+      <div id="cq1" class="c big" style="font-size:100px">Quel sera</div>
+      <div id="cq2" class="c big" style="font-size:100px;color:#F5B942">ton destin ?</div>
+      <div id="cglow" class="c" style="width:780px;height:260px;border-radius:90px;background:rgba(110,231,183,.55);filter:blur(44px)"></div>
+      <div id="cbtn" class="btn3d c" style="width:760px;height:230px;border-radius:74px"><div class="lip" style="background:#065F46"></div>
+        <div class="face" style="background:linear-gradient(170deg,#6EE7B7,#10B981 55%,#059669)"><div class="fd" style="font-size:118px;color:#fff;-webkit-text-stroke:8px #065F46;paint-order:stroke fill;letter-spacing:2px">▶ JOUER</div><div class="shine" id="cshine" style="width:170px"></div></div></div>
+      <div id="cfree" class="c cap" style="font-size:32px;color:#A9BCD9">GRATUIT SUR ROBLOX</div>
+      <div id="csearch" class="c" style="width:740px;height:124px;border-radius:62px;background:#fff;box-shadow:0 12px 0 #9FB0CF,0 30px 60px rgba(0,0,0,.35);display:flex;align-items:center;padding:0 40px;gap:22px">
+        <span style="font-size:54px">🔍</span><span id="ctype" class="fd" style="font-size:58px;color:#10233F"></span><span id="ccaret" style="width:6px;height:62px;background:#6D4AFF;border-radius:3px;display:inline-block"></span></div>
+    </section>
+
+    <div id="fx" class="abs" style="inset:0"></div>
+  </div>
+  <div id="grain"></div>
+  <div id="vig"></div>
+</div>
+
+<script src="../capsules/common/dl.js"></script>
+<script>
+// =====================================================================
+// Destiny Life — focus prison (30 s, 9:16, 120 BPM). Rendu image par image : window.render(t).
+// Mécaniques tirées du jeu (Prison.lua, ActivitiesData) : tentation 4 %/an dès 18 ans, 3 délits
+// (45 / 40 / 55 % d'être pris, 1 à 5 ans), gardien + 3 détenus, « Passer l'année » (−10 bonheur,
+// −5 santé), activités, 30 événements, évasion 35 % (sinon +5 ans), libération.
+// =====================================================================
+const END = 30.0;
+initOverlay();
+$('#prog').style.display = 'none';
+$('#root').insertBefore($('#overlay'), $('#grain'));
+
+// ---------- Fond ----------
+const BLOBS = [['#3B82F6', 900, .2, .2], ['#6D4AFF', 1000, .85, .25], ['#EF4444', 800, .8, .8], ['#334155', 760, .15, .85], ['#F97316', 600, .5, .55]];
+const blobs = BLOBS.map(b => html($('#mesh'), `<div class="blob" style="width:${b[1]}px;height:${b[1]}px;background:${b[0]}"></div>`));
+const br = rng(5);
+const bokeh = Array.from({ length: 20 }, () => ({ el: html($('#bokeh'), `<div class="bok" style="width:${30 + br() * 90}px;height:${30 + br() * 90}px;filter:blur(${2 + br() * 6}px)"></div>`), x: br() * W, y: br() * H, sp: 20 + br() * 60, ph: br() * 6, z: .3 + br() * .7 }));
+let ACCENT = '#F97316';
+function renderBg(t, tint) {
+  blobs.forEach((el, i) => {
+    const b = BLOBS[i];
+    el.style.transform = `translate(${b[2] * W + Math.sin(t * .4 + i * 1.7) * 160 - b[1] / 2}px,${b[3] * H + Math.cos(t * .33 + i) * 200 - b[1] / 2}px) scale(${1 + .1 * Math.sin(t * .8 + i)})`;
+    el.style.opacity = (i === 4 ? .2 : .4) * clamp(t / .8);
+    if (i === 4) el.style.background = tint;
+  });
+  bokeh.forEach(b => { const y = ((b.y - t * b.sp) % (H + 200) + H + 200) % (H + 200) - 100; tf(b.el, { x: b.x + Math.sin(t * .7 + b.ph) * 30, y, op: .2 * b.z * clamp(t / 1.2) }); });
+  $('#grain').style.transform = `translate(${Math.floor(rng(Math.floor(t * 24))() * 200) - 100}px,${Math.floor(rng(Math.floor(t * 24) + 7)() * 200) - 100}px)`;
+}
+// Gyrophares : rouge / bleu en alternance rapide.
+function sirens(t, amt) {
+  const ph = Math.floor(t * 8) % 2, wob = .6 + .4 * Math.abs(Math.sin(t * 25));
+  tf($('#sirR'), { x: 120, y: 260, op: amt * (ph ? wob : .15) });
+  tf($('#sirB'), { x: 960, y: 260, op: amt * (ph ? .15 : wob) });
+}
+
+// ---------- Mots cinétiques ----------
+function setWord(el, txt, accentLast, maxW = 990) {
+  if (el.dataset.w === txt) return;
+  el.dataset.w = txt;
+  const chars = [...txt];
+  el.innerHTML = chars.map((c, i) => `<span${accentLast && i === chars.length - 1 ? ' style="color:#F5B942"' : ''}>${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+  el.dataset.fit = 1; const w = el.scrollWidth; el.dataset.fit = w > maxW ? maxW / w : 1;
+}
+function animWord(el, u, inAt, outAt, { x = 540, y, stagger = .025 } = {}) {
+  [...el.children].forEach((s, i) => {
+    const qi = E.outExpo(P(u, inAt + i * stagger, inAt + .4 + i * stagger));
+    const qo = outAt == null ? 0 : E.inExpo(P(u, outAt + i * stagger * .6, outAt + .25 + i * stagger * .6));
+    s.style.transform = `translateY(${(1 - qi) * 140 - qo * 160}px) rotate(${(1 - qi) * 8}deg) scale(${lerp(.6, 1, qi)})`;
+    s.style.opacity = Math.min(qi * 1.5, 1) * (1 - qo);
+  });
+  tf(el, { x, y });
+}
+function extrudeLogo(el, size) {
+  const word = (t, c) => [...t].map(ch => `<span class="L" style="display:inline-block;color:${c}">${ch}</span>`).join('');
+  const layers = [];
+  for (let k = 10; k >= 1; k--) layers.push(`<div class="extr" style="position:absolute;left:50%;top:50%;transform:translate(-50%,calc(-50% + ${k * 3}px));font-size:${size}px;color:#071224;white-space:nowrap">${word('Destiny', '#071224')}${word('Life', '#071224')}</div>`);
+  el.innerHTML = layers.join('') + `<div class="extr" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:${size}px;white-space:nowrap">${word('Destiny', '#fff')}${word('Life', '#F5B942')}</div>`;
+  return [...el.querySelectorAll('.L')];
+}
+function letters(ls, u, start, step) {
+  ls.forEach((L, j) => {
+    const i = j % 11, q = P(u, start + i * step, start + .4 + i * step);
+    L.style.transform = `translateY(${(1 - E.outCubic(q)) * 120}px) scale(${Math.max(0, E.outBack(q, 2.4))}) rotate(${(1 - q) * (i % 2 ? 18 : -18)}deg)`;
+    L.style.opacity = q > 0 ? 1 : 0;
+  });
+}
+const llet = extrudeLogo($('#llogo'), 178), clet = extrudeLogo($('#clogo'), 160);
+
+// ---------- 1 · Ouverture : les 3 délits et leur risque ----------
+const CRIMES = [['🛍️', 'VOLER DANS UN MAGASIN', '45 % d\'être pris'], ['💳', 'FRAUDER / ARNAQUER', '40 % d\'être pris'], ['📦', 'VENDRE DES TRUCS ILLÉGAUX', '55 % d\'être pris']];
+const obits = Array.from({ length: 28 }, (_, i) => html($('#obits'), `<div class="c" style="width:${10 + (i % 4) * 6}px;height:${10 + (i % 4) * 6}px;border-radius:50%;background:${['#EF4444', '#3B82F6', '#fff'][i % 3]}"></div>`));
+function sOpen(t) {
+  setWord($('#o1'), 'Une occasion…'); setWord($('#o2'), 'très risquée.');
+  animWord($('#o1'), t, .05, .95, { y: 860, stagger: .02 });
+  animWord($('#o2'), t, .4, .95, { y: 1050, stagger: .02 });
+  $('#o2').querySelectorAll('span').forEach(s => s.style.color = '#F87171');
+  const mp = P(t, 1.0, 2.5), idx = Math.min(2, Math.floor(mp * 3)), ip = (mp * 3) % 1, show = t >= 1.0;
+  $('#oico').textContent = CRIMES[idx][0]; $('#olab').textContent = CRIMES[idx][1]; $('#orisk').textContent = '⚠️ ' + CRIMES[idx][2];
+  const d = E.outBack(P(t, .95, 1.2), 1.6), out = E.inExpo(P(t, 2.55, 2.95));
+  tf($('#odisk'), { s: show ? d * (1 + out * 2.5) : 0, op: 1 - out });
+  tf($('#oico'), { s: show ? (1 + .3 * Math.exp(-ip * 8)) * d * (1 - out) : 0, r: Math.sin(t * 9) * 4 });
+  tf($('#olab'), { y: 1320, op: show ? 1 - out : 0 });
+  tf($('#orisk'), { y: 1420, s: show ? (1 + .2 * Math.exp(-ip * 8)) * (1 - out) : 0, op: show ? 1 - out : 0 });
+  $('#oring').setAttribute('stroke-dashoffset', 1 - mp); $('#oring').style.opacity = show ? 1 - out : 0;
+  $('#oring2').setAttribute('transform', `rotate(${t * 40} 540 960)`); $('#oring2').style.opacity = show ? .8 * (1 - out) : 0;
+  obits.forEach((b, i) => { const a = i / 28 * Math.PI * 2, q = E.outExpo(P(t, 2.55, 3.0)), r = 280 + q * (500 + (i % 5) * 80); tf(b, { x: 540 + Math.cos(a) * r, y: 960 + Math.sin(a) * r, op: q > 0 ? 1 - P(t, 2.85, 3.0) : 0 }); });
+  return { s: 1 + (show ? Math.exp(-ip * 6) * .02 : 0) + out * .3 };
+}
+
+// ---------- 2 · Logo ----------
+function sLogo(u) {
+  tf($('#lcrown'), { y: lerp(-220, 610, E.outBounce(P(u, .05, .6))), r: Math.sin(u * 5) * 7 });
+  letters(llet, u, .05, .03);
+  tf($('#llogo'), { y: 840, s: 1 + .02 * Math.sin(u * 4) });
+  const tq = P(u, .75, 1.05);
+  tf($('#ltag'), { y: 1040, s: tq > 0 ? lerp(2.2, 1, E.outExpo(tq)) : 0, r: lerp(-12, -3, tq), op: tq > 0 ? 1 : 0 });
+  const sp = E.outBack(P(u, 1.0, 1.3), 2);
+  tf($('#lslog'), { y: 1170, s: sp, op: sp > 0 ? 1 : 0 });
+  const out = E.inExpo(P(u, 1.75, 2.0));
+  return { s: 1 + (1 - E.outCubic(P(u, 0, .6))) * .12 + out * 1.6 + (u > .75 ? Math.exp(-(u - .75) * 9) * .04 : 0), b: out * 14 };
+}
+
+// ---------- 3 → 5 · Téléphone ----------
+const ACTS = [['💪', 'Gym', '#F97316', '#9A3412'], ['📚', 'Bibliothèque', '#3B82F6', '#1E3A8A'], ['🎨', 'Atelier', '#EC4899', '#9D174D'], ['⚽', 'Cour', '#10B981', '#065F46'], ['🗣️', 'Parloir', '#8B5CF6', '#4C1D95']];
+const actEls = ACTS.map((a, i) => html($('#jActs'), `<div class="act" style="left:${i < 4 ? (i % 2) * 268 : 0}px;width:${i < 4 ? 256 : 524}px;top:${i < 4 ? Math.floor(i / 2) * 164 : 328}px;background:linear-gradient(130deg,${a[2]},${a[3]})"><div class="ae">${a[0]}</div>${a[1]}</div>`));
+const barEls = Array.from({ length: 5 }, (_, i) => html($('#bars'), `<div class="bar" style="left:${50 + i * 112}px;width:24px"></div>`));
+const TAP_GO = 7.45, BARS = 8.75, TAP_GYM = 12.0, TAP_YEAR = 13.0;
+const CALL = [
+  [5.6, 6.65, '🎂 Dès <b>18 ans</b>', 540, 640], [6.65, 7.75, '🎲 <b>4 %</b> de chance par an', 540, 640], [5.9, 7.75, '😇 C\'est <b>toi</b> qui décides', 540, 1730],
+  [8.9, 10.75, '⚖️ <b>1 à 5 ans</b> selon le délit', 540, 640], [9.4, 10.75, '💰 Pas pris ? <b>+200 à 800 €</b>', 540, 1730],
+  [11.6, 13.75, '📉 <b>−10</b> 😊 <b>−5</b> ❤️ par an', 540, 640], [12.2, 13.75, '🗣️ <b>Parloir</b> avec tes proches', 540, 1730],
+];
+const callEls = CALL.map(c => html($('#callouts'), `<div class="callout">${c[2]}</div>`));
+const WORDS = [[5.0, 8.0, '01 <i>—</i> LA TENTATION', 'Tente.'], [8.0, 11.0, '02 <i>—</i> LA SENTENCE', 'Pris !'], [11.0, 14.0, '03 <i>—</i> LA CELLULE', 'Survis.']];
+function deviceAt(t) {
+  let x = 540, y = 1190, s = .98, rx = 6, ry = -16, b = 0;
+  const enter = E.outExpo(P(t, 5.0, 5.7));
+  y += (1 - enter) * 1100; ry += (1 - enter) * -40; rx += (1 - enter) * 30;
+  ry += Math.sin(t * .9) * 6; rx += Math.cos(t * .7) * 3;
+  const sw1 = P(t, 7.8, 8.2), sw2 = P(t, 10.8, 11.2);
+  ry += Math.sin(sw1 * Math.PI) * 70 + Math.sin(sw2 * Math.PI) * -70;
+  b += Math.sin(sw1 * Math.PI) * 10 + Math.sin(sw2 * Math.PI) * 10;
+  ry += lerp(0, 28, E.inOutCubic(P(t, 8.2, 8.8))) - lerp(0, 28, E.inOutCubic(P(t, 10.4, 10.8)));
+  // Secousse au claquement des barreaux.
+  const shake = t > BARS + .3 && t < BARS + .7 ? Math.sin(t * 90) * 10 * (1 - P(t, BARS + .3, BARS + .7)) : 0;
+  x += shake;
+  const ex = E.inExpo(P(t, 13.6, 14.0));
+  s *= 1 + ex * 3; b += ex * 20;
+  return { x, y, s, rx, ry, b };
+}
+function sDevice(t) {
+  const d = deviceAt(t), dev = $('#device');
+  dev.style.transform = `translate(${d.x - 300}px,${d.y - 620}px) rotateX(${d.rx}deg) rotateY(${d.ry}deg) scale(${d.s})`;
+  dev.style.filter = d.b > .3 ? `blur(${d.b}px)` : '';
+  $('#glare').style.transform = `translateX(${d.ry * 12}px)`;
+  const scr = t < 8.0 ? 'scrT' : t < 11.0 ? 'scrC' : 'scrJ';
+  ['scrT', 'scrC', 'scrJ'].forEach(id => $('#' + id).style.display = id === scr ? 'block' : 'none');
+  if (scr === 'scrT') {
+    $('#tRisk').style.width = (45 * E.outCubic(P(t, 5.7, 6.4))) + '%';
+    $('#tGo .face').style.transform = `translateY(${-10 + pressAt(t, TAP_GO) * 8}px)`;
+    $('#tNo').style.opacity = 1 - .5 * P(t, TAP_GO, TAP_GO + .15);
+  }
+  if (scr === 'scrC') {
+    // Les barreaux tombent sur l'écran.
+    barEls.forEach((b, i) => { const q = P(t, BARS + i * .03, BARS + .3 + i * .03); b.style.transform = `translateY(${lerp(-1300, 0, E.outBounce(q))}px)`; });
+  }
+  if (scr === 'scrJ') {
+    const yr2 = t >= TAP_YEAR + .1;
+    $('#jYear').textContent = `🔒 PRISON · ANNÉE ${yr2 ? 2 : 1}/2`;
+    $('#jBon').textContent = Math.round(58 + 3 * P(t, TAP_GYM + .1, TAP_GYM + .4) - 10 * P(t, TAP_YEAR + .1, TAP_YEAR + .4));
+    $('#jSan').textContent = Math.round(71 + 8 * P(t, TAP_GYM + .1, TAP_GYM + .4) - 5 * P(t, TAP_YEAR + .1, TAP_YEAR + .4));
+    actEls.forEach((a, i) => { a.style.transform = `scale(${pop(t - 11.0, .3 + i * .06, .25, 2) * (i === 0 ? 1 - pressAt(t, TAP_GYM) * .06 : 1)})`; a.style.opacity = i === 0 && t > TAP_GYM + .15 && !yr2 ? .45 : 1; });
+    const toast = $('#jToast'), tq = P(t, TAP_GYM + .1, TAP_GYM + .3) * (1 - P(t, TAP_YEAR - .2, TAP_YEAR));
+    toast.textContent = '💪 Gym : ❤️ +8 · 😊 +3'; toast.style.opacity = tq; toast.style.transform = `translateX(-50%) scale(${E.outBack(tq, 2.4)})`;
+    $('#jBtn .face').style.transform = `translateY(${-14 + pressAt(t, TAP_YEAR) * 12}px)`;
+  }
+  const W0 = WORDS.find(w => t >= w[0] && t < w[1]);
+  if (W0) {
+    const u = t - W0[0];
+    $('#wcap').innerHTML = W0[2]; setWord($('#wbig'), W0[3], true);
+    tf($('#wcap'), { y: 250, op: E.outCubic(P(u, .05, .35)) * (1 - P(u, 2.75, 2.95)) });
+    $('#wcap').style.letterSpacing = lerp(30, 12, E.outCubic(P(u, 0, .5))) + 'px';
+    animWord($('#wbig'), u, .1, 2.65, { y: 410 });
+  }
+  callEls.forEach((el, i) => { const c = CALL[i], q = E.outBack(P(t, c[0], c[0] + .3), 2), o = E.inCubic(P(t, c[1] - .2, c[1])); tf(el, { x: c[3], y: c[4] + Math.sin(t * 2 + i) * 6, s: q * (1 - o), op: q > 0 ? 1 - o : 0 }); });
+  const sq = P(t, BARS + .35, BARS + .47), so = P(t, 10.6, 10.8);
+  tf($('#stamp'), { x: 560, y: 1520, s: lerp(3, 1, E.inCubic(sq)) * (1 - so), r: -12, op: sq > 0 ? 1 - so : 0 });
+  sirens(t, t > 8.0 && t < 10.8 ? .7 * (1 - P(t, 10.3, 10.8)) : 0);
+  const kick = t > BARS + .3 ? Math.exp(-(t - BARS - .3) * 9) * .05 : 0;
+  return { s: 1 + kick, r: Math.sin(t * 30) * kick * 20 };
+}
+
+// ---------- 6 · Carrousel : 12 des 30 événements en cellule ----------
+const FEAT = [['🍲', 'Repas dégueu', '❤️ −8 · 😊 −5', '#78716C', '#292524'], ['⚠️', 'Bagarre dans la cour', '😊 −15 · ❤️ −10', '#EF4444', '#7F1D1D'], ['💌', 'Lettre de dehors', '😊 +12', '#EC4899', '#9D174D'],
+  ['👥', 'Nouvel ami détenu', '😊 +8 · 🤝 +10', '#10B981', '#065F46'], ['📚', 'Livre trouvé', '😊 +10 · 🧠 +3', '#3B82F6', '#1E3A8A'], ['🏃', 'Cour d\'exercice', '❤️ +8 · 😊 +6', '#F59E0B', '#92400E'],
+  ['💼', 'Job en prison', '💰 +200 € d\'argent de poche', '#14B8A6', '#115E59'], ['🎨', 'Peinture ou muscu ?', '✨ +5  ou  ❤️ +12', '#8B5CF6', '#4C1D95'], ['💬', 'Rumeur sur toi', '« C\'est une balance ! »', '#F97316', '#9A3412'],
+  ['🏥', 'Tu tombes malade', 'Infirmerie : ❤️ +20', '#0EA5E9', '#075985'], ['👨‍⚖️', 'Appel de l\'avocat', '−500 € · 30 % : −1 an', '#6366F1', '#312E81'], ['🚪', 'Opportunité d\'évasion', 'Très risqué…', '#DC2626', '#450A0A']];
+const F0 = 14.0, FB = .5;
+Array.from({ length: 5 }, (_, i) => html($('#fbars'), `<div class="bar" style="left:${50 + i * 100}px;width:22px;opacity:.35"></div>`));
+function sFeat(t) {
+  const u = t - F0, k = clamp(Math.floor(u / FB), 0, 11), f = (u / FB) % 1, F = FEAT[k];
+  const flip = E.outBack(clamp(f / .55), 1.3), cards = [$('#fcardA'), $('#fcardB')];
+  const cur = cards[k % 2], prv = cards[(k + 1) % 2], P0 = FEAT[Math.max(0, k - 1)];
+  cur.textContent = F[0]; cur.style.background = `linear-gradient(150deg,${F[3]},${F[4]})`;
+  prv.textContent = P0[0]; prv.style.background = `linear-gradient(150deg,${P0[3]},${P0[4]})`;
+  const enter = E.outBack(P(u, 0, .4), 1.6), exit = E.inExpo(P(u, 5.75, 6.0));
+  const base = `translate(${540 - 260}px,${780 - 260}px)`;
+  cur.style.transform = `${base} rotateY(${k === 0 ? (1 - enter) * -90 : lerp(-180, 0, flip)}deg) rotateX(${Math.sin(t * 1.4) * 6}deg) scale(${(k === 0 ? enter : 1) * (1 + exit * 2)})`;
+  prv.style.transform = `${base} rotateY(${lerp(0, 180, flip)}deg) rotateX(${Math.sin(t * 1.4) * 6}deg)`;
+  prv.style.opacity = k === 0 || flip >= 1 ? 0 : 1; cur.style.opacity = 1 - exit;
+  $('#fbars').style.opacity = (1 - exit) * (k === 0 ? enter : 1);
+  setWord($('#fword'), F[1]);
+  animWord($('#fword'), f * FB, 0, k === 11 ? 5 : .4, { y: 1230, stagger: .01 });
+  $('#fprev').textContent = k > 0 ? P0[1] : ''; $('#fnext').textContent = FEAT[k + 1] ? FEAT[k + 1][1] : '';
+  const sl = E.outCubic(clamp(f / .4));
+  tf($('#fprev'), { y: lerp(1230, 1090, sl), op: .9 * (1 - exit), s: lerp(1.3, 1, sl) });
+  tf($('#fnext'), { y: lerp(1480, 1370, sl), op: (k < 11 ? .9 : 0) * (1 - exit), s: lerp(.7, 1, sl) });
+  $('#fstat').textContent = F[2];
+  tf($('#fstat'), { y: 1530, s: E.outBack(clamp((f - .1) / .35), 2.4) * (1 - exit), op: 1 - exit });
+  $('#fcnt').innerHTML = `${String(k + 1).padStart(2, '0')} <i>/</i> 30 <i>—</i> ÉVÉNEMENTS EN CELLULE`;
+  tf($('#fcnt'), { y: 300, op: E.outCubic(P(u, 0, .4)) * (1 - exit) });
+  ACCENT = F[3];
+  return { s: 1 + Math.exp(-f * 7) * .03 + exit * .4, r: Math.exp(-f * 7) * (k % 2 ? 1 : -1) * .6, b: exit * 12 };
+}
+
+// ---------- 7 · Évasion : 35 % de réussite, sinon +5 ans ----------
+const GL = 540 - 470, GW = 940;
+function sEsc(u) {
+  setWord($('#eword'), 'Évade-toi ?', true);
+  tf($('#ecap'), { y: 250, op: E.outCubic(P(u, .05, .35)) * (1 - P(u, 2.8, 3.0)) });
+  animWord($('#eword'), u, .1, 2.7, { y: 410, stagger: .02 });
+  tf($('#edoor'), { y: 780, s: pop(u, .1, .3) * (1 + .03 * Math.sin(u * 10)), r: Math.sin(u * 6) * 3 });
+  const gq = E.outBack(P(u, .2, .5), 1.6);
+  tf($('#gauge'), { y: 1080, s: lerp(.6, 1, gq), op: P(u, .2, .28) });
+  tf($('#glab0'), { x: GL + GW * .175, y: 1210, s: pop(u, .45, .25), op: u > .45 ? 1 : 0 });
+  tf($('#glab1'), { x: GL + GW * .675, y: 1210, s: pop(u, .52, .25), op: u > .52 ? 1 : 0 });
+  // L'aiguille balaie la jauge puis s'arrête dans le rouge.
+  const np = P(u, .6, 1.9), pos = .72 + .5 * Math.sin(np * Math.PI * 5) * Math.pow(1 - np, 1.6);
+  tf($('#needle'), { x: GL + GW * clamp(pos, .02, .98), y: 950, s: pop(u, .55, .2), op: u > .55 ? 1 : 0 });
+  const fq = P(u, 1.95, 2.2);
+  tf($('#efail'), { y: 1420, s: fq > 0 ? E.outBack(fq, 3) : 0, r: -4 + (1 - fq) * 20, op: fq > 0 ? 1 : 0 });
+  tf($('#efx'), { y: 1560, s: pop(u, 2.15, .25), op: u > 2.15 ? 1 : 0 });
+  sirens(u + 20, u > 1.95 ? .8 * (1 - P(u, 2.6, 3.0)) : 0);
+  const kick = u > 1.95 ? Math.exp(-(u - 1.95) * 9) * .06 : 0, out = E.inExpo(P(u, 2.8, 3.0));
+  return { s: 1 + kick + out * .3, r: Math.sin(u * 30) * kick * 25, b: out * 12 };
+}
+
+// ---------- 8 · Libération ----------
+function sRel(u) {
+  setWord($('#rword'), 'Libéré.', true);
+  tf($('#rcap'), { y: 250, op: E.outCubic(P(u, .05, .35)) });
+  animWord($('#rword'), u, .05, null, { y: 410, stagger: .03 });
+  const dq = E.inOutCubic(P(u, .2, .7));
+  tf($('#rlight'), { y: 900, op: P(u, 0, .15) });
+  const door = $('#rdoorL');
+  door.style.transform = `translate(${540 - 210}px,${900 - 310}px) perspective(800px) rotateY(${-100 * dq}deg)`;
+  door.style.opacity = P(u, 0, .1);
+  tf($('#rwalk'), { y: lerp(940, 1000, dq), s: lerp(.6, 1.15, dq), op: P(u, .35, .55) });
+  tf($('#rcard'), { y: 1360, s: pop(u, .8, .3, 1.8), op: u > .8 ? 1 : 0 });
+  tf($('#rlost'), { y: 1640, s: pop(u, 1.3, .25, 2), op: u > 1.3 ? 1 : 0 });
+  const out = E.inExpo(P(u, 1.8, 2.0));
+  return { s: 1 + u * .02 + out * .3, b: out * 10 };
+}
+
+// ---------- 9 · CTA ----------
+const TAP_CTA = 26.7;
+function sCta(u, t) {
+  tf($('#ctag'), { y: 250, s: pop(u, .5, .3, 2.6), r: -3, op: u > .5 ? 1 : 0 });
+  tf($('#ccrown'), { y: lerp(-180, 430, E.outBounce(P(u, 0, .5))), r: Math.sin(u * 4) * 7 });
+  letters(clet, u, .05, .028);
+  tf($('#clogo'), { y: 620, s: 1 + .02 * Math.sin(u * 4) });
+  const a = E.outBack(P(u, .4, .65), 2.2), b = E.outBack(P(u, .48, .73), 2.2);
+  tf($('#cq1'), { y: 820, s: a, op: a > 0 ? 1 : 0, r: -2 });
+  tf($('#cq2'), { y: 935, s: b, op: b > 0 ? 1 : 0, r: 2 });
+  const bp = P(u, .6, 1.05), beat = 1 + .035 * Math.max(0, Math.sin((u - 1) * Math.PI * 4)) * P(u, 2.0, 2.2);
+  tf($('#cbtn'), { y: 1190, s: E.outElastic(bp) * beat, op: bp > 0 ? 1 : 0 });
+  $('#cbtn .face').style.transform = `translateY(${-18 + pressAt(t, TAP_CTA) * 16}px)`;
+  tf($('#cglow'), { y: 1200, s: (1.05 + .12 * Math.sin(u * 6)) * E.outCubic(bp), op: .9 * bp });
+  $('#cshine').style.left = lerp(-260, 950, ((u - 1) % 1.2) / .6) + 'px';
+  tf($('#cfree'), { y: 1380, op: E.outCubic(P(u, 1.0, 1.3)) });
+  const sq = E.outBack(P(u, 1.1, 1.4), 1.8);
+  tf($('#csearch'), { y: 1505, s: sq, op: sq > 0 ? 1 : 0 });
+  const txt = 'Destiny Life';
+  $('#ctype').textContent = txt.slice(0, Math.floor(txt.length * P(u, 1.9, 2.6)));
+  $('#ccaret').style.opacity = (Math.floor(u * 3) % 2 === 0 || u < 2.6) ? 1 : 0;
+  const kick = t > TAP_CTA ? Math.exp(-(t - TAP_CTA) * 8) * .05 : 0, intro = 1 - E.outCubic(P(u, 0, .6));
+  return { s: 1 + intro * .15 + u * .008 + kick, r: Math.sin(u * 20) * kick * 20 };
+}
+
+// =================== Montage ===================
+const SC = [['s0', 0, 3.0, sOpen], ['s1', 3.0, 5.0, sLogo], ['sd', 5.0, 14.0, null], ['sf', 14.0, 20.0, null], ['se', 20.0, 23.0, sEsc], ['sr', 23.0, 25.0, sRel], ['s8', 25.0, 30.0, sCta]];
+const TAPS = [[TAP_GO, 700, 1190 + (110 + 730 + 52 - 620 + 20) * .98], [TAP_GYM, 420, 1190 + (460 + 75 - 620 + 20) * .98], [TAP_YEAR, 700, 1190 + (990 + 75 - 620 + 20) * .98], [TAP_CTA, 840, 1220]];
+addConfetti(110, 71, TAP_CTA, 540, 1190, 1.3);
+const TINT = t => t < 5 ? '#EF4444' : t < 8 ? '#F97316' : t < 11 ? '#3B82F6' : t < 14 ? '#F97316' : t < 20 ? ACCENT : t < 23 ? '#EF4444' : t < 25 ? '#F5B942' : '#10B981';
+function render(t) {
+  document.querySelectorAll('.scene').forEach(s => s.style.display = 'none');
+  let cam = { s: 1 };
+  sirens(t, t < 3 ? .55 : 0);
+  for (const [id, a, b, fn] of SC) if (t >= a && t < b) {
+    $('#' + id).style.display = 'block';
+    cam = (id === 'sd' ? sDevice(t) : id === 'sf' ? sFeat(t) : fn(t - a, t)) || cam;
+  }
+  renderBg(t, TINT(t));
+  const rays = t >= 3 && t < 5 ? .8 * P(t, 3.1, 3.5) * (1 - P(t, 4.7, 5)) : t >= 23 && t < 25 ? .9 * P(t, 23.2, 23.6) * (1 - P(t, 24.7, 25)) : t >= 25 ? .9 * P(t, 25.05, 25.5) : 0;
+  tf($('#rays'), { y: t >= 25 ? 640 : t >= 23 ? 900 : 840, r: t * 12, op: rays });
+  applyCam(cam);
+  renderConfetti(t);
+  renderTaps(t, TAPS);
+  const fl = [3.0, 14.0, 25.0].reduce((m, c) => Math.max(m, P(t, c - .06, c) * (1 - P(t, c, c + .35))), 0);
+  $('#flash').style.opacity = .85 * fl;
+}
+window.render = render;
+window.DURATION = END;
+render(0);
+</script>
+</body>
+</html>
