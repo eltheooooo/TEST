@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Destiny Life Showreel</title>
+<link rel="stylesheet" href="../capsules/common/fonts.css">
+<link rel="stylesheet" href="../capsules/common/dl.css">
+<style>
+#root{background:#0B1830}
+#mesh{position:absolute;inset:0;overflow:hidden}
+#mesh .blob{position:absolute;left:0;top:0;border-radius:50%;filter:blur(90px);will-change:transform}
+#dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 2px,transparent 2.5px);background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse at 50% 50%,#000 30%,transparent 75%)}
+#grain{position:absolute;inset:-200px;background:url(grain.png);opacity:.07;mix-blend-mode:overlay;pointer-events:none}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,transparent 52%,rgba(3,8,20,.75) 100%);pointer-events:none}
+.bok{position:absolute;left:0;top:0;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),rgba(255,255,255,0) 70%)}
+.word{position:absolute;left:0;top:0;white-space:nowrap;line-height:1}
+.word span{display:inline-block}
+.cap{font:800 28px Montserrat;letter-spacing:12px;color:#FDE68A;white-space:nowrap}
+.cap i{font-style:normal;color:rgba(255,255,255,.45)}
+.big{font-family:'Fredoka One';color:#fff;-webkit-text-stroke:14px #071224;paint-order:stroke fill;text-shadow:0 14px 0 #071224,0 34px 60px rgba(0,0,0,.45)}
+.extr{font-family:'Fredoka One';-webkit-text-stroke:6px #071224;paint-order:stroke fill}
+/* Téléphone */
+#device{position:absolute;left:0;top:0;width:600px;height:1240px;border-radius:98px;background:linear-gradient(145deg,#3A5078,#0B1730 60%);box-shadow:inset 0 0 0 4px rgba(255,255,255,.18),0 60px 120px rgba(0,0,0,.6);transform-origin:300px 620px}
+#screen{position:absolute;inset:20px;border-radius:80px;overflow:hidden;background:radial-gradient(circle at 20% 15%,rgba(25,169,232,.35),transparent 45%),radial-gradient(circle at 85% 80%,rgba(109,74,255,.35),transparent 45%),linear-gradient(160deg,#1A3157,#2A1850)}
+#notch{position:absolute;left:50%;top:18px;width:170px;height:44px;border-radius:22px;background:#081224;transform:translateX(-50%);z-index:5}
+#glare{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.16) 45%,transparent 60%);z-index:6;pointer-events:none}
+.scr{position:absolute;inset:0}
+.st{position:absolute;left:28px;right:28px;height:56px;display:flex;align-items:center;gap:14px}
+.st .ic{width:50px;height:50px;border-radius:16px;background:#F4F7FC;display:flex;align-items:center;justify-content:center;font-size:28px;flex:none}
+.st .lb{font:700 22px Montserrat;color:#4A5B78;width:140px}
+.st .tr{flex:1;height:20px;border-radius:10px;background:#E3E9F2;overflow:hidden}.st .tr i{display:block;height:100%;border-radius:10px}
+.st .v{font:400 30px 'Fredoka One';width:52px;text-align:right}
+.jr{position:absolute;left:0;right:0;height:108px;border-radius:30px;background:#fff;display:flex;align-items:center;gap:14px;padding:0 18px;box-shadow:0 6px 0 #9FB0CF}
+.jr .ag{font:400 24px 'Fredoka One';color:#fff;background:#6D4AFF;border-radius:999px;padding:6px 14px;flex:none}
+.jr .je{font-size:44px;flex:none}
+.jr .jt{font:400 28px 'Fredoka One';color:#10233F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chc{position:absolute;left:28px;right:28px;height:96px;border-radius:32px}
+.chc .face{font:800 28px Montserrat;color:#fff;justify-content:flex-start;flex-direction:row;padding:0 26px;gap:12px}
+.callout{position:absolute;left:0;top:0;display:flex;align-items:center;gap:14px;padding:16px 28px;border-radius:999px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.28);font:800 30px Montserrat;color:#fff;white-space:nowrap;backdrop-filter:blur(6px);box-shadow:0 20px 40px rgba(0,0,0,.35)}
+.callout b{color:#FDE68A}
+.out{position:absolute;left:0;top:0;width:300px;height:290px;border-radius:40px;background:#fff;box-shadow:0 14px 0 #9FB0CF,0 30px 60px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px;text-align:center}
+.out .oe{font-size:84px;line-height:1}.out .ot{font:400 30px/1.1 'Fredoka One';color:#10233F}
+.out .pill{font-size:22px;padding:8px 16px}
+.fcard{position:absolute;left:0;top:0;width:520px;height:520px;border-radius:130px;display:flex;align-items:center;justify-content:center;font-size:300px;box-shadow:0 24px 0 rgba(7,18,36,.45),0 60px 120px rgba(0,0,0,.5);backface-visibility:hidden}
+.tnode{position:absolute;left:0;top:0;width:128px;height:128px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:68px}
+.lrow{position:absolute;left:36px;right:36px;height:112px;border-radius:32px;background:#F4F7FC;display:flex;align-items:center;padding:0 26px;gap:22px}
+.lrow .rk{width:64px;text-align:center;font:400 48px 'Fredoka One';color:#8A9AB5}
+.lrow .av{width:76px;height:76px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:46px}
+.lrow .nm{flex:1;font:800 36px Montserrat;color:#10233F}
+.lrow .vl{font:400 42px 'Fredoka One';color:#059669}
+</style>
+</head>
+<body>
+<div id="root">
+  <div id="mesh"></div>
+  <div id="dots"></div>
+  <div id="rays" class="c" style="width:2600px;height:2600px;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(253,230,138,.2) 0deg 6deg,transparent 6deg 16deg);-webkit-mask-image:radial-gradient(circle,#000 0%,rgba(0,0,0,.5) 25%,transparent 60%)"></div>
+  <div id="bokeh" class="abs" style="inset:0"></div>
+
+  <div id="cam" class="abs" style="width:1080px;height:1920px;transform-origin:540px 960px">
+
+    <!-- 1 · Ouverture -->
+    <section class="scene" id="s0">
+      <div id="o1" class="word big" style="font-size:150px"></div>
+      <div id="o2" class="word big" style="font-size:118px"></div>
+      <svg class="abs" width="1080" height="1920"><circle id="oring" cx="540" cy="960" r="270" fill="none" stroke="#F5B942" stroke-width="14" pathLength="1" stroke-dasharray="1 1" transform="rotate(-90 540 960)"/>
+        <circle id="oring2" cx="540" cy="960" r="300" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="3" stroke-dasharray="4 18"/></svg>
+      <div id="odisk" class="c" style="width:500px;height:500px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#22406E,#10233F 70%);box-shadow:inset 0 0 0 6px rgba(255,255,255,.08),0 40px 90px rgba(0,0,0,.5)"></div>
+      <div id="oico" class="c emo" style="font-size:250px"></div>
+      <div id="olab" class="c cap" style="font-size:34px"></div>
+      <div id="obits"></div>
+    </section>
+
+    <!-- 2 · Logo -->
+    <section class="scene" id="s1">
+      <div id="lcrown" class="c emo" style="font-size:190px">👑</div>
+      <div id="llogo" class="c" style="width:1040px;height:240px"></div>
+      <div id="lshine" class="c" style="width:200px;height:300px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);mix-blend-mode:overlay"></div>
+      <div id="ltag" class="c cap" style="font-size:30px">LE SIMULATEUR DE VIE <i>·</i> ROBLOX</div>
+      <div id="lslog" class="c fd" style="font-size:64px;color:#FDE68A;text-shadow:0 6px 0 #071224;white-space:nowrap">Chaque choix compte !</div>
+    </section>
+
+    <!-- 3 → 5 · Le téléphone et les mots -->
+    <section class="scene" id="sd">
+      <div id="wcap" class="c cap"></div>
+      <div id="wbig" class="word big" style="font-size:210px"></div>
+      <svg id="paths" class="abs" width="1080" height="1920"></svg>
+      <div id="persp" class="abs" style="inset:0;perspective:2400px;perspective-origin:540px 1150px">
+        <div id="device">
+          <div id="screen">
+            <div id="notch"></div>
+            <!-- Écran Nouvelle vie -->
+            <div class="scr" id="scrNew">
+              <div class="emo" style="position:absolute;left:50%;top:62px;transform:translateX(-50%);font-size:56px">👑</div>
+              <div class="extr" style="position:absolute;left:0;right:0;top:120px;text-align:center;font-size:66px;color:#fff"><span>Destiny</span><span style="color:#F5B942">Life</span></div>
+              <div class="fd" style="position:absolute;left:0;right:0;top:200px;text-align:center;font-size:26px;color:#FDE68A">Chaque choix compte !</div>
+              <div style="position:absolute;left:22px;right:22px;top:262px;height:700px;border-radius:44px;background:#fff;box-shadow:0 10px 0 #9FB0CF">
+                <div class="pill purple" style="position:absolute;left:50%;top:22px;transform:translateX(-50%);font-size:22px;padding:10px 22px">✨ NOUVELLE VIE ✨</div>
+                <div id="nvRing" style="position:absolute;left:26px;top:88px;width:128px;height:128px;border-radius:50%;background:conic-gradient(#F5B942,#EC4899,#6D4AFF,#19A9E8,#10B981,#F5B942)"></div>
+                <div id="nvAv" class="bubble" style="position:absolute;left:36px;top:98px;width:108px;height:108px;border-radius:50%;background:#F4F7FC;font-size:66px">👶</div>
+                <div id="nvName" class="fd" style="position:absolute;left:176px;top:104px;font-size:44px;color:#10233F;white-space:nowrap"></div>
+                <div id="nvCty" style="position:absolute;left:178px;top:160px;font:700 24px Montserrat;color:#4A5B78;white-space:nowrap"></div>
+                <div id="nvStats"></div>
+              </div>
+              <div class="pill glass" style="position:absolute;left:22px;top:996px;font-size:26px;padding:22px 28px">🎲 Relancer</div>
+              <div id="nvGo" class="btn3d" style="left:250px;right:22px;top:984px;height:108px;border-radius:38px"><div class="lip" style="background:#065F46"></div><div class="face fd" style="background:linear-gradient(170deg,#34D399,#10B981 60%,#059669);font-size:38px;color:#fff">COMMENCER ▶</div></div>
+            </div>
+            <!-- Écran principal (hub) -->
+            <div class="scr" id="scrHub">
+              <div style="position:absolute;left:18px;right:18px;top:76px;height:118px;border-radius:36px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.16);display:flex;align-items:center;gap:16px;padding:0 18px">
+                <div class="bubble" style="width:84px;height:84px;border-radius:50%;background:#fff;font-size:52px;box-shadow:0 0 0 5px #F5B942" id="hubAv">👶</div>
+                <div><div class="fd" style="font-size:34px;color:#fff">Léa Moreau</div><div style="font:700 20px Montserrat;color:#A9BCD9;margin-top:4px">🇫🇷 France · 💰 <span id="hubMoney">0</span> €</div></div>
+                <div id="hubAge" class="fd" style="margin-left:auto;background:#F5B942;color:#10233F;border-radius:999px;padding:8px 18px;font-size:32px">0 an</div>
+              </div>
+              <div id="hubStats" style="position:absolute;left:18px;right:18px;top:210px;display:flex;justify-content:space-between"></div>
+              <div class="fd" style="position:absolute;left:24px;top:318px;font-size:32px;color:#A9BCD9">📖 Ta vie</div>
+              <div style="position:absolute;left:18px;right:18px;top:364px;height:520px;overflow:hidden"><div id="hubJr" style="position:absolute;left:0;right:0;top:0"></div></div>
+              <div id="hubBtn" class="btn3d" style="left:18px;right:18px;top:906px;height:150px;border-radius:46px"><div class="lip" style="background:#065F46"></div>
+                <div class="face" style="background:linear-gradient(170deg,#34D399,#10B981 60%,#059669)"><div class="fd" style="font-size:56px;color:#fff;-webkit-text-stroke:4px #065F46;paint-order:stroke fill">🎂 VIEILLIR</div><div id="hubSub" style="font:700 22px Montserrat;color:rgba(255,255,255,.9)">Passer à 1 an</div><div class="shine" id="hubShine"></div></div></div>
+              <div style="position:absolute;left:18px;right:18px;top:1078px;height:90px;display:flex;gap:12px">
+                <div class="bubble fd" style="flex:1;border-radius:28px;background:linear-gradient(120deg,#EC4899,#A21CAF);color:#fff;font-size:24px">👥 Relations</div>
+                <div class="bubble fd" style="flex:1;border-radius:28px;background:linear-gradient(120deg,#6D4AFF,#0E7AC4);color:#fff;font-size:24px">🎯 Activités</div>
+                <div class="bubble fd" style="flex:1;border-radius:28px;background:linear-gradient(120deg,#4F46E5,#1E1B4B);color:#fff;font-size:24px">💼 Carrière</div>
+              </div>
+            </div>
+            <!-- Écran événement à choix -->
+            <div class="scr" id="scrEvt">
+              <div style="position:absolute;left:18px;right:18px;top:120px;height:960px;border-radius:48px;background:#fff;overflow:hidden;box-shadow:0 12px 0 #9FB0CF">
+                <div style="position:absolute;left:0;right:0;top:0;height:210px;background:linear-gradient(120deg,#6D4AFF,#19A9E8)"></div>
+                <div class="bubble" style="position:absolute;left:30px;top:44px;width:122px;height:122px;background:rgba(255,255,255,.25);font-size:76px">🏃</div>
+                <div class="pill" style="position:absolute;left:176px;top:58px;background:rgba(255,255,255,.2);color:#fff;font-size:24px;padding:10px 20px">🎒 15 ans · Lycée</div>
+                <div style="position:absolute;left:178px;top:124px;font:800 22px Montserrat;color:rgba(255,255,255,.85);letter-spacing:4px">ÉVÉNEMENT</div>
+                <div class="fd" style="position:absolute;left:30px;right:30px;top:240px;font-size:44px;line-height:1.08;color:#10233F">La tentation de sécher les cours</div>
+                <div style="position:absolute;left:30px;right:30px;top:360px;font:600 26px/1.42 Montserrat;color:#4A5B78">Léa n'en peut plus de l'école. Quelqu'un propose : « On y va pas aujourd'hui ? » La tentation est grande...</div>
+                <div id="ev0" class="btn3d chc" style="top:560px"><div class="lip" style="background:#3B1FB8"></div><div class="face" style="background:linear-gradient(120deg,#7C5CFF,#6D4AFF)">🏃 Sécher les cours</div></div>
+                <div id="ev1" class="btn3d chc" style="top:680px"><div class="lip" style="background:#0E7AC4"></div><div class="face" style="background:linear-gradient(120deg,#38BDF8,#19A9E8)">🎒 Aller en cours</div></div>
+                <div id="ev2" class="btn3d chc" style="top:800px"><div class="lip" style="background:#C2410C"></div><div class="face" style="background:linear-gradient(120deg,#FB923C,#F97316)">⏰ Y aller mais en retard</div></div>
+              </div>
+            </div>
+            <div id="glare"></div>
+          </div>
+        </div>
+      </div>
+      <div id="outs"></div>
+      <div id="callouts"></div>
+    </section>
+
+    <!-- 6 · Carrousel de fonctionnalités -->
+    <section class="scene" id="sf">
+      <div id="fcnt" class="c cap" style="font-size:30px"></div>
+      <div id="fpersp" class="abs" style="inset:0;perspective:1800px;perspective-origin:540px 780px">
+        <div id="fcardA" class="fcard"></div>
+        <div id="fcardB" class="fcard"></div>
+      </div>
+      <div id="fprev" class="word fd" style="font-size:84px;color:rgba(255,255,255,.22)"></div>
+      <div id="fword" class="word big" style="font-size:150px"></div>
+      <div id="fnext" class="word fd" style="font-size:84px;color:rgba(255,255,255,.22)"></div>
+      <div id="fstat" class="c pill gold" style="font-size:36px;padding:18px 36px"></div>
+    </section>
+
+    <!-- 7 · Talents puis classement -->
+    <section class="scene" id="st">
+      <svg class="abs" width="1080" height="1920"><g id="tlines" stroke-width="10" stroke-linecap="round" fill="none"></g></svg>
+      <div id="tnodes"></div>
+      <div id="tcore" class="c bubble" style="width:210px;height:210px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#6EE7B7,#10B981 60%,#047857);box-shadow:0 0 0 12px #10233F,0 0 80px rgba(16,185,129,.6);font-size:120px">🌳</div>
+      <div id="tcap" class="c pill glass" style="font-size:30px">11 branches · gardées d'une vie à l'autre</div>
+    </section>
+    <section class="scene" id="sl">
+      <div id="lcard" class="c card" style="width:920px;height:880px">
+        <div class="fd" style="position:absolute;left:0;right:0;top:40px;text-align:center;font-size:56px;color:#10233F">🏆 Classement du jour</div>
+        <div style="position:absolute;left:0;right:0;top:128px;display:flex;justify-content:center;gap:16px"><div class="pill gold">💰 Richesse</div><div class="pill" style="background:#F4F7FC;color:#8A9AB5">🎂 Âge</div></div>
+        <div id="lrows" style="position:absolute;left:0;right:0;top:0"></div>
+      </div>
+      <div id="lkrown" class="c emo" style="font-size:110px">👑</div>
+      <div id="lchip" class="c pill glass" style="font-size:30px">⏰ Nouveau classement chaque jour à minuit</div>
+    </section>
+
+    <!-- 8 · CTA -->
+    <section class="scene" id="s8">
+      <div id="ccrown" class="c emo" style="font-size:160px">👑</div>
+      <div id="clogo" class="c" style="width:1040px;height:220px"></div>
+      <div id="cq1" class="c big" style="font-size:100px">Quel sera</div>
+      <div id="cq2" class="c big" style="font-size:100px;color:#F5B942">ton destin ?</div>
+      <div id="cglow" class="c" style="width:780px;height:260px;border-radius:90px;background:rgba(110,231,183,.55);filter:blur(44px)"></div>
+      <div id="cbtn" class="btn3d c" style="width:760px;height:230px;border-radius:74px"><div class="lip" style="background:#065F46"></div>
+        <div class="face" style="background:linear-gradient(170deg,#6EE7B7,#10B981 55%,#059669)"><div class="fd" style="font-size:118px;color:#fff;-webkit-text-stroke:8px #065F46;paint-order:stroke fill;letter-spacing:2px">▶ JOUER</div><div class="shine" id="cshine" style="width:170px"></div></div></div>
+      <div id="cfree" class="c cap" style="font-size:32px;color:#A9BCD9">GRATUIT SUR ROBLOX</div>
+      <div id="csearch" class="c" style="width:740px;height:124px;border-radius:62px;background:#fff;box-shadow:0 12px 0 #9FB0CF,0 30px 60px rgba(0,0,0,.35);display:flex;align-items:center;padding:0 40px;gap:22px">
+        <span style="font-size:54px">🔍</span><span id="ctype" class="fd" style="font-size:58px;color:#10233F"></span><span id="ccaret" style="width:6px;height:62px;background:#6D4AFF;border-radius:3px;display:inline-block"></span></div>
+    </section>
+
+    <div id="fx" class="abs" style="inset:0"></div>
+  </div>
+  <div id="grain"></div>
+  <div id="vig"></div>
+</div>
+
+<script src="../capsules/common/dl.js"></script>
+<script>
+// =====================================================================
+// Destiny Life — showreel v2 (30 s, 9:16, 120 BPM). Rendu image par image : window.render(t).
+// Chiffres tirés du jeu : 15 pays, 20 métiers, 11 CAP, 12 spécialités, 11 branches de talents,
+// classements quotidiens ; écrans reconstruits d'après Main.lua (Nouvelle vie, hub, événement).
+// =====================================================================
+const END = 30.0;
+initOverlay();
+$('#prog').style.display = 'none';
+// La caméra et les overlays au-dessus du grain / vignettage ? Non : grain et vignettage restent au-dessus.
+$('#root').insertBefore($('#overlay'), $('#grain'));
+
+// ---------- Fond : dégradé « mesh » animé + bokeh ----------
+const BLOBS = [['#19A9E8', 900, .2, .2], ['#6D4AFF', 1000, .85, .25], ['#EC4899', 800, .8, .8], ['#10B981', 760, .15, .85], ['#F5B942', 600, .5, .55]];
+const blobs = BLOBS.map(b => html($('#mesh'), `<div class="blob" style="width:${b[1]}px;height:${b[1]}px;background:${b[0]}"></div>`));
+const br = rng(3);
+const bokeh = Array.from({ length: 22 }, () => ({ el: html($('#bokeh'), `<div class="bok" style="width:${30 + br() * 90}px;height:${30 + br() * 90}px;filter:blur(${2 + br() * 6}px)"></div>`), x: br() * W, y: br() * H, sp: 20 + br() * 60, ph: br() * 6, z: .3 + br() * .7 }));
+let ACCENT = ['#6D4AFF', 0];
+function renderBg(t, tint, energy) {
+  blobs.forEach((el, i) => {
+    const b = BLOBS[i];
+    const x = b[2] * W + Math.sin(t * .4 + i * 1.7) * 160, y = b[3] * H + Math.cos(t * .33 + i) * 200;
+    el.style.transform = `translate(${x - b[1] / 2}px,${y - b[1] / 2}px) scale(${1 + .1 * Math.sin(t * .8 + i)})`;
+    el.style.opacity = (i === 4 ? .18 : .42) * clamp(t / .8);
+    if (i === 4) el.style.background = tint;
+  });
+  bokeh.forEach(b => {
+    const y = ((b.y - t * b.sp) % (H + 200) + H + 200) % (H + 200) - 100;
+    tf(b.el, { x: b.x + Math.sin(t * .7 + b.ph) * 30, y, op: .25 * b.z * clamp(t / 1.2) * (.6 + .4 * energy) });
+  });
+  $('#grain').style.transform = `translate(${Math.floor(rng(Math.floor(t * 24))() * 200) - 100}px,${Math.floor(rng(Math.floor(t * 24) + 7)() * 200) - 100}px)`;
+}
+
+// ---------- Mots cinétiques (révélation lettre par lettre) ----------
+function setWord(el, txt, accentLast) {
+  if (el.dataset.w === txt) return;
+  el.dataset.w = txt;
+  const chars = [...txt];
+  el.innerHTML = chars.map((c, i) => `<span${accentLast && i === chars.length - 1 ? ' style="color:#F5B942"' : ''}>${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+}
+function animWord(el, u, inAt, outAt, { x = 540, y, stagger = .025, dir = 1 } = {}) {
+  const spans = [...el.children];
+  spans.forEach((s, i) => {
+    const qi = E.outExpo(P(u, inAt + i * stagger, inAt + .4 + i * stagger));
+    const qo = outAt == null ? 0 : E.inExpo(P(u, outAt + i * stagger * .6, outAt + .25 + i * stagger * .6));
+    s.style.transform = `translateY(${(1 - qi) * 140 * dir - qo * 160 * dir}px) rotate(${(1 - qi) * 8}deg) scale(${lerp(.6, 1, qi)})`;
+    s.style.opacity = Math.min(qi * 1.5, 1) * (1 - qo);
+  });
+  tf(el, { x, y });
+}
+
+// ---------- 1 · Ouverture ----------
+const OICONS = [['👶', 'NAISSANCE'], ['🎒', 'ÉCOLE'], ['🎓', 'BAC'], ['💘', 'AMOUR'], ['💼', 'CARRIÈRE'], ['🏠', 'FAMILLE'], ['🚗', 'PERMIS'], ['🎤', 'CÉLÉBRITÉ'], ['💰', 'FORTUNE'], ['🐶', 'ANIMAUX'], ['🏆', 'GLOIRE'], ['🌳', 'TALENTS']];
+const obits = Array.from({ length: 28 }, (_, i) => html($('#obits'), `<div class="c" style="width:${10 + (i % 4) * 6}px;height:${10 + (i % 4) * 6}px;border-radius:50%;background:${BRAND[i % 6]}"></div>`));
+function sOpen(t) {
+  setWord($('#o1'), 'Une vie.'); setWord($('#o2'), 'Mille destins.', false);
+  animWord($('#o1'), t, .05, .95, { y: 860 });
+  animWord($('#o2'), t, .45, .95, { y: 1060, stagger: .02 });
+  $('#o2').querySelectorAll('span').forEach(s => s.style.color = '#F5B942');
+  // Montage d'icônes au rythme (12 coupes de 0,125 s).
+  const mp = P(t, 1.0, 2.5), idx = Math.min(11, Math.floor(mp * 12));
+  const ip = (mp * 12) % 1, show = t >= 1.0;
+  $('#oico').textContent = OICONS[idx][0]; $('#olab').textContent = OICONS[idx][1];
+  const d = E.outBack(P(t, .95, 1.2), 1.6), out = E.inExpo(P(t, 2.55, 2.95));
+  tf($('#odisk'), { s: show ? d * (1 + out * 2.5) : 0, op: 1 - out });
+  tf($('#oico'), { s: show ? (1 + .25 * (1 - E.outCubic(Math.min(1, ip * 3)))) * d * (1 - out) : 0, r: Math.sin(t * 9) * 4 });
+  tf($('#olab'), { y: 1330, op: show ? 1 - out : 0 });
+  $('#oring').setAttribute('stroke-dashoffset', 1 - mp); $('#oring').style.opacity = show ? 1 - out : 0;
+  $('#oring2').setAttribute('transform', `rotate(${t * 40} 540 960)`); $('#oring2').style.opacity = show ? .8 * (1 - out) : 0;
+  obits.forEach((b, i) => {
+    const a = i / 28 * Math.PI * 2, q = E.outExpo(P(t, 2.55, 3.0)), r = 280 + q * (500 + (i % 5) * 80);
+    tf(b, { x: 540 + Math.cos(a) * r, y: 960 + Math.sin(a) * r, op: q > 0 ? 1 - P(t, 2.85, 3.0) : 0 });
+  });
+  const kick = idx >= 0 && show ? Math.exp(-ip * 6) * .015 : 0;
+  return { s: 1 + kick + out * .3, r: 0 };
+}
+
+// ---------- 2 · Logo (relief 3D par couches) ----------
+function extrudeLogo(el, size) {
+  const word = (t, c) => [...t].map(ch => `<span class="L" style="display:inline-block;color:${c}">${ch}</span>`).join('');
+  const layers = [];
+  for (let k = 10; k >= 1; k--) layers.push(`<div class="extr" style="position:absolute;left:50%;top:50%;transform:translate(-50%,calc(-50% + ${k * 3}px));font-size:${size}px;color:#071224;-webkit-text-stroke-color:#071224;white-space:nowrap">${word('Destiny', '#071224')}${word('Life', '#071224')}</div>`);
+  el.innerHTML = layers.join('') + `<div class="extr" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:${size}px;white-space:nowrap">${word('Destiny', '#fff')}${word('Life', '#F5B942')}</div>`;
+  return [...el.querySelectorAll('.L')];
+}
+const llet = extrudeLogo($('#llogo'), 178), clet = extrudeLogo($('#clogo'), 160);
+function letters(ls, u, start, step) {
+  const n = ls.length / 11; // chaque lettre existe dans 11 couches : on les anime ensemble
+  ls.forEach((L, j) => {
+    const i = j % 11, q = P(u, start + i * step, start + .4 + i * step);
+    L.style.transform = `translateY(${(1 - E.outCubic(q)) * 120}px) scale(${Math.max(0, E.outBack(q, 2.4))}) rotate(${(1 - q) * (i % 2 ? 18 : -18)}deg)`;
+    L.style.opacity = q > 0 ? 1 : 0;
+  });
+}
+function sLogo(u) {
+  tf($('#lcrown'), { y: lerp(-220, 610, E.outBounce(P(u, .05, .6))), r: Math.sin(u * 5) * 7 });
+  letters(llet, u, .05, .03);
+  tf($('#llogo'), { y: 840, s: 1 + .02 * Math.sin(u * 4) });
+  tf($('#lshine'), { x: lerp(-100, 1180, E.inOutCubic(P(u, .7, 1.3))), y: 840, r: 20 });
+  tf($('#ltag'), { y: 1010, op: E.outCubic(P(u, .65, 1.0)) }); $('#ltag').style.letterSpacing = lerp(30, 12, E.outCubic(P(u, .65, 1.1))) + 'px';
+  const sp = E.outBack(P(u, .9, 1.25), 2);
+  tf($('#lslog'), { y: 1110, s: sp, op: sp > 0 ? 1 : 0 });
+  const out = E.inExpo(P(u, 1.75, 2.0));
+  return { s: 1 + (1 - E.outCubic(P(u, 0, .6))) * .12 + out * 1.6, b: out * 14 };
+}
+
+// ---------- 3 → 5 · Téléphone ----------
+const NV = [['Léa Moreau', '🇫🇷 France', '👶', [86, 72, 64, 48, 22]], ['Hugo Rossi', '🇮🇹 Italie', '👶🏽', [61, 90, 77, 35, 28]], ['Inès Silva', '🇧🇷 Brésil', '👶🏻', [92, 58, 85, 70, 17]]];
+const STATS = [['❤️', 'Santé'], ['😊', 'Bonheur'], ['✨', 'Beauté'], ['🍀', 'Chance'], ['🧠', 'Intelligence']];
+const statColor = v => v < 30 ? '#EF4444' : v < 50 ? '#F59E0B' : v < 75 ? '#84CC16' : '#10B981';
+const nvRows = STATS.map((s, i) => html($('#nvStats'), `<div class="st" style="top:${250 + i * 82}px"><div class="ic">${s[0]}</div><div class="lb">${s[1]}</div><div class="tr"><i></i></div><div class="v"></div></div>`));
+const hubStats = STATS.map(s => html($('#hubStats'), `<div style="width:96px;height:92px;border-radius:26px;background:rgba(255,255,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><div style="font-size:30px">${s[0]}</div><div class="fd hv" style="font-size:28px;color:#fff">0</div></div>`));
+const JR = [[1, '👣', 'Premiers pas'], [3, '🎒', 'Rentrée à la maternelle'], [5, '🚲', 'Tu apprends le vélo'], [6, '✏️', 'Rentrée au CP'], [8, '🐶', 'Adoption d\'un animal !'], [11, '📱', 'Rentrée au collège'], [13, '💘', 'Premier crush'], [16, '📝', 'Bac de français']];
+const jrEls = JR.map(j => html($('#hubJr'), `<div class="jr"><div class="ag">${j[0]} an${j[0] > 1 ? 's' : ''}</div><div class="je">${j[1]}</div><div class="jt">${j[2]}</div></div>`));
+const PRESS = JR.map((_, k) => 8.55 + k * .27); // VIEILLIR enfoncé au rythme
+const TAP_GO = 7.55, TAP_EVT = 12.35;
+
+const CALL = [ // [t0, t1, texte, x, y, ancre x, ancre y]
+  [5.6, 7.75, '🌍 <b>15</b> pays', 230, 700, 330, 820], [5.8, 7.75, '🎲 Parents <b>tirés au sort</b>', 760, 1080, 700, 1060], [6.0, 7.75, '📊 <b>5</b> statistiques', 290, 1460, 360, 1290],
+  [8.7, 10.75, '📖 Des <b>centaines</b> d\'événements', 540, 620, 540, 760], [9.3, 10.75, '🎂 <b>1 an</b> par clic', 800, 1700, 700, 1560],
+];
+const callEls = CALL.map(c => html($('#callouts'), `<div class="callout">${c[2]}</div>`));
+const OUTS = [['😎', 'Personne n\'a rien su !', '😊 +15', 'good', 220], ['😬', 'Les parents l\'apprennent…', '😊 −50', 'bad', 540], ['🎒', '« Faut que j\'y aille… »', '😊 −8', 'neutral', 860]];
+const outEls = OUTS.map(o => html($('#outs'), `<div class="out"><div class="oe">${o[0]}</div><div class="ot">${o[1]}</div><div class="pill ${o[3]}">${o[2]}</div></div>`));
+const pathEls = OUTS.map(() => { const p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p.setAttribute('fill', 'none'); p.setAttribute('stroke', '#FDE68A'); p.setAttribute('stroke-width', '10'); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('pathLength', '1'); p.setAttribute('stroke-dasharray', '1 1'); $('#paths').appendChild(p); return p; });
+
+const WORDS = [[5.0, 8.0, '01 <i>—</i> NAISSANCE', 'Nais.'], [8.0, 11.0, '02 <i>—</i> CHAQUE ANNÉE', 'Grandis.'], [11.0, 14.0, '03 <i>—</i> CHAQUE CHOIX', 'Choisis.']];
+function deviceAt(t) {
+  // Trajectoire de la caméra autour du téléphone (rotation 3D, échelle, position).
+  let x = 540, y = 1190, s = .98, rx = 6, ry = -16, rz = 0, b = 0;
+  const enter = E.outExpo(P(t, 5.0, 5.7));
+  y += (1 - enter) * 1100; ry += (1 - enter) * -40; rx += (1 - enter) * 30;
+  ry += Math.sin(t * .9) * 6; rx += Math.cos(t * .7) * 3;
+  // Bascules entre les écrans (8 s et 11 s) : demi-tour rapide.
+  const sw1 = P(t, 7.8, 8.2), sw2 = P(t, 10.8, 11.2);
+  ry += Math.sin(sw1 * Math.PI) * 70 + Math.sin(sw2 * Math.PI) * -70;
+  b += Math.sin(sw1 * Math.PI) * 10 + Math.sin(sw2 * Math.PI) * 10;
+  ry += lerp(0, 28, E.inOutCubic(P(t, 8.2, 8.8))) - lerp(0, 28, E.inOutCubic(P(t, 10.4, 10.8)));
+  // Après le choix : le téléphone recule pour laisser place aux destins.
+  const back = E.inOutCubic(P(t, 12.55, 12.95));
+  s = lerp(s, .6, back); y = lerp(y, 900, back); ry = lerp(ry, 0, back); rx = lerp(rx, 4, back);
+  // Sortie : il fonce vers la caméra.
+  const ex = E.inExpo(P(t, 13.6, 14.0));
+  s *= 1 + ex * 3; b += ex * 20;
+  return { x, y, s, rx, ry, rz, b };
+}
+function sDevice(t) {
+  const d = deviceAt(t), dev = $('#device');
+  dev.style.transform = `translate(${d.x - 300}px,${d.y - 620}px) rotateX(${d.rx}deg) rotateY(${d.ry}deg) rotateZ(${d.rz}deg) scale(${d.s})`;
+  dev.style.filter = d.b > .3 ? `blur(${d.b}px)` : '';
+  $('#glare').style.transform = `translateX(${d.ry * 12}px)`;
+  const scr = t < 8.0 ? 'scrNew' : t < 11.0 ? 'scrHub' : 'scrEvt';
+  ['scrNew', 'scrHub', 'scrEvt'].forEach(id => $('#' + id).style.display = id === scr ? 'block' : 'none');
+  // --- Écran Nouvelle vie : trois tirages au sort ---
+  if (scr === 'scrNew') {
+    const k = Math.min(2, Math.floor(P(t, 5.3, 7.1) * 3)), roll = (P(t, 5.3, 7.1) * 3) % 1;
+    const nv = NV[k];
+    $('#nvName').textContent = nv[0]; $('#nvCty').textContent = nv[1] + ' · 0 an'; $('#nvAv').textContent = nv[2];
+    $('#nvRing').style.transform = `rotate(${t * 220}deg)`;
+    $('#nvAv').style.transform = `scale(${1 + .25 * Math.exp(-roll * 8)})`;
+    nvRows.forEach((r, i) => {
+      const v = nv[3][i] * E.outCubic(clamp(roll * 2.2 - i * .1));
+      r.querySelector('i').style.width = v + '%'; r.querySelector('i').style.background = statColor(v);
+      r.querySelector('.v').textContent = Math.round(v); r.querySelector('.v').style.color = statColor(v);
+    });
+    $('#nvGo .face').style.transform = `translateY(${-12 + pressAt(t, TAP_GO) * 10}px)`;
+  }
+  // --- Hub : VIEILLIR enfoncé, le journal se remplit ---
+  if (scr === 'scrHub') {
+    const n = PRESS.filter(p => t >= p).length;
+    const age = n ? JR[n - 1][0] : 0;
+    $('#hubAge').textContent = age + (age > 1 ? ' ans' : ' an');
+    $('#hubSub').textContent = `Passer à ${age + 1} an${age + 1 > 1 ? 's' : ''}`;
+    $('#hubAv').textContent = age < 3 ? '👶' : age < 12 ? '👧' : '👩';
+    $('#hubMoney').textContent = fmt(age * 35);
+    const pr = PRESS.reduce((m, p) => Math.max(m, pressAt(t, p)), 0);
+    $('#hubBtn .face').style.transform = `translateY(${-14 + pr * 12}px)`;
+    $('#hubShine').style.left = lerp(-200, 700, (t * 1.3) % 1) + 'px';
+    const base = [86, 72, 64, 48, 22];
+    hubStats.forEach((h, i) => { const v = Math.round(clamp(base[i] + Math.sin(age * 1.3 + i) * 8 + (i === 4 ? age * 2.8 : 0), 0, 100)); h.querySelector('.hv').textContent = v; h.querySelector('.hv').style.color = statColor(v); });
+    // Le plus récent en haut ; les anciens glissent vers le bas.
+    jrEls.forEach((el, k) => {
+      const q = E.outBack(P(t, PRESS[k], PRESS[k] + .22), 2);
+      let pos = 0; for (let j = k + 1; j < JR.length; j++) pos += E.outCubic(P(t, PRESS[j], PRESS[j] + .18));
+      el.style.transform = `translateY(${pos * 122}px) scale(${q})`; el.style.opacity = q > 0 ? 1 : 0;
+    });
+  }
+  // --- Événement : on tape « Sécher les cours » ---
+  if (scr === 'scrEvt') {
+    ['#ev0', '#ev1', '#ev2'].forEach((id, k) => {
+      const q = E.outBack(P(t, 11.3 + k * .1, 11.6 + k * .1), 2);
+      $(id).style.transform = `translateX(${(1 - q) * (k % 2 ? 600 : -600)}px)`;
+      $(id + ' .face').style.transform = `translateY(${-10 + (k === 0 ? pressAt(t, TAP_EVT) * 8 : 0)}px)`;
+    });
+  }
+  // --- Mots et légendes ---
+  const W0 = WORDS.find(w => t >= w[0] && t < w[1]);
+  if (W0) {
+    const u = t - W0[0];
+    $('#wcap').innerHTML = W0[2]; setWord($('#wbig'), W0[3], true);
+    tf($('#wcap'), { y: 250, op: E.outCubic(P(u, .05, .35)) * (1 - P(u, 2.75, 2.95)) });
+    $('#wcap').style.letterSpacing = lerp(30, 12, E.outCubic(P(u, 0, .5))) + 'px';
+    animWord($('#wbig'), u, .1, 2.65, { y: 410 });
+  }
+  callEls.forEach((el, i) => {
+    const c = CALL[i], q = E.outBack(P(t, c[0], c[0] + .3), 2), o = E.inCubic(P(t, c[1] - .2, c[1]));
+    tf(el, { x: c[3], y: c[4] + Math.sin(t * 2 + i) * 6, s: q * (1 - o), op: q > 0 ? 1 - o : 0 });
+  });
+  // --- Les destins possibles après le choix ---
+  OUTS.forEach((o, i) => {
+    const a0 = 12.7 + i * .12, q = E.inOutCubic(P(t, a0, a0 + .35)), ex = E.inCubic(P(t, 13.6, 13.9));
+    const sx = 420 + i * 120, sy = 1250, ex2 = o[4], ey = 1480;
+    pathEls[i].setAttribute('d', `M${sx} ${sy} C ${sx} ${sy + 160} ${ex2} ${ey - 220} ${ex2} ${ey - 150}`);
+    pathEls[i].setAttribute('stroke-dashoffset', 1 - q); pathEls[i].style.opacity = q > 0 ? 1 - ex : 0;
+    const cq = P(t, a0 + .25, a0 + .55);
+    tf(outEls[i], { x: ex2, y: ey + Math.sin(t * 3 + i) * 6, s: cq > 0 ? E.outBack(cq, 2.4) * (1 - ex) : 0, r: (i - 1) * 3, op: cq > 0 ? 1 - ex : 0 });
+  });
+  const kick = PRESS.reduce((m, p) => Math.max(m, t > p ? Math.exp(-(t - p) * 12) : 0), 0) * .012;
+  return { s: 1 + kick };
+}
+
+// ---------- 6 · Carrousel de fonctionnalités (1 par temps) ----------
+const FEAT = [['💼', 'Métiers', '20 métiers', '#4F46E5', '#1E1B4B'], ['🎓', 'École & BAC', '12 spécialités', '#19A9E8', '#0369A1'], ['🛠️', 'CAP', '11 CAP', '#F97316', '#9A3412'],
+  ['👨‍👩‍👧', 'Famille', 'Parents · frères · grands-parents', '#EC4899', '#9D174D'], ['💞', 'Amour', 'Meeter · rendez-vous', '#F43F5E', '#881337'], ['▶️', 'Réseaux', 'YouTube · Instagram', '#EF4444', '#7F1D1D'],
+  ['🏦', 'Banque', 'Livret A · bourse', '#10B981', '#065F46'], ['🚗', 'Permis', 'Auto-école · voitures', '#0EA5E9', '#075985'], ['🎣', 'Collections', 'Pêche · insectes · trésors', '#14B8A6', '#115E59'],
+  ['🐶', 'Animaux', 'Ton compagnon de vie', '#F59E0B', '#92400E'], ['⚽', 'Sport & musique', 'Deviens un prodige', '#8B5CF6', '#4C1D95'], ['🏙️', 'La ville', 'Ciné · resto · coiffeur…', '#6D4AFF', '#2E1065']];
+const F0 = 14.0, FB = .5;
+function sFeat(t) {
+  const u = t - F0, k = clamp(Math.floor(u / FB), 0, 11), f = (u / FB) % 1, F = FEAT[k];
+  // Carte 3D qui se retourne à chaque temps (face A / face B en alternance).
+  const flip = E.outBack(clamp(f / .55), 1.3), cards = [$('#fcardA'), $('#fcardB')];
+  const cur = cards[k % 2], prv = cards[(k + 1) % 2], P0 = FEAT[Math.max(0, k - 1)];
+  cur.textContent = F[0]; cur.style.background = `linear-gradient(150deg,${F[3]},${F[4]})`;
+  prv.textContent = P0[0]; prv.style.background = `linear-gradient(150deg,${P0[3]},${P0[4]})`;
+  const enter = E.outBack(P(u, 0, .4), 1.6), exit = E.inExpo(P(u, 5.75, 6.0));
+  const base = `translate(${540 - 260}px,${780 - 260}px)`;
+  const ry = k === 0 ? (1 - enter) * -90 : lerp(-180, 0, flip);
+  cur.style.transform = `${base} rotateY(${ry}deg) rotateX(${Math.sin(t * 1.4) * 6}deg) scale(${(k === 0 ? enter : 1) * (1 + exit * 2)})`;
+  prv.style.transform = `${base} rotateY(${lerp(0, 180, flip)}deg) rotateX(${Math.sin(t * 1.4) * 6}deg)`;
+  prv.style.opacity = k === 0 || flip >= 1 ? 0 : 1; cur.style.opacity = 1 - exit;
+  // Mot principal + précédent / suivant façon « machine à sous ».
+  setWord($('#fword'), F[1]);
+  animWord($('#fword'), f * FB, 0, k === 11 ? 5 : .4, { y: 1230, stagger: .012 });
+  $('#fprev').textContent = P0 && k > 0 ? P0[1] : ''; $('#fnext').textContent = FEAT[k + 1] ? FEAT[k + 1][1] : '';
+  const sl = E.outCubic(clamp(f / .4));
+  tf($('#fprev'), { y: lerp(1230, 1080, sl), op: .9 * (1 - exit), s: lerp(1.4, 1, sl) });
+  tf($('#fnext'), { y: lerp(1500, 1380, sl), op: (k < 11 ? .9 : 0) * (1 - exit), s: lerp(.7, 1, sl) });
+  $('#fstat').textContent = F[2];
+  tf($('#fstat'), { y: 1530, s: E.outBack(clamp((f - .1) / .35), 2.4) * (1 - exit), op: 1 - exit });
+  $('#fcnt').innerHTML = `${String(k + 1).padStart(2, '0')} <i>/</i> 12 <i>—</i> TOUT CE QUE TU PEUX VIVRE`;
+  tf($('#fcnt'), { y: 300, op: E.outCubic(P(u, 0, .4)) * (1 - exit) });
+  ACCENT = [F[3], 1];
+  return { s: 1 + Math.exp(-f * 7) * .03 + exit * .4, r: Math.exp(-f * 7) * (k % 2 ? 1 : -1) * .6, b: exit * 12 };
+}
+
+// ---------- 7 · Arbre de talents ----------
+const TAL = [['💰', '#22C55E'], ['🧠', '#3B82F6'], ['❤️', '#EF4444'], ['😊', '#F5B942'], ['💄', '#EC4899'], ['🍀', '#84CC16'], ['🎣', '#14B8A6'], ['🏪', '#F97316'], ['💼', '#6366F1'], ['👥', '#A855F7'], ['📱', '#E11D48']];
+const TC = [540, 1130], TR = 330;
+const tnodes = TAL.map(tl => html($('#tnodes'), `<div class="tnode" style="box-shadow:0 0 0 9px ${tl[1]},0 0 40px ${tl[1]}">${tl[0]}</div>`));
+const tlines = TAL.map(tl => { const l = document.createElementNS('http://www.w3.org/2000/svg', 'line'); l.setAttribute('stroke', tl[1]); $('#tlines').appendChild(l); return l; });
+function sTal(u) {
+  const rot = u * .25;
+  tf($('#tcore'), { x: TC[0], y: TC[1], s: E.outBack(P(u, 0, .35), 2.2) * (1 + .03 * Math.sin(u * 8)) });
+  TAL.forEach((tl, i) => {
+    const a = -Math.PI / 2 + i / 11 * Math.PI * 2 + rot, q = E.outCubic(P(u, .2 + i * .07, .45 + i * .07));
+    const x = TC[0] + Math.cos(a) * TR * q, y = TC[1] + Math.sin(a) * TR * q;
+    tlines[i].setAttribute('x1', TC[0]); tlines[i].setAttribute('y1', TC[1]); tlines[i].setAttribute('x2', x); tlines[i].setAttribute('y2', y);
+    tlines[i].style.opacity = q > 0 ? .9 : 0;
+    tf(tnodes[i], { x, y, s: pop(u, .32 + i * .07, .25, 2.6), op: q > 0 ? 1 : 0 });
+  });
+  tf($('#tcap'), { y: 1640, s: pop(u, 1.15, .3, 2), op: u > 1.15 ? 1 : 0 });
+  const out = E.inExpo(P(u, 1.8, 2.0));
+  return { s: 1 + out * .25, b: out * 10 };
+}
+
+// ---------- 7b · Classement du jour ----------
+const LB = [['👦', 'Hugo', '4,2 M €'], ['👧', 'Inès', '3,8 M €'], ['🧑', 'Gabin', '2,9 M €'], ['👩', 'Chloé', '1,7 M €']];
+const lrows = LB.map(r => html($('#lrows'), `<div class="lrow"><div class="rk"></div><div class="av">${r[0]}</div><div class="nm">${r[1]}</div><div class="vl">${r[2]}</div></div>`));
+const lme = html($('#lrows'), `<div class="lrow" style="background:linear-gradient(110deg,#FEF3C7,#FDE68A);box-shadow:0 0 0 6px #F5B942,0 18px 40px rgba(245,185,66,.5);z-index:2"><div class="rk" style="color:#92400E"></div><div class="av">😎</div><div class="nm">Toi</div><div class="vl" style="color:#92400E"></div></div>`);
+const MED = ['🥇', '🥈', '🥉', '4', '5'];
+function sLead(u) {
+  tf($('#lcard'), { y: 1130, s: lerp(.8, .96, E.outBack(P(u, 0, .3), 1.5)), op: P(u, 0, .08) });
+  const climb = E.inOutCubic(P(u, .5, 1.1)), me = lerp(4, 0, climb), rowY = k => 228 + k * 128;
+  lrows.forEach((el, k) => {
+    const q = E.outBack(P(u, .1 + k * .05, .35 + k * .05), 1.8), sh = me < k + .5 ? k + 1 : k;
+    el.style.transform = `translate(${(1 - q) * 1000}px,${lerp(rowY(k), rowY(sh), E.outCubic(clamp((k + .5 - me) * 2)))}px)`;
+    el.firstElementChild.textContent = MED[sh];
+  });
+  lme.style.transform = `translate(${(1 - E.outBack(P(u, .3, .5), 1.8)) * -1000}px,${rowY(me)}px) scale(${1 + .06 * Math.sin(climb * Math.PI)})`;
+  lme.firstElementChild.textContent = MED[Math.round(me)];
+  lme.lastElementChild.textContent = lerp(.9, 5.1, climb).toFixed(1).replace('.', ',') + ' M €';
+  const kq = P(u, 1.1, 1.35);
+  tf($('#lkrown'), { x: 238, y: lerp(300, 1130 - 422 + 228 * .96 - 20, E.outBounce(kq)), r: -16, s: .7, op: kq > 0 ? 1 : 0 });
+  tf($('#lchip'), { y: 1660, s: pop(u, .9, .3, 2), op: u > .9 ? 1 : 0 });
+  const out = E.inExpo(P(u, 1.8, 2.0));
+  return { s: 1 + out * .3, b: out * 12 };
+}
+
+// ---------- 8 · CTA ----------
+const TAP_CTA = 25.7;
+function sCta(u, t) {
+  tf($('#ccrown'), { y: lerp(-180, 430, E.outBounce(P(u, 0, .5))), r: Math.sin(u * 4) * 7 });
+  letters(clet, u, .05, .028);
+  tf($('#clogo'), { y: 620, s: 1 + .02 * Math.sin(u * 4) });
+  const a = E.outBack(P(u, .4, .65), 2.2), b = E.outBack(P(u, .48, .73), 2.2);
+  tf($('#cq1'), { y: 820, s: a, op: a > 0 ? 1 : 0, r: -2 });
+  tf($('#cq2'), { y: 935, s: b, op: b > 0 ? 1 : 0, r: 2 });
+  const bp = P(u, .6, 1.05), beat = 1 + .035 * Math.max(0, Math.sin((u - 1) * Math.PI * 4)) * P(u, 2.0, 2.2);
+  tf($('#cbtn'), { y: 1190, s: E.outElastic(bp) * beat, op: bp > 0 ? 1 : 0 });
+  $('#cbtn .face').style.transform = `translateY(${-18 + pressAt(t, TAP_CTA) * 16}px)`;
+  tf($('#cglow'), { y: 1200, s: (1.05 + .12 * Math.sin(u * 6)) * E.outCubic(bp), op: .9 * bp });
+  $('#cshine').style.left = lerp(-260, 950, ((u - 1) % 1.2) / .6) + 'px';
+  tf($('#cfree'), { y: 1380, op: E.outCubic(P(u, 1.0, 1.3)) });
+  const sq = E.outBack(P(u, 1.1, 1.4), 1.8);
+  tf($('#csearch'), { y: 1505, s: sq, op: sq > 0 ? 1 : 0 });
+  const txt = 'Destiny Life';
+  $('#ctype').textContent = txt.slice(0, Math.floor(txt.length * P(u, 1.9, 2.6)));
+  $('#ccaret').style.opacity = (Math.floor(u * 3) % 2 === 0 || u < 2.6) ? 1 : 0;
+  const kick = t > TAP_CTA ? Math.exp(-(t - TAP_CTA) * 8) * .05 : 0, intro = 1 - E.outCubic(P(u, 0, .6));
+  return { s: 1 + intro * .15 + u * .008 + kick, r: Math.sin(u * 20) * kick * 20 };
+}
+
+// =================== Montage ===================
+const SC = [['s0', 0, 3.0, sOpen], ['s1', 3.0, 5.0, sLogo], ['sd', 5.0, 14.0, sDevice], ['sf', 14.0, 20.0, sFeat], ['st', 20.0, 22.0, sTal], ['sl', 22.0, 24.0, sLead], ['s8', 24.0, 30.0, sCta]];
+const TAPS = [[TAP_GO, 540 + 180, 1190 + (1038 - 620) * .98], [TAP_EVT, 420, 1190 + (120 + 560 + 48 - 620 + 20) * .98], [TAP_CTA, 840, 1220]];
+addConfetti(60, 61, 7.6, 540, 1250);
+addConfetti(90, 62, 23.15, 540, 900, 1.1);
+addConfetti(110, 63, TAP_CTA, 540, 1190, 1.3);
+const TINT = t => t < 3 ? '#F5B942' : t < 5 ? '#6D4AFF' : t < 8 ? '#EC4899' : t < 11 ? '#10B981' : t < 14 ? '#19A9E8' : t < 20 ? ACCENT[0] : t < 24 ? '#10B981' : '#F5B942';
+function render(t) {
+  document.querySelectorAll('.scene').forEach(s => s.style.display = 'none');
+  let cam = { s: 1 };
+  for (const [id, a, b, fn] of SC) if (t >= a && t < b) { $('#' + id).style.display = 'block'; cam = (id === 'sd' || id === 'sf' ? fn(t) : fn(t - a, t)) || cam; }
+  const sec = SC.find(s => t >= s[1] && t < s[2]);
+  renderBg(t, TINT(t), sec && sec[0] === 'sf' ? 1 : .6);
+  const rays = t >= 3 && t < 5 ? .9 * P(t, 3.1, 3.5) * (1 - P(t, 4.7, 5)) : t >= 24 ? .9 * P(t, 24.05, 24.5) : t >= 22.9 && t < 24 ? .6 * P(t, 23.1, 23.4) : 0;
+  tf($('#rays'), { y: t >= 24 ? 640 : t >= 22 ? 930 : 840, r: t * 12, op: rays });
+  applyCam(cam);
+  renderConfetti(t);
+  renderTaps(t, TAPS);
+  // Flashs blancs sur les grandes coupes.
+  const fl = [3.0, 14.0, 24.0].reduce((m, c) => Math.max(m, P(t, c - .06, c) * (1 - P(t, c, c + .35))), 0);
+  $('#flash').style.opacity = .85 * fl;
+}
+window.render = render;
+window.DURATION = END;
+render(0);
+</script>
+</body>
+</html>
