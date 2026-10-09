@@ -8,7 +8,7 @@ En rareté **BIG**, un pet est simplement agrandi ×2 avec `pet:ScaleTo(2)`, dep
 
 ![Shiba BIG ×2 à côté du chien normal](preview/comparaison_big.png)
 
-La colonne de droite montre l'affichage de l'œuf (« Œuf des Toutous ») : le chien basique à 1/2 et le Shiba BIG à 1/10 000. Comme le Shiba BIG est plus grand, son icône ne montre que le carré de sa tête.
+La colonne de droite montre l'affichage de l'œuf « Œuf de la Prairie » : le chien basique (commun) à 1/2 et le Shiba BIG à 1/10 000. L'UI seule est aussi disponible dans `preview/oeuf_prairie.png`.
 
 Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visage** : aucun mesh ni aucune image à uploader. Tu glisses le fichier dans Studio et c'est prêt.
 
@@ -18,7 +18,7 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 | `CubeDog.rbxmx` / `CubeDog_Golden.rbxmx` | Chien, version normale et dorée |
 | `src/CubePetBuilder.luau` | Source qui génère les modèles (dimensions, couleurs, visages) |
 | `tools/` | Export (Lune), vérifications, viewer 3D web |
-| `preview/` | Rendus des modèles (`comparaison.png`, `comparaison_big.png`, `shiba_*.png`, `chien_*.png`) |
+| `preview/` | Rendus des modèles (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `shiba_*.png`, `chien_*.png`) |
 
 ## Importer dans Roblox Studio
 
