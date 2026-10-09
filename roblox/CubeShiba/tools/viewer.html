@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cube Shiba — aperçu 3D</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #eef3e6; font-family: system-ui, sans-serif; }
+  #v { position: fixed; inset: 0; }
+  .bar { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 8px; }
+  button { border: 0; border-radius: 999px; padding: 8px 14px; background: #2f5d3a; color: #fff; font-weight: 600; cursor: pointer; }
+  button[aria-pressed="false"] { background: #9db59f; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="v"></div>
+<div class="bar">
+  <button data-variant="Normal" aria-pressed="true">Normal</button>
+  <button data-variant="Golden" aria-pressed="false">Golden</button>
+  <button id="outline" aria-pressed="true">Contour</button>
+</div>
+<script type="module">
+  // Lancer depuis ce dossier : python3 -m http.server  puis ouvrir /viewer.html
+  import { createViewer } from "./viewer.js";
+  const data = await (await fetch("./pet_data.json")).json();
+  const viewer = await createViewer(document.getElementById("v"), data, { variant: "Normal" });
+  window.viewer = viewer;
+  for (const b of document.querySelectorAll("[data-variant]")) {
+    b.onclick = () => {
+      viewer.setVariant(b.dataset.variant);
+      document.querySelectorAll("[data-variant]").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+    };
+  }
+  const ob = document.getElementById("outline");
+  ob.onclick = () => {
+    const on = ob.getAttribute("aria-pressed") !== "true";
+    ob.setAttribute("aria-pressed", String(on));
+    viewer.setOutline(on);
+  };
+</script>
+</body>
+</html>
