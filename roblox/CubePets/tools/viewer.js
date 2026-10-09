@@ -2,7 +2,7 @@
 // (Block / Ball / Cylinder / Wedge), le rig Motor6D et le visage SurfaceGui à partir
 // de pet_data.json (exporté par tools/preview_export.luau).
 //
-// API : createViewer(container, data, opts) -> { setVariant, setOutline, setView, setPose, render, ... }
+// API : createViewer(container, data, opts) -> { setVariant, setLineup, setOutline, setView, setPose, project, render, ... }
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -231,15 +231,21 @@ export async function createViewer(container, data, opts = {}) {
     frozenTime: null,
   };
 
-  let pet = null; // { bones: {name: group}, motors, faceTex, faceCanvas, parts }
+  let pets = []; // [{ group, boneGroups, boneRest, motors, faceTex, faceCanvas, ... }]
 
-  function buildPet(variantName) {
-    if (pet) {
+  function clearPets() {
+    for (const pet of pets) {
       petRoot.remove(pet.group);
       pet.group.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) { o.material.map?.dispose?.(); o.material.dispose(); } });
     }
+    pets = [];
+  }
+
+  // Ajoute un pet dans la scène, décalé de x studs (plusieurs pets = vue côte à côte)
+  function buildPet(variantName, x = 0) {
     const d = data[variantName];
     const group = new THREE.Group();
+    group.position.x = x;
     const boneRest = {};
     const boneGroups = {};
     for (const [name, b] of Object.entries(d.bones)) {
@@ -288,12 +294,13 @@ export async function createViewer(container, data, opts = {}) {
     boneGroups.Body.add(plane);
 
     petRoot.add(group);
-    pet = { group, boneGroups, boneRest, motors: d.motors, faceCanvas, faceTex, face: f, meshes, data: d, SS };
+    const pet = { group, boneGroups, boneRest, motors: d.motors, faceCanvas, faceTex, face: f, meshes, data: d, SS };
+    pets.push(pet);
     quadMat.uniforms.color.value.setRGB(...d.outline, THREE.SRGBColorSpace);
-    drawFace();
+    drawFace(pet);
   }
 
-  function drawFace() {
+  function drawFace(pet) {
     const { faceCanvas, faceTex, face, SS } = pet;
     const ctx = faceCanvas.getContext("2d");
     ctx.clearRect(0, 0, faceCanvas.width, faceCanvas.height);
@@ -309,7 +316,7 @@ export async function createViewer(container, data, opts = {}) {
   }
 
   // ─── Rig : Part1 = Part0 * C0 * anim * C1^-1 ───────────────────────────────
-  function applyPose(offsets) {
+  function applyPose(pet, offsets) {
     const world = { RootPart: pet.boneRest.RootPart.clone() };
     const order = ["RootJoint", "EarL", "EarR", "Tail", "LegFL", "LegFR", "LegBL", "LegBR"];
     for (const name of order) {
@@ -343,8 +350,7 @@ export async function createViewer(container, data, opts = {}) {
 
   function render() {
     const now = state.frozenTime !== null ? state.frozenTime : (performance.now() - state.t0) / 1000;
-    if (state.pose) applyPose(state.pose(now, api));
-    else applyPose(null);
+    for (const pet of pets) applyPose(pet, state.pose ? state.pose(now, api) : null);
     controls.update();
     // passe principale
     renderer.setRenderTarget(sceneTarget);
@@ -377,7 +383,14 @@ export async function createViewer(container, data, opts = {}) {
 
   const api = {
     THREE, angles, cfn, renderer, scene, camera, controls,
-    setVariant(v) { state.variant = v; buildPet(v); },
+    setVariant(v) { state.variant = v; clearPets(); buildPet(v); },
+    // ex. setLineup([{ key: "Shiba/Normal", x: 2.4 }, { key: "Dog/Normal", x: -2.4 }])
+    setLineup(list) { clearPets(); for (const it of list) buildPet(it.key, it.x || 0); },
+    // position écran (pixels CSS) d'un point du monde
+    project(p) {
+      const v = new THREE.Vector3(...p).project(camera);
+      return [(v.x + 1) / 2 * container.clientWidth, (1 - v.y) / 2 * container.clientHeight];
+    },
     setOutline(on) { state.outline = on; },
     setPose(fn) { state.pose = fn; },
     freeze(t) { state.frozenTime = t; },
@@ -392,7 +405,8 @@ export async function createViewer(container, data, opts = {}) {
     start() { if (!running) { running = true; loop(); } },
   };
 
-  buildPet(state.variant);
+  if (opts.lineup) api.setLineup(opts.lineup);
+  else buildPet(state.variant);
   if (opts.autoLoop !== false) loop();
   return api;
 }

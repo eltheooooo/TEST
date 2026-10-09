@@ -25,6 +25,7 @@
   <button data-variant="Shiba/Golden" aria-pressed="false">Shiba Golden</button>
   <button data-variant="Dog/Normal" aria-pressed="false">Chien</button>
   <button data-variant="Dog/Golden" aria-pressed="false">Chien Golden</button>
+  <button data-variant="lineup" aria-pressed="false">Côte à côte</button>
   <button id="outline" aria-pressed="true">Contour</button>
 </div>
 <script type="module">
@@ -35,7 +36,12 @@
   window.viewer = viewer;
   for (const b of document.querySelectorAll("[data-variant]")) {
     b.onclick = () => {
-      viewer.setVariant(b.dataset.variant);
+      if (b.dataset.variant === "lineup") {
+        viewer.setLineup([{ key: "Shiba/Normal", x: 2.3 }, { key: "Dog/Normal", x: -2.1 }]);
+        viewer.setView([-1.5, 5, -16], [0, 1.45, 0]);
+      } else {
+        viewer.setVariant(b.dataset.variant);
+      }
       document.querySelectorAll("[data-variant]").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
     };
   }
