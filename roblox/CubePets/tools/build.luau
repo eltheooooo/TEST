@@ -7,6 +7,7 @@
 	  CubeShiba.rbxmx, CubeShiba_Golden.rbxmx
 	  CubeDog.rbxmx,   CubeDog_Golden.rbxmx
 	  CubeCat.rbxmx,   CubeCat_Golden.rbxmx
+	  CubeHamster.rbxmx, CubeHamster_Golden.rbxmx
 ]]
 local roblox = require("@lune/roblox")
 local fs = require("@lune/fs")
@@ -61,7 +62,7 @@ local function stats(model)
 end
 
 local failures = 0
-for _, job in { { "Shiba", "Normal" }, { "Shiba", "Golden" }, { "Dog", "Normal" }, { "Dog", "Golden" }, { "Cat", "Normal" }, { "Cat", "Golden" } } do
+for _, job in { { "Shiba", "Normal" }, { "Shiba", "Golden" }, { "Dog", "Normal" }, { "Dog", "Golden" }, { "Cat", "Normal" }, { "Cat", "Golden" }, { "Hamster", "Normal" }, { "Hamster", "Golden" } } do
 	local model = Builder.build({ species = job[1], variant = job[2] }, roblox)
 	failures += checkJoints(model)
 

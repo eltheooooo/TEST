@@ -1,6 +1,6 @@
 # Cube Pets : pets Roblox (style Pet Simulator)
 
-Trois pets cubiques qui partagent **exactement les mêmes proportions** (corps, pattes, arêtes arrondies) : Shiba, chien et chat. Seuls les oreilles, la queue, le visage et les couleurs changent.
+Quatre pets cubiques qui partagent **exactement les mêmes proportions** (corps, pattes, arêtes arrondies) : Shiba, chien, chat et hamster. Seuls les oreilles, la queue, le visage et les couleurs changent.
 
 ![Comparaison Shiba / Chien](preview/comparaison.png)
 
@@ -22,9 +22,10 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 | `CubeShiba.rbxmx` / `CubeShiba_Golden.rbxmx` | Shiba, version normale et dorée |
 | `CubeDog.rbxmx` / `CubeDog_Golden.rbxmx` | Chien, version normale et dorée |
 | `CubeCat.rbxmx` / `CubeCat_Golden.rbxmx` | Chat, version normale et dorée |
+| `CubeHamster.rbxmx` / `CubeHamster_Golden.rbxmx` | Hamster, version normale et dorée (pas encore sur la planche) |
 | `src/CubePetBuilder.luau` | Source qui génère les modèles (dimensions, couleurs, visages) |
 | `tools/` | Export (Lune), vérifications, viewer 3D web |
-| `preview/` | Rendus des modèles et maquettes d'UI (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `parametres.png`, `bouton_parametres.png`, `shiba_*.png`, `chien_*.png`, `chat_*.png`) |
+| `preview/` | Rendus des modèles et maquettes d'UI (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `parametres.png`, `bouton_parametres.png`, `shiba_*.png`, `chien_*.png`, `chat_*.png`, `hamster_*.png`) |
 
 ## Importer dans Roblox Studio
 
@@ -58,11 +59,24 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 - Grands yeux, truffe rose, bouche « ω », moustaches et joues roses.
 - Longue queue dressée vers l'arrière, pointe blanche.
 
-### Commun aux trois
+### Cube Hamster
+![Planche Hamster](preview/hamster_planche.png)
+
+- Dessus orange doré, bas du visage crème qui monte en pointe entre les yeux, taches crème sur le bas des flancs.
+- Oreilles rondes à l'intérieur rose.
+- Grands yeux, petite truffe rose, bouche « ◡▯◡ » avec deux incisives, et joues roses.
+- Il tient une graine de tournesol entre ses deux pattes roses.
+- Pieds roses et petite queue en moignon à l'arrière.
+
+Il respecte les mêmes règles de taille que le chien et le chat :
+
+![Contrôle de taille](preview/hamster_taille.png)
+
+### Commun à tous
 - **Corps** : cube 2,4 × 2 × 2 studs aux arêtes arrondies, taches crème sur le bas des flancs, 4 pattes « blocky » crème.
 - **Visage** : SurfaceGui vectorielle posée directement sur la face avant (`Visual/Body/CoreFront/Face`). Elle contient le pelage, les zones crème, les yeux (blanc + pupille noire, sans reflet), la truffe, la bouche « ω » et les joues. L'éclairage est le même que sur le reste du corps, et le rendu reste net à toutes les distances.
 - **Contour cartoon** : `Highlight` nommé `Outline` (contour seul), comme les traits noirs des planches.
-- **Taille** : environ 3 studs de haut (la queue du chat monte à environ 3,4), de 71 à 78 pièces.
+- **Taille** : environ 3 studs de haut (la queue du chat monte à environ 3,4), de 49 à 78 pièces.
 - Les pets ont seulement le visage neutre : ni expressions, ni poses.
 
 ## Structure et rig
@@ -88,7 +102,7 @@ CubeDog (Model)              PrimaryPart = RootPart, pivot au sol
 - Toutes les pièces sont `CanCollide = false`, `CanTouch = false`, `Massless = true` : le pet ne gêne ni la physique ni les joueurs.
 - `RootPart` est ancrée, ce qui convient aux systèmes de pets qui déplacent le modèle par `PivotTo` côté client (le cas le plus courant). Si ton système utilise la physique (`AlignPosition`…), désancre-la.
 - Le rig Motor6D + `AnimationController` permet d'animer le pet avec l'Animation Editor (ou Moon Animator) si tu le souhaites.
-- Attributs sur le Model : `PetName`, `Species` (`Shiba` / `Dog` / `Cat`), `Variant` (`Normal` / `Golden`).
+- Attributs sur le Model : `PetName`, `Species` (`Shiba` / `Dog` / `Cat` / `Hamster`), `Variant` (`Normal` / `Golden`).
 
 ### Exemple minimal (LocalScript)
 
@@ -118,7 +132,8 @@ end)
   - `Primary` = pelage ;
   - `Secondary` = crème ;
   - `Accent` = oreilles du chien ;
-  - `EarInner` = intérieur des oreilles (Shiba, chat).
+  - `EarInner` = intérieur des oreilles (Shiba, chat, hamster) ;
+  - `Feet` = pieds roses du hamster.
 
   Pour une nouvelle variante par script :
 
@@ -138,7 +153,7 @@ end)
 Les `.rbxmx` sont générés à partir de `src/CubePetBuilder.luau` avec [Lune](https://lune-org.github.io/docs) :
 
 ```bash
-lune run tools/build.luau            # écrit les 6 fichiers .rbxmx
+lune run tools/build.luau            # écrit les 8 fichiers .rbxmx
 lune run tools/preview_export.luau   # met à jour tools/pet_data.json pour le viewer
 ```
 

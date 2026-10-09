@@ -6,7 +6,8 @@
 	primitives Roblox + une SurfaceGui pour le visage : aucun asset à uploader,
 	aucun MeshId, les modèles marchent tels quels dans n'importe quel jeu.
 
-	Espèces : "Shiba" (Cube Shiba), "Dog" (Cube Dog), "Cat" (Cube Cat). Même corps, mêmes
+	Espèces : "Shiba" (Cube Shiba), "Dog" (Cube Dog), "Cat" (Cube Cat),
+	"Hamster" (Cube Hamster). Même corps, mêmes
 	proportions ; seuls les oreilles, la queue, le visage et les couleurs changent.
 
 	Ce module est la *source* des fichiers .rbxmx fournis. Il tourne :
@@ -261,6 +262,79 @@ local SPECIES = {
 			},
 		},
 	},
+
+	Hamster = {
+		ModelName = "CubeHamster",
+		PetName = "Cube Hamster",
+		SplitY = 0.15, -- bas du visage crème, au niveau des yeux
+		BellyTint = "Secondary",
+		LegTint = "Feet", -- petits pieds roses
+		Patch = { Depth = 0.6, Radius = 0.32 },
+		-- Oreilles rondes : disques posés sur le dessus de la tête, intérieur rose
+		Ears = {
+			Type = "Round",
+			X = 0.8,
+			Y = 1.08, -- centre du disque (dessus de la tête = 1.0)
+			Z = -0.1,
+			Radius = 0.3,
+			Thickness = 0.22,
+			OutTilt = 10,
+			Inner = { Radius = 0.17, Thickness = 0.04, Drop = 0.03 },
+		},
+		-- Petite queue en moignon à l'arrière
+		Tail = {
+			Path = { { 0, -0.42, 0.88 }, { 0, -0.36, 1.04 }, { 0, -0.28, 1.14 } },
+			Count = 3,
+			Smooth = true,
+			Thickness = { 0.13, 0.14, 0.13 },
+			TipStart = 2,
+			Lining = false,
+		},
+		Face = {
+			Muzzle = { Shape = "Diamond", D = 0.84, Y = 0.2 }, -- le crème monte en pointe entre les yeux
+			Eyes = { X = 0.6, Y = 0.24, Sclera = 0.64, Pupil = 0.44, Inward = 0.03, Down = 0.02 },
+			Nose = { Y = 0.0, Scale = 0.62, Color = "Nose" },
+			Mouth = { Y = -0.09, R = 0.1, Split = 0.082 }, -- arcs écartés : les dents pendent au milieu
+			Teeth = { W = 0.074, H = 0.11, Gap = 0.012 },
+			Cheeks = { X = 0.84, Y = -0.12, W = 0.3, H = 0.25 },
+			-- Graine de tournesol tenue par les deux pattes
+			Seed = { Y = -0.6, W = 0.3, H = 0.44 },
+		},
+		Palettes = {
+			Normal = {
+				Primary = { 248, 174, 104 },
+				Secondary = { 255, 241, 231 },
+				EarInner = { 252, 196, 196 },
+				Cheek = { 252, 198, 190 },
+				Eye = { 58, 27, 24 },
+				Nose = { 250, 156, 156 },
+				Feet = { 252, 206, 204 },
+				Paw = { 252, 196, 196 },
+				Seed = { 44, 30, 28 },
+				SeedStripe = { 250, 246, 240 },
+				Sclera = { 255, 255, 255 },
+				Shine = { 255, 255, 255 },
+				Outline = { 58, 30, 22 },
+				Reflectance = 0,
+			},
+			Golden = {
+				Primary = { 255, 193, 48 },
+				Secondary = { 255, 236, 150 },
+				EarInner = { 255, 212, 104 },
+				Cheek = { 255, 160, 92 },
+				Eye = { 96, 54, 12 },
+				Nose = { 232, 120, 60 },
+				Feet = { 255, 214, 110 },
+				Paw = { 255, 214, 110 },
+				Seed = { 96, 54, 12 },
+				SeedStripe = { 255, 246, 214 },
+				Sclera = { 255, 255, 255 },
+				Shine = { 255, 255, 255 },
+				Outline = { 122, 74, 8 },
+				Reflectance = 0.15,
+			},
+		},
+	},
 }
 Builder.Species = SPECIES
 
@@ -280,7 +354,7 @@ end
 
 --[[
 	options :
-	  species   "Shiba" | "Dog" | "Cat"             (défaut "Shiba")
+	  species   "Shiba" | "Dog" | "Cat" | "Hamster"  (défaut "Shiba")
 	  variant   "Normal" | "Golden"                 (défaut "Normal")
 	  name      nom du Model                        (défaut "CubeShiba", "CubeDog_Golden"...)
 	  outline   contour cartoon (Highlight)         (défaut true)
@@ -544,6 +618,17 @@ function Builder.build(options, rbx)
 			local iz = -t / 2 - 0.015 + inner.Thickness / 2
 			earPiece("InnerL", V3(inner.Thickness, inner.Height, inner.Base / 2), CF(-inner.Base / 4, inner.Y + inner.Height / 2, iz) * CFrame.Angles(0, math.pi / 2, 0), "EarInner")
 			earPiece("InnerR", V3(inner.Thickness, inner.Height, inner.Base / 2), CF(inner.Base / 4, inner.Y + inner.Height / 2, iz) * CFrame.Angles(0, -math.pi / 2, 0), "EarInner")
+		elseif ears.Type == "Round" then
+			-- Disque (cylindre d'axe Z) à moitié enfoncé dans le dessus de la tête
+			local base = BODY_CENTER * CF(sx * ears.X, ears.Y, ears.Z) * CFrame.Angles(0, 0, -sx * rad(ears.OutTilt))
+			local earBone = makeBone("Ear" .. s, V3(0.2, 0.2, 0.2), base)
+			motor("Ear" .. s, body, earBone, base)
+			local outer = makePart("Part", "Outer", V3(ears.Thickness, 2 * ears.Radius, 2 * ears.Radius), base * AZ, "Primary", earFolder, "Cylinder")
+			weld(earBone, outer)
+			local inner = ears.Inner
+			local iz = -ears.Thickness / 2 - 0.015 + inner.Thickness / 2
+			local ip = makePart("Part", "Inner", V3(inner.Thickness, 2 * inner.Radius, 2 * inner.Radius), base * CF(0, -inner.Drop, iz) * AZ, "EarInner", earFolder, "Cylinder")
+			weld(earBone, ip)
 		elseif ears.Type == "Floppy" then
 			-- Repère du pli : origine au milieu du pli, axe Z le long du pli (avant = -Z)
 			local t, depth = ears.Thickness, ears.Depth
@@ -575,7 +660,7 @@ function Builder.build(options, rbx)
 		for _, sx in { -1, 1 } do
 			local legName = "Leg" .. (fz < 0 and "F" or "B") .. (sx < 0 and "L" or "R")
 			local legLen = LEG_H + LEG_EMBED
-			local leg = makePart("Part", legName, V3(LEG_W, legLen, LEG_D), CF(sx * LEG_X, legLen / 2, fz * LEG_Z), "Secondary", model, "Block")
+			local leg = makePart("Part", legName, V3(LEG_W, legLen, LEG_D), CF(sx * LEG_X, legLen / 2, fz * LEG_Z), spec.LegTint or "Secondary", model, "Block")
 			motor(legName, body, leg, CF(sx * LEG_X, LEG_H, fz * LEG_Z))
 		end
 	end
@@ -734,6 +819,9 @@ function Builder.build(options, rbx)
 	local m = F.Muzzle
 	if m and m.Shape == "Circle" then
 		tint(shape(background, canvasSpace, "Muzzle", 0, m.Y, 2 * m.R, 2 * m.R, C.Secondary, 3, { round = true }), "Secondary")
+	elseif m and m.Shape == "Diamond" then
+		local side = m.D / math.sqrt(2)
+		tint(shape(background, canvasSpace, "Muzzle", 0, m.Y, side, side, C.Secondary, 3, { round = 14, rotation = 45 }), "Secondary")
 	elseif m then
 		tint(shape(background, canvasSpace, "Muzzle", 0, m.Y, m.W, m.H, C.Secondary, 3, { round = true }), "Secondary")
 	end
@@ -785,8 +873,37 @@ function Builder.build(options, rbx)
 	local mo = F.Mouth
 	local mouth = shape(canvas, canvasSpace, "Mouth", 0, 0, FW, FH, nil, 4)
 	line(mouth, canvasSpace, "Philtrum", 0, noseY - 0.08 * ns_, 0, mo.Y, STROKE, C.Eye, 1)
-	arc(mouth, canvasSpace, "LipL", -mo.R, mo.Y, mo.R, 180, 360, STROKE, C.Eye, 1, 10)
-	arc(mouth, canvasSpace, "LipR", mo.R, mo.Y, mo.R, 180, 360, STROKE, C.Eye, 1, 10)
+	local split = mo.Split or 0
+	arc(mouth, canvasSpace, "LipL", -mo.R - split, mo.Y, mo.R, 180, 360, STROKE, C.Eye, 1, 10)
+	arc(mouth, canvasSpace, "LipR", mo.R + split, mo.Y, mo.R, 180, 360, STROKE, C.Eye, 1, 10)
+
+	-- Dents (hamster) : deux incisives qui pendent sous la jonction du « ω »
+	if F.Teeth then
+		local t = F.Teeth
+		local teeth = shape(canvas, canvasSpace, "Teeth", 0, 0, FW, FH, nil, 5)
+		local ty = mo.Y - 0.005 - t.H / 2
+		shape(teeth, canvasSpace, "Outline", 0, ty - 0.004, 2 * t.W + t.Gap + 0.046, t.H + 0.05, C.Eye, 1, { round = 7 })
+		for _, sx in { -1, 1 } do
+			local tx = sx * (t.W / 2 + t.Gap / 2)
+			shape(teeth, canvasSpace, sx < 0 and "ToothR" or "ToothL", tx, ty, t.W, t.H - 0.012, rgb(pal.Sclera), 2, { round = 4 })
+		end
+	end
+
+	-- Graine de tournesol tenue par les pattes (hamster)
+	if F.Seed then
+		local sd = F.Seed
+		local seed = shape(canvas, canvasSpace, "Seed", 0, 0, FW, FH, nil, 6)
+		shape(seed, canvasSpace, "Shell", 0, sd.Y, sd.W, sd.H, rgb(pal.Seed), 1, { round = true })
+		for i, dx in { -0.065, 0.065 } do
+			shape(seed, canvasSpace, "Stripe" .. i, dx, sd.Y, 0.045, sd.H * 0.72, rgb(pal.SeedStripe), 2, { round = true })
+		end
+		for _, sx in { -1, 1 } do
+			local px, py = sx * (sd.W / 2 + 0.01), sd.Y - 0.06
+			local name = sx < 0 and "PawR" or "PawL"
+			shape(seed, canvasSpace, name .. "Line", px, py, 0.24, 0.17, C.Eye, 3, { round = true, rotation = sx * 22 })
+			shape(seed, canvasSpace, name, px, py, 0.2, 0.13, rgb(pal.Paw), 4, { round = true, rotation = sx * 22 })
+		end
+	end
 
 	-- Truffe
 	local nose, ns = shape(canvas, canvasSpace, "Nose", 0, noseY, 0.24 * ns_, 0.2 * ns_, nil, 5)
