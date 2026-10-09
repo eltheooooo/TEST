@@ -10,6 +10,8 @@ En rareté **BIG**, un pet est simplement agrandi ×2 avec `pet:ScaleTo(2)`, dep
 
 La colonne de droite montre l'affichage de l'œuf « Œuf de la Prairie » : le chien basique (commun) à 1/2 et le Shiba BIG à 1/10 000. Le Shiba BIG remplit toute sa case, et ses oreilles dépassent du cadre pour bien montrer qu'il est plus gros. L'UI seule est aussi disponible dans `preview/oeuf_prairie.png`.
 
+La dernière colonne montre le menu « Paramètres » et le bouton du HUD qui l'ouvre. Le menu contient : Musique, Effets sonores, Échanges, Notifications et Pets des autres. Une coche verte veut dire activé, une croix rouge désactivé. Ces UI sont aussi disponibles seules dans `preview/parametres.png` et `preview/bouton_parametres.png`.
+
 Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visage** : aucun mesh ni aucune image à uploader. Tu glisses le fichier dans Studio et c'est prêt.
 
 | Fichier | Contenu |
@@ -18,7 +20,7 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 | `CubeDog.rbxmx` / `CubeDog_Golden.rbxmx` | Chien, version normale et dorée |
 | `src/CubePetBuilder.luau` | Source qui génère les modèles (dimensions, couleurs, visages) |
 | `tools/` | Export (Lune), vérifications, viewer 3D web |
-| `preview/` | Rendus des modèles (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `shiba_*.png`, `chien_*.png`) |
+| `preview/` | Rendus des modèles et maquettes d'UI (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `parametres.png`, `bouton_parametres.png`, `shiba_*.png`, `chien_*.png`) |
 
 ## Importer dans Roblox Studio
 
@@ -32,7 +34,7 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 
 - Pelage orange, ventre et bas du visage crème, bosse crème du museau, sourcils clairs.
 - Oreilles triangulaires avec intérieur rose.
-- Queue enroulée sur le côté arrière gauche, pointe et intérieur crème.
+- Queue enroulée derrière le corps (vers le haut), pointe et intérieur crème.
 
 ### Cube Dog
 ![Planche Chien](preview/chien_planche.png)

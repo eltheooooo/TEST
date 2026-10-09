@@ -72,10 +72,10 @@ local SPECIES = {
 			BackTilt = 8,
 			Inner = { Base = 0.56, Height = 0.56, Thickness = 0.06, Y = 0.06 },
 		},
-		-- Queue : spirale de sphères qui s'enroule derrière le flanc gauche
+		-- Queue : spirale de sphères enroulée derrière le corps, vers le haut
 		Tail = {
-			Center = { -1.36, 0.02, 1.0 },
-			Out = { -0.85, 0, 0.53 },
+			Center = { 0, 0.3, 1.3 },
+			Out = { 0, 0, 1 },
 			Radius = 0.3,
 			From = -125,
 			To = 110,

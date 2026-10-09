@@ -357,9 +357,9 @@
         <Properties>
           <string name="Name">Tail</string>
           <CoordinateFrame name="C0">
-            <X>-1.2139893</X>
-            <Y>-0.22573853</Y>
-            <Z>0.9089508</Z>
+            <X>0</X>
+            <Y>0.054260254</Y>
+            <Z>1.1279297</Z>
             <R00>1</R00>
             <R01>0</R01>
             <R02>0</R02>
@@ -373,7 +373,7 @@
           <CoordinateFrame name="C1">
             <X>0</X>
             <Y>-0</Y>
-            <Z>0</Z>
+            <Z>-0</Z>
             <R00>1</R00>
             <R01>0</R01>
             <R02>0</R02>
@@ -5236,9 +5236,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.2139893</X>
-              <Y>1.2242584</Y>
-              <Z>0.9089508</Z>
+              <X>0</X>
+              <Y>1.5042572</Y>
+              <Z>1.1279297</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5309,9 +5309,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.2532959</X>
-              <Y>1.1976318</Y>
-              <Z>0.9334564</Z>
+              <X>0</X>
+              <Y>1.4776306</Y>
+              <Z>1.1742401</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5343,9 +5343,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.03930664</X>
+                <X>0</X>
                 <Y>-0.026626587</Y>
-                <Z>0.024505615</Z>
+                <Z>0.046310425</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -5382,9 +5382,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.2959747</X>
-              <Y>1.1796417</Y>
-              <Z>0.960083</Z>
+              <X>0</X>
+              <Y>1.4596405</Y>
+              <Z>1.2245483</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5416,9 +5416,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.08198547</X>
+                <X>0</X>
                 <Y>-0.0446167</Y>
-                <Z>0.051132202</Z>
+                <Z>0.09661865</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -5455,9 +5455,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.3406982</X>
-              <Y>1.1708679</Y>
-              <Z>0.9879608</Z>
+              <X>0</X>
+              <Y>1.4508667</Y>
+              <Z>1.2772522</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5489,9 +5489,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.12670898</X>
+                <X>0</X>
                 <Y>-0.053390503</Y>
-                <Z>0.07901001</Z>
+                <Z>0.14932251</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -5528,9 +5528,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.3860321</X>
-              <Y>1.1715698</Y>
-              <Z>1.0162354</Z>
+              <X>0</X>
+              <Y>1.4515686</Y>
+              <Z>1.3306732</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5562,9 +5562,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.17204285</X>
+                <X>0</X>
                 <Y>-0.0526886</Y>
-                <Z>0.107284546</Z>
+                <Z>0.20274353</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -5601,9 +5601,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.430542</X>
-              <Y>1.1817474</Y>
-              <Z>1.0439911</Z>
+              <X>0</X>
+              <Y>1.4617462</Y>
+              <Z>1.3831329</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5635,9 +5635,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.21655273</X>
+                <X>0</X>
                 <Y>-0.042510986</Y>
-                <Z>0.13504028</Z>
+                <Z>0.25520325</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -5674,9 +5674,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.4728088</X>
-              <Y>1.2010651</Y>
-              <Z>1.070343</Z>
+              <X>0</X>
+              <Y>1.4810638</Y>
+              <Z>1.4329376</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5708,9 +5708,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.25881958</X>
+                <X>0</X>
                 <Y>-0.02319336</Y>
-                <Z>0.16139221</Z>
+                <Z>0.30500793</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -5747,9 +5747,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.5115051</X>
-              <Y>1.2289124</Y>
-              <Z>1.0944672</Z>
+              <X>0</X>
+              <Y>1.5089111</Y>
+              <Z>1.4785309</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5781,9 +5781,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.29751587</X>
+                <X>0</X>
                 <Y>0.0046539307</Y>
-                <Z>0.18551636</Z>
+                <Z>0.3506012</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -5820,9 +5820,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.4432831</X>
-              <Y>1.3374634</Y>
-              <Z>1.0519257</Z>
+              <X>0</X>
+              <Y>1.6174774</Y>
+              <Z>1.3981476</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5854,9 +5854,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.22929382</X>
-                <Y>0.113204956</Y>
-                <Z>0.14297485</Z>
+                <X>0</X>
+                <Y>0.113220215</Y>
+                <Z>0.2702179</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -5893,9 +5893,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.5453796</X>
-              <Y>1.2644043</Y>
-              <Z>1.1156006</Z>
+              <X>0</X>
+              <Y>1.5444031</Y>
+              <Z>1.5184784</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -5927,9 +5927,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.33139038</X>
+                <X>0</X>
                 <Y>0.040145874</Y>
-                <Z>0.20664978</Z>
+                <Z>0.3905487</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -5966,9 +5966,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.5733948</X>
-              <Y>1.3064117</Y>
-              <Z>1.1330566</Z>
+              <X>0</X>
+              <Y>1.5864105</Y>
+              <Z>1.5514832</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6000,9 +6000,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.35940552</X>
+                <X>0</X>
                 <Y>0.08215332</Y>
-                <Z>0.22410583</Z>
+                <Z>0.42355347</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6039,9 +6039,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.474823</X>
-              <Y>1.3819733</Y>
-              <Z>1.0715942</Z>
+              <X>0</X>
+              <Y>1.661972</Y>
+              <Z>1.435318</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6073,9 +6073,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.26083374</X>
+                <X>0</X>
                 <Y>0.15771484</Y>
-                <Z>0.16264343</Z>
+                <Z>0.3073883</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6112,9 +6112,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.594635</X>
-              <Y>1.3536224</Y>
-              <Z>1.1463013</Z>
+              <X>0</X>
+              <Y>1.6336212</Y>
+              <Z>1.5765076</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6146,9 +6146,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.38064575</X>
+                <X>0</X>
                 <Y>0.12936401</Y>
-                <Z>0.23735046</Z>
+                <Z>0.44857788</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6185,9 +6185,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.608429</X>
-              <Y>1.4045105</Y>
-              <Z>1.1549072</Z>
+              <X>0</X>
+              <Y>1.6845093</Y>
+              <Z>1.5927582</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6219,9 +6219,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.3944397</X>
+                <X>0</X>
                 <Y>0.18025208</Y>
-                <Z>0.24595642</Z>
+                <Z>0.4648285</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6258,9 +6258,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.4948425</X>
-              <Y>1.4344635</Y>
-              <Z>1.0840759</Z>
+              <X>0</X>
+              <Y>1.7144623</Y>
+              <Z>1.4589081</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6292,9 +6292,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.28085327</X>
+                <X>0</X>
                 <Y>0.21020508</Y>
-                <Z>0.17512512</Z>
+                <Z>0.3309784</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6331,9 +6331,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.6143494</X>
-              <Y>1.457489</Y>
-              <Z>1.1585999</Z>
+              <X>0</X>
+              <Y>1.7374878</Y>
+              <Z>1.5997314</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6365,9 +6365,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.4003601</X>
+                <X>0</X>
                 <Y>0.23323059</Y>
-                <Z>0.24964905</Z>
+                <Z>0.47180176</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6404,9 +6404,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.6121979</X>
-              <Y>1.510849</Y>
-              <Z>1.1572571</Z>
+              <X>0</X>
+              <Y>1.7908478</Y>
+              <Z>1.5971985</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6438,9 +6438,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.39820862</X>
+                <X>0</X>
                 <Y>0.28659058</Y>
-                <Z>0.24830627</Z>
+                <Z>0.4692688</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6477,9 +6477,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.5010376</X>
-              <Y>1.4928436</Y>
-              <Z>1.0879364</Z>
+              <X>0</X>
+              <Y>1.7728424</Y>
+              <Z>1.4662018</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6511,9 +6511,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.28704834</X>
+                <X>0</X>
                 <Y>0.2685852</Y>
-                <Z>0.1789856</Z>
+                <Z>0.3382721</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6550,9 +6550,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.6020508</X>
-              <Y>1.5629272</Y>
-              <Z>1.1509247</Z>
+              <X>0</X>
+              <Y>1.842926</Y>
+              <Z>1.5852509</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6584,9 +6584,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.38806152</X>
+                <X>0</X>
                 <Y>0.33866882</Y>
-                <Z>0.24197388</Z>
+                <Z>0.45732117</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6623,9 +6623,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.5842285</X>
-              <Y>1.6120453</Y>
-              <Z>1.1398163</Z>
+              <X>0</X>
+              <Y>1.8920441</Y>
+              <Z>1.5642395</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6657,9 +6657,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.37023926</X>
+                <X>0</X>
                 <Y>0.38778687</Y>
-                <Z>0.23086548</Z>
+                <Z>0.4363098</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6696,9 +6696,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.4917297</X>
-              <Y>1.5534515</Y>
-              <Z>1.0821381</Z>
+              <X>0</X>
+              <Y>1.8334503</Y>
+              <Z>1.4552307</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6730,9 +6730,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.27774048</X>
+                <X>0</X>
                 <Y>0.32919312</Y>
-                <Z>0.17318726</Z>
+                <Z>0.32730103</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6769,9 +6769,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.5592804</X>
-              <Y>1.656662</Y>
-              <Z>1.1242676</Z>
+              <X>0</X>
+              <Y>1.9366608</Y>
+              <Z>1.5348511</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6803,9 +6803,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.34529114</X>
+                <X>0</X>
                 <Y>0.43240356</Y>
-                <Z>0.21531677</Z>
+                <Z>0.4069214</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6842,9 +6842,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.5280304</X>
-              <Y>1.6953583</Y>
-              <Z>1.1047668</Z>
+              <X>0</X>
+              <Y>1.975357</Y>
+              <Z>1.4980164</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6876,9 +6876,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.31404114</X>
+                <X>0</X>
                 <Y>0.47109985</Y>
-                <Z>0.19581604</Z>
+                <Z>0.37008667</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6915,9 +6915,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.4654236</X>
-              <Y>1.6114044</Y>
-              <Z>1.0657349</Z>
+              <X>0</X>
+              <Y>1.8914032</Y>
+              <Z>1.4242401</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -6949,9 +6949,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.25143433</X>
+                <X>0</X>
                 <Y>0.387146</Y>
-                <Z>0.15678406</Z>
+                <Z>0.29631042</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -6988,9 +6988,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgcAAABQcmltYXJ5</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.4914398</X>
-              <Y>1.7269135</Y>
-              <Z>1.081955</Z>
+              <X>0</X>
+              <Y>2.0069122</Y>
+              <Z>1.454895</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -7022,9 +7022,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.27745056</X>
+                <X>0</X>
                 <Y>0.502655</Y>
-                <Z>0.17300415</Z>
+                <Z>0.32696533</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -7061,9 +7061,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.4506836</X>
-              <Y>1.7503204</Y>
-              <Z>1.0565491</Z>
+              <X>0</X>
+              <Y>2.0303192</Y>
+              <Z>1.4068756</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -7095,9 +7095,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.23669434</X>
+                <X>0</X>
                 <Y>0.526062</Y>
-                <Z>0.14759827</Z>
+                <Z>0.27894592</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -7134,9 +7134,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.4070587</X>
-              <Y>1.7648315</Y>
-              <Z>1.0293427</Z>
+              <X>0</X>
+              <Y>2.0448303</Y>
+              <Z>1.3554535</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -7168,9 +7168,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.19306946</X>
+                <X>0</X>
                 <Y>0.5405731</Y>
-                <Z>0.120391846</Z>
+                <Z>0.2275238</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -7207,9 +7207,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.3619385</X>
-              <Y>1.769989</Y>
-              <Z>1.0012054</Z>
+              <X>0</X>
+              <Y>2.0499878</Y>
+              <Z>1.3022766</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -7241,9 +7241,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.14794922</X>
+                <X>0</X>
                 <Y>0.5457306</Y>
-                <Z>0.09225464</Z>
+                <Z>0.17434692</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -7280,9 +7280,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.316742</X>
-              <Y>1.7656403</Y>
-              <Z>0.97302246</Z>
+              <X>0</X>
+              <Y>2.045639</Y>
+              <Z>1.2490234</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -7314,9 +7314,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.102752686</X>
+                <X>0</X>
                 <Y>0.54138184</Y>
-                <Z>0.064071655</Z>
+                <Z>0.12109375</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -7353,9 +7353,9 @@
             <BinaryString name="AttributesSerialize">AQAAAAQAAABUaW50AgkAAABTZWNvbmRhcnk=</BinaryString>
             <token name="BottomSurface">0</token>
             <CoordinateFrame name="CFrame">
-              <X>-1.272934</X>
-              <Y>1.7519073</Y>
-              <Z>0.9457092</Z>
+              <X>0</X>
+              <Y>2.0319061</Y>
+              <Z>1.1973877</Z>
               <R00>1</R00>
               <R01>0</R01>
               <R02>0</R02>
@@ -7387,9 +7387,9 @@
             <Properties>
               <string name="Name">Weld</string>
               <CoordinateFrame name="C0">
-                <X>-0.058944702</X>
+                <X>0</X>
                 <Y>0.5276489</Y>
-                <Z>0.036758423</Z>
+                <Z>0.06945801</Z>
                 <R00>1</R00>
                 <R01>0</R01>
                 <R02>0</R02>
@@ -7655,9 +7655,9 @@
         <bool name="Anchored">false</bool>
         <token name="BottomSurface">0</token>
         <CoordinateFrame name="CFrame">
-          <X>-1.2139893</X>
-          <Y>1.2242584</Y>
-          <Z>0.9089508</Z>
+          <X>0</X>
+          <Y>1.5042572</Y>
+          <Z>1.1279297</Z>
           <R00>1</R00>
           <R01>0</R01>
           <R02>0</R02>
