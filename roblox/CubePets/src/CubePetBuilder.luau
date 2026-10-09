@@ -1,16 +1,19 @@
 --!nonstrict
 --[[
-	CubeShibaBuilder
-	================
-	Construit le pet « Cube Shiba » (style Pet Simulator) uniquement avec des
+	CubePetBuilder
+	==============
+	Construit les pets cubiques (style Pet Simulator) uniquement avec des
 	primitives Roblox + une SurfaceGui pour le visage : aucun asset à uploader,
-	aucun MeshId, le modèle marche tel quel dans n'importe quel jeu.
+	aucun MeshId, les modèles marchent tels quels dans n'importe quel jeu.
+
+	Espèces : "Shiba" (Cube Shiba), "Dog" (Cube Dog). Même corps, mêmes
+	proportions ; seuls les oreilles, la queue, le visage et les couleurs changent.
 
 	Ce module est la *source* des fichiers .rbxmx fournis. Il tourne :
 	  • dans Lune (export des fichiers, voir tools/build.luau)
-	        Builder.build({ variant = "Golden" }, require("@lune/roblox"))
+	        Builder.build({ species = "Dog", variant = "Golden" }, require("@lune/roblox"))
 	  • dans Roblox Studio (ModuleScript), pour régénérer / créer tes variantes :
-	        require(path.to.CubeShibaBuilder).build({ variant = "Golden" }).Parent = workspace
+	        require(path.to.CubePetBuilder).build({ species = "Dog" }).Parent = workspace
 
 	Repère du modèle
 	  • Pivot (PrimaryPart.PivotOffset) = sol, sous le centre du corps.
@@ -25,10 +28,10 @@
 
 local Builder = {}
 
-Builder.Version = "1.1.0"
+Builder.Version = "1.2.0"
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Dimensions (studs)
+-- Corps commun (studs) — identique pour toutes les espèces
 -- ─────────────────────────────────────────────────────────────────────────────
 local W, H, D = 2.4, 2.0, 2.0 -- corps : largeur, hauteur, profondeur
 local R = 0.15 -- rayon des arêtes arrondies du corps
@@ -36,92 +39,156 @@ local LEG_H = 0.45 -- hauteur visible des pattes
 local LEG_EMBED = 0.15 -- partie des pattes cachée dans le corps (pour les rotations)
 local LEG_W, LEG_D = 0.62, 0.46
 local LEG_X, LEG_Z = 0.65, 0.54
-local SPLIT_Y = 0.045 -- frontière orange / crème sur la face avant (depuis le centre du corps)
-local PATCH_DEPTH = 0.57 -- profondeur de la tache crème sur les flancs
-local PATCH_RADIUS = 0.3 -- arrondi du coin haut-arrière de cette tache
-local MUZZLE_R, MUZZLE_Y = 0.32, -0.08 -- « bosse » crème du museau, entre les yeux
 local LIP = 0.01 -- débord minuscule anti z-fighting des taches crème des flancs
-
-local EAR_B, EAR_H, EAR_T = 0.8, 0.75, 0.32 -- oreille : base, hauteur, épaisseur
-local EAR_X, EAR_Z = 0.7, -0.12
-local EAR_EMBED = 0.08
-local EAR_OUT_TILT, EAR_BACK_TILT = 6, 8 -- degrés
-local INNER_B, INNER_H, INNER_T, INNER_Y = 0.56, 0.56, 0.06, 0.06
-
--- Queue : une spirale de sphères qui s'enroule derrière le flanc gauche.
-local TAIL = {
-	Center = { -1.36, 0.02, 1.0 }, -- centre de l'enroulement (repère du corps)
-	Out = { -0.85, 0, 0.53 }, -- direction « vers l'extérieur » du plan de la queue
-	Radius = 0.3,
-	From = -125, -- angle de départ (degrés) : racine plantée dans le corps
-	To = 110, -- angle de fin (pointe)
-	Count = 24, -- sphères serrées => tube lisse
-	TipStart = 0.8, -- au-delà de cette fraction, la pointe est crème
-}
-
--- Visage (studs, origine au centre de la face avant, x vers la droite de l'écran, y vers le haut)
-local FACE = {
-	EyeX = 0.63,
-	EyeY = 0.12,
-	Sclera = 0.56, -- blanc de l'œil
-	Pupil = 0.4, -- rond noir
-	PupilInward = 0.06, -- pupilles légèrement tournées vers le museau
-	PupilDown = 0.03,
-	BrowX = 0.47,
-	BrowY = 0.57,
-	BrowW = 0.25,
-	BrowH = 0.13,
-	BrowTilt = 8, -- degrés, bout intérieur plus bas
-	NoseY = -0.035,
-	MouthY = -0.13,
-	MouthR = 0.13, -- rayon de chaque arc du « ω »
-	Stroke = 0.045, -- épaisseur des traits
-	CheekX = 0.86,
-	CheekY = -0.27,
-	CheekW = 0.29,
-	CheekH = 0.23,
-}
-
 local PX = 200 -- pixels par stud du canvas du visage
 
 Builder.Dimensions = {
 	BodySize = { W, H, D },
 	LegHeight = LEG_H,
-	TotalHeight = LEG_H + H + EAR_H - EAR_EMBED,
 }
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Palettes (RGB 0-255). Primary = orange, Secondary = crème.
+-- Espèces
+--   Couleurs (RGB 0-255) : Primary = pelage, Secondary = crème, Accent = oreilles
+--   tombantes. Coordonnées du visage en studs, origine au centre de la face
+--   avant, x vers la droite de l'écran, y vers le haut.
 -- ─────────────────────────────────────────────────────────────────────────────
-local PALETTES = {
-	Normal = {
-		Primary = { 243, 161, 86 },
-		Secondary = { 255, 239, 223 },
-		EarInner = { 250, 186, 186 },
-		Cheek = { 255, 176, 172 },
-		Brow = { 255, 229, 196 },
-		Eye = { 64, 35, 29 },
-		Sclera = { 255, 255, 255 },
-		Shine = { 255, 255, 255 },
-		Outline = { 58, 34, 26 },
-		Material = "SmoothPlastic",
-		Reflectance = 0,
+local SPECIES = {
+	Shiba = {
+		ModelName = "CubeShiba",
+		PetName = "Cube Shiba",
+		SplitY = 0.045, -- frontière pelage / crème sur l'avant (depuis le centre du corps)
+		BellyTint = "Secondary",
+		Patch = { Depth = 0.57, Radius = 0.3 }, -- tache crème bas-avant des flancs
+		Ears = {
+			Type = "Pointy",
+			Base = 0.8,
+			Height = 0.75,
+			Thickness = 0.32,
+			X = 0.7,
+			Z = -0.12,
+			Embed = 0.08,
+			OutTilt = 6,
+			BackTilt = 8,
+			Inner = { Base = 0.56, Height = 0.56, Thickness = 0.06, Y = 0.06 },
+		},
+		-- Queue : spirale de sphères qui s'enroule derrière le flanc gauche
+		Tail = {
+			Center = { -1.36, 0.02, 1.0 },
+			Out = { -0.85, 0, 0.53 },
+			Radius = 0.3,
+			From = -125,
+			To = 110,
+			Count = 24,
+			Thickness = { 0.21, 0.33, 0.13 }, -- rayon base / milieu / pointe
+			TipStart = 0.8,
+			Lining = true, -- doublure crème à l'intérieur de la boucle
+		},
+		Face = {
+			Muzzle = { Shape = "Circle", R = 0.32, Y = -0.08 },
+			Brows = { X = 0.47, Y = 0.57, W = 0.25, H = 0.13, Tilt = 8 },
+			Eyes = { X = 0.63, Y = 0.12, Sclera = 0.56, Pupil = 0.4, Inward = 0.06, Down = 0.03 },
+			Nose = { Y = -0.035 },
+			Mouth = { Y = -0.13, R = 0.13 },
+			Cheeks = { X = 0.86, Y = -0.27, W = 0.29, H = 0.23 },
+		},
+		Palettes = {
+			Normal = {
+				Primary = { 243, 161, 86 },
+				Secondary = { 255, 239, 223 },
+				EarInner = { 250, 186, 186 },
+				Cheek = { 255, 176, 172 },
+				Brow = { 255, 229, 196 },
+				Eye = { 64, 35, 29 },
+				Sclera = { 255, 255, 255 },
+				Shine = { 255, 255, 255 },
+				Outline = { 58, 34, 26 },
+				Reflectance = 0,
+			},
+			Golden = {
+				Primary = { 255, 193, 48 },
+				Secondary = { 255, 236, 150 },
+				EarInner = { 255, 212, 104 },
+				Cheek = { 255, 160, 92 },
+				Brow = { 255, 241, 178 },
+				Eye = { 96, 54, 12 },
+				Sclera = { 255, 255, 255 },
+				Shine = { 255, 255, 255 },
+				Outline = { 122, 74, 8 },
+				Reflectance = 0.15,
+			},
+		},
 	},
-	Golden = {
-		Primary = { 255, 193, 48 },
-		Secondary = { 255, 236, 150 },
-		EarInner = { 255, 212, 104 },
-		Cheek = { 255, 160, 92 },
-		Brow = { 255, 241, 178 },
-		Eye = { 96, 54, 12 },
-		Sclera = { 255, 255, 255 },
-		Shine = { 255, 255, 255 },
-		Outline = { 122, 74, 8 },
-		Material = "SmoothPlastic",
-		Reflectance = 0.15,
+
+	Dog = {
+		ModelName = "CubeDog",
+		PetName = "Cube Dog",
+		SplitY = -0.3,
+		BellyTint = "Primary",
+		Patch = { Depth = 0.5, Radius = 0.25 },
+		-- Oreilles tombantes : un rabat posé sur le dessus de la tête + un pan qui
+		-- pend en biais. Le pli est en diagonale sur le coin de la tête, pour que
+		-- l'oreille se voie de face comme de profil.
+		Ears = {
+			Type = "Floppy",
+			Back = { 0.8, 0.5 }, -- extrémité arrière du pli (x, z depuis le centre du corps)
+			Yaw = 22, -- rotation du pli : l'avant de l'oreille part vers l'extérieur (degrés)
+			FoldY = 1.0, -- hauteur du pli (dessus de la tête)
+			Depth = 1.02, -- longueur du pli (largeur de l'oreille)
+			Thickness = 0.2,
+			TopWidth = 0.38, -- largeur du rabat posé sur la tête
+			Length = 1.05, -- longueur du pan qui pend
+			Angle = 34, -- écartement du pan par rapport à la verticale (degrés)
+		},
+		-- Liste blanche du front qui continue sur le dessus de la tête
+		TopStripe = { Length = 0.75 },
+		-- Queue relevée en croissant, pointe blanche
+		Tail = {
+			Center = { -0.42, 0.1, 1.36 },
+			Out = { -0.55, 0, 0.84 },
+			Radius = 0.4,
+			From = -150,
+			To = 30,
+			Count = 20,
+			Thickness = { 0.2, 0.27, 0.19 },
+			TipStart = 0.72,
+			Lining = false,
+		},
+		Face = {
+			Blaze = { W = 0.44 }, -- liste blanche du front
+			Muzzle = { Shape = "Pill", W = 1.0, H = 0.62, Y = -0.2 },
+			Eyes = { X = 0.66, Y = -0.03, Sclera = 0.68, Pupil = 0.44, Inward = 0.03, Down = 0 },
+			Nose = { Y = -0.17 },
+			Mouth = { Y = -0.32, R = 0.14 },
+			Cheeks = { X = 0.86, Y = -0.44, W = 0.28, H = 0.22 },
+		},
+		Palettes = {
+			Normal = {
+				Primary = { 244, 172, 100 },
+				Secondary = { 255, 240, 226 },
+				Accent = { 176, 100, 64 },
+				Cheek = { 248, 184, 168 },
+				Eye = { 64, 31, 27 },
+				Sclera = { 255, 255, 255 },
+				Shine = { 255, 255, 255 },
+				Outline = { 56, 30, 22 },
+				Reflectance = 0,
+			},
+			Golden = {
+				Primary = { 255, 193, 48 },
+				Secondary = { 255, 236, 150 },
+				Accent = { 214, 138, 22 },
+				Cheek = { 255, 160, 92 },
+				Eye = { 96, 54, 12 },
+				Sclera = { 255, 255, 255 },
+				Shine = { 255, 255, 255 },
+				Outline = { 122, 74, 8 },
+				Reflectance = 0.15,
+			},
+		},
 	},
 }
-Builder.Palettes = PALETTES
+Builder.Species = SPECIES
 
 local function getGlobals()
 	-- Dans Studio, les types Roblox sont des globales.
@@ -139,8 +206,9 @@ end
 
 --[[
 	options :
-	  variant   "Normal" | "Golden"                (défaut "Normal")
-	  name      nom du Model                        (défaut "CubeShiba[_Variant]")
+	  species   "Shiba" | "Dog"                     (défaut "Shiba")
+	  variant   "Normal" | "Golden"                 (défaut "Normal")
+	  name      nom du Model                        (défaut "CubeShiba", "CubeDog_Golden"...)
 	  outline   contour cartoon (Highlight)         (défaut true)
 	rbx : table des types Roblox (Lune). Laisser nil dans Studio.
 ]]
@@ -150,8 +218,11 @@ function Builder.build(options, rbx)
 	local Instance, Vector3, Vector2, CFrame, Color3 = env.Instance, env.Vector3, env.Vector2, env.CFrame, env.Color3
 	local UDim, UDim2, Enum = env.UDim, env.UDim2, env.Enum
 
+	local speciesName = options.species or "Shiba"
+	local spec = SPECIES[speciesName]
+	assert(spec, "Espèce inconnue : " .. tostring(speciesName))
 	local variant = options.variant or "Normal"
-	local pal = PALETTES[variant]
+	local pal = spec.Palettes[variant]
 	assert(pal, "Variante inconnue : " .. tostring(variant))
 
 	local function rgb(t)
@@ -161,10 +232,11 @@ function Builder.build(options, rbx)
 	local CF = CFrame.new
 	local rad = math.rad
 
-	local material = Enum.Material[pal.Material]
+	local material = Enum.Material.SmoothPlastic
+	local SPLIT_Y = spec.SplitY
 
 	local model = Instance.new("Model")
-	model.Name = options.name or (variant == "Normal" and "CubeShiba" or ("CubeShiba_" .. variant))
+	model.Name = options.name or (variant == "Normal" and spec.ModelName or (spec.ModelName .. "_" .. variant))
 
 	local BODY_CENTER = CF(0, LEG_H + H / 2, 0)
 
@@ -177,7 +249,7 @@ function Builder.build(options, rbx)
 	end
 
 	-- Applique une couleur de la palette et note sa teinte logique dans l'attribut
-	-- « Tint » (pratique pour recolorer le pet par script : Primary / Secondary / EarInner).
+	-- « Tint » (pratique pour recolorer le pet par script).
 	local function tint(inst, tintName)
 		inst:SetAttribute("Tint", tintName)
 		if inst:IsA("BasePart") then
@@ -243,6 +315,10 @@ function Builder.build(options, rbx)
 		return w
 	end
 
+	-- Cylindres : axe X par défaut
+	local AY = CFrame.Angles(0, 0, math.pi / 2)
+	local AZ = CFrame.Angles(0, math.pi / 2, 0)
+
 	-- ── Racine / hitbox ──────────────────────────────────────────────────────
 	local rootH = LEG_H + H
 	local root = makePart("Part", "RootPart", V3(W, rootH, D), CF(0, rootH / 2, 0), nil, model, "Block")
@@ -273,18 +349,13 @@ function Builder.build(options, rbx)
 	local upperH = hy - SPLIT_Y
 	local lowerH = SPLIT_Y + hy
 
-	-- Noyau : 3 dalles qui se croisent (dessus orange, ventre crème).
-	-- La face avant de CoreFront porte la SurfaceGui « Face » qui peint tout le
-	-- devant (pelage, masque crème, museau, yeux...) : aucun écart d'éclairage.
+	-- Noyau : 3 dalles qui se croisent. La face avant de CoreFront porte la
+	-- SurfaceGui « Face » qui peint tout le devant : aucun écart d'éclairage.
 	bodyPiece("CoreSides", "Block", V3(W, H - 2 * R, D - 2 * R), CF(), "Primary")
 	bodyPiece("CoreTop", "Block", V3(W - 2 * R, H / 2, D - 2 * R), CF(0, H / 4, 0), "Primary")
-	bodyPiece("CoreBelly", "Block", V3(W - 2 * R, H / 2, D - 2 * R), CF(0, -H / 4, 0), "Secondary")
+	bodyPiece("CoreBelly", "Block", V3(W - 2 * R, H / 2, D - 2 * R), CF(0, -H / 4, 0), spec.BellyTint)
 	local coreFront = bodyPiece("CoreFront", "Block", V3(W - 2 * R, H - 2 * R, D), CF(), "Primary")
 
-	-- Arêtes (cylindres, axe X par défaut) et coins (boules)
-	local AX = CF()
-	local AY = CFrame.Angles(0, 0, math.pi / 2)
-	local AZ = CFrame.Angles(0, math.pi / 2, 0)
 	local function edge(name, length, x, y, z, rot, tintName)
 		return bodyPiece(name, "Cylinder", V3(length, 2 * R, 2 * R), CF(x, y, z) * rot, tintName)
 	end
@@ -292,12 +363,25 @@ function Builder.build(options, rbx)
 		return bodyPiece(name, "Ball", V3(2 * R, 2 * R, 2 * R), CF(x, y, z), tintName)
 	end
 
-	edge("EdgeTopFront", W - 2 * R, 0, hy, -hz, AX, "Primary")
-	edge("EdgeTopBack", W - 2 * R, 0, hy, hz, AX, "Primary")
-	edge("EdgeBottomFront", W - 2 * R, 0, -hy, -hz, AX, "Secondary")
-	edge("EdgeBottomBack", W - 2 * R, 0, -hy, hz, AX, "Primary")
+	if spec.TopStripe then
+		-- arête avant-haut en 3 morceaux : la liste blanche passe par-dessus
+		local bw = spec.Face.Blaze.W
+		local sideLen = (W - 2 * R - bw) / 2
+		edge("EdgeTopFrontL", sideLen, -(bw / 2 + sideLen / 2), hy, -hz, CF(), "Primary")
+		edge("EdgeTopFrontStripe", bw, 0, hy, -hz, CF(), "Secondary")
+		edge("EdgeTopFrontR", sideLen, bw / 2 + sideLen / 2, hy, -hz, CF(), "Primary")
+		local len = spec.TopStripe.Length
+		bodyPiece("TopStripe", "Block", V3(bw, 0.02, len), CF(0, H / 2 - 0.01 + LIP, -hz + len / 2), "Secondary")
+		bodyPiece("TopStripeEnd", "Cylinder", V3(0.02, bw, bw), CF(0, H / 2 - 0.01 + LIP, -hz + len) * AY, "Secondary")
+	else
+		edge("EdgeTopFront", W - 2 * R, 0, hy, -hz, CF(), "Primary")
+	end
+	edge("EdgeTopBack", W - 2 * R, 0, hy, hz, CF(), "Primary")
+	edge("EdgeBottomFront", W - 2 * R, 0, -hy, -hz, CF(), "Secondary")
+	edge("EdgeBottomBack", W - 2 * R, 0, -hy, hz, CF(), "Primary")
 
-	local zPatch = -hz + PATCH_DEPTH
+	local patchDepth, rc = spec.Patch.Depth, spec.Patch.Radius
+	local zPatch = -hz + patchDepth
 	for _, sx in { -1, 1 } do
 		local s = sx < 0 and "L" or "R"
 		local x = sx * hx
@@ -305,7 +389,7 @@ function Builder.build(options, rbx)
 		edge("EdgeFront" .. s .. "Upper", upperH, x, SPLIT_Y + upperH / 2, -hz, AY, "Primary")
 		edge("EdgeBack" .. s, H - 2 * R, x, 0, hz, AY, "Primary")
 		edge("EdgeTop" .. s, D - 2 * R, x, hy, 0, AZ, "Primary")
-		edge("EdgeBottom" .. s .. "Front", PATCH_DEPTH, x, -hy, -hz + PATCH_DEPTH / 2, AZ, "Secondary")
+		edge("EdgeBottom" .. s .. "Front", patchDepth, x, -hy, -hz + patchDepth / 2, AZ, "Secondary")
 		local backLen = hz - zPatch
 		edge("EdgeBottom" .. s .. "Back", backLen, x, -hy, zPatch + backLen / 2, AZ, "Primary")
 
@@ -317,32 +401,61 @@ function Builder.build(options, rbx)
 
 	-- Taches crème des flancs (bas-avant, coin haut-arrière arrondi)
 	local pw = W + 2 * LIP
-	local rc = PATCH_RADIUS
-	bodyPiece("SidePatchFront", "Block", V3(pw, lowerH, PATCH_DEPTH - rc), CF(0, SPLIT_Y - lowerH / 2, -hz + (PATCH_DEPTH - rc) / 2), "Secondary")
+	bodyPiece("SidePatchFront", "Block", V3(pw, lowerH, patchDepth - rc), CF(0, SPLIT_Y - lowerH / 2, -hz + (patchDepth - rc) / 2), "Secondary")
 	bodyPiece("SidePatchBack", "Block", V3(pw, lowerH - rc, rc), CF(0, -hy + (lowerH - rc) / 2, zPatch - rc / 2), "Secondary")
 	bodyPiece("SidePatchRound", "Cylinder", V3(pw, 2 * rc, 2 * rc), CF(0, SPLIT_Y - rc, zPatch - rc), "Secondary")
 
-	-- ── Oreilles (prismes triangulaires, intérieur rose) ─────────────────────
+	-- ── Oreilles ─────────────────────────────────────────────────────────────
+	local ears = spec.Ears
 	for _, sx in { -1, 1 } do
 		local s = sx < 0 and "L" or "R"
-		local base = BODY_CENTER
-			* CF(sx * EAR_X, H / 2 - EAR_EMBED, EAR_Z)
-			* CFrame.Angles(rad(EAR_BACK_TILT), 0, -sx * rad(EAR_OUT_TILT))
-		local earBone = makeBone("Ear" .. s, V3(0.2, 0.2, 0.2), base)
-		motor("Ear" .. s, body, earBone, base)
 		local earFolder = folder("Ear" .. s, visual)
-		local function earPiece(name, size, localCF, tintName)
-			local p = makePart("WedgePart", name, size, base * localCF, tintName, earFolder)
-			weld(earBone, p)
-			return p
+
+		if ears.Type == "Pointy" then
+			-- Prisme triangulaire (2 WedgeParts) + intérieur rose
+			local base = BODY_CENTER
+				* CF(sx * ears.X, H / 2 - ears.Embed, ears.Z)
+				* CFrame.Angles(rad(ears.BackTilt), 0, -sx * rad(ears.OutTilt))
+			local earBone = makeBone("Ear" .. s, V3(0.2, 0.2, 0.2), base)
+			motor("Ear" .. s, body, earBone, base)
+			local function earPiece(name, size, localCF, tintName)
+				local p = makePart("WedgePart", name, size, base * localCF, tintName, earFolder)
+				weld(earBone, p)
+				return p
+			end
+			-- Un WedgePart a sa pente vers l'avant (-Z) : tourné de ±90° autour de Y,
+			-- son côté vertical se retrouve sur l'axe de l'oreille.
+			local b, h, t = ears.Base, ears.Height, ears.Thickness
+			earPiece("OuterL", V3(t, h, b / 2), CF(-b / 4, h / 2, 0) * CFrame.Angles(0, math.pi / 2, 0), "Primary")
+			earPiece("OuterR", V3(t, h, b / 2), CF(b / 4, h / 2, 0) * CFrame.Angles(0, -math.pi / 2, 0), "Primary")
+			local inner = ears.Inner
+			local iz = -t / 2 - 0.015 + inner.Thickness / 2
+			earPiece("InnerL", V3(inner.Thickness, inner.Height, inner.Base / 2), CF(-inner.Base / 4, inner.Y + inner.Height / 2, iz) * CFrame.Angles(0, math.pi / 2, 0), "EarInner")
+			earPiece("InnerR", V3(inner.Thickness, inner.Height, inner.Base / 2), CF(inner.Base / 4, inner.Y + inner.Height / 2, iz) * CFrame.Angles(0, -math.pi / 2, 0), "EarInner")
+		elseif ears.Type == "Floppy" then
+			-- Repère du pli : origine au milieu du pli, axe Z le long du pli (avant = -Z)
+			local t, depth = ears.Thickness, ears.Depth
+			local fold = BODY_CENTER
+				* CF(sx * ears.Back[1], ears.FoldY, ears.Back[2])
+				* CFrame.Angles(0, -sx * rad(ears.Yaw), 0)
+				* CF(0, 0, -depth / 2)
+			local earBone = makeBone("Ear" .. s, V3(0.2, 0.2, 0.2), fold)
+			motor("Ear" .. s, body, earBone, fold)
+			local function earPiece(name, shape, size, cf)
+				local p = makePart("Part", name, size, cf, "Accent", earFolder, shape)
+				weld(earBone, p)
+				return p
+			end
+			local tw = ears.TopWidth
+			-- rabat posé sur la tête, bords arrondis par des cylindres
+			earPiece("Top", "Block", V3(tw, t, depth), fold * CF(-sx * tw / 2, 0, 0))
+			earPiece("TopEdge", "Cylinder", V3(depth, t, t), fold * CF(-sx * tw, 0, 0) * AZ)
+			earPiece("Fold", "Cylinder", V3(depth, t, t), fold * AZ)
+			-- pan qui pend vers l'extérieur
+			local hang = fold * CFrame.Angles(0, 0, sx * rad(ears.Angle))
+			earPiece("Flap", "Block", V3(t, ears.Length, depth), hang * CF(0, -ears.Length / 2, 0))
+			earPiece("FlapEdge", "Cylinder", V3(depth, t, t), hang * CF(0, -ears.Length, 0) * AZ)
 		end
-		-- Un WedgePart a sa pente vers l'avant (-Z) : tourné de ±90° autour de Y,
-		-- son côté vertical se retrouve sur l'axe de l'oreille.
-		earPiece("OuterL", V3(EAR_T, EAR_H, EAR_B / 2), CF(-EAR_B / 4, EAR_H / 2, 0) * CFrame.Angles(0, math.pi / 2, 0), "Primary")
-		earPiece("OuterR", V3(EAR_T, EAR_H, EAR_B / 2), CF(EAR_B / 4, EAR_H / 2, 0) * CFrame.Angles(0, -math.pi / 2, 0), "Primary")
-		local iz = -EAR_T / 2 - 0.015 + INNER_T / 2
-		earPiece("InnerL", V3(INNER_T, INNER_H, INNER_B / 2), CF(-INNER_B / 4, INNER_Y + INNER_H / 2, iz) * CFrame.Angles(0, math.pi / 2, 0), "EarInner")
-		earPiece("InnerR", V3(INNER_T, INNER_H, INNER_B / 2), CF(INNER_B / 4, INNER_Y + INNER_H / 2, iz) * CFrame.Angles(0, -math.pi / 2, 0), "EarInner")
 	end
 
 	-- ── Pattes ───────────────────────────────────────────────────────────────
@@ -355,22 +468,24 @@ function Builder.build(options, rbx)
 		end
 	end
 
-	-- ── Queue enroulée ───────────────────────────────────────────────────────
+	-- ── Queue ────────────────────────────────────────────────────────────────
 	do
-		local c = V3(TAIL.Center[1], TAIL.Center[2], TAIL.Center[3])
-		local eOut = V3(TAIL.Out[1], TAIL.Out[2], TAIL.Out[3]).Unit
+		local tail = spec.Tail
+		local c = V3(tail.Center[1], tail.Center[2], tail.Center[3])
+		local eOut = V3(tail.Out[1], tail.Out[2], tail.Out[3]).Unit
 		local eUp = V3(0, 1, 0)
 		local function at(t)
-			local th = rad(TAIL.From + (TAIL.To - TAIL.From) * t)
-			return c + (eOut * math.cos(th) + eUp * math.sin(th)) * TAIL.Radius
+			local th = rad(tail.From + (tail.To - tail.From) * t)
+			return c + (eOut * math.cos(th) + eUp * math.sin(th)) * tail.Radius
 		end
+		local r0, r1, r2 = tail.Thickness[1], tail.Thickness[2], tail.Thickness[3]
 		local function radiusAt(t)
 			-- base fine, milieu touffu, pointe effilée
 			if t < 0.4 then
-				return 0.21 + (0.33 - 0.21) * math.sin(t / 0.4 * math.pi / 2)
+				return r0 + (r1 - r0) * math.sin(t / 0.4 * math.pi / 2)
 			end
 			local u = (t - 0.4) / 0.6
-			return 0.33 - (0.33 - 0.13) * u * u
+			return r1 - (r1 - r2) * u * u
 		end
 
 		local rootPos = BODY_CENTER * at(0)
@@ -378,15 +493,15 @@ function Builder.build(options, rbx)
 		motor("Tail", body, tailBone, CF(rootPos))
 		local tailFolder = folder("Tail", visual)
 
-		for i = 1, TAIL.Count do
-			local t = (i - 1) / (TAIL.Count - 1)
+		for i = 1, tail.Count do
+			local t = (i - 1) / (tail.Count - 1)
 			local p = at(t)
 			local r = radiusAt(t)
-			local isTip = t >= TAIL.TipStart
+			local isTip = t >= tail.TipStart
 			local ball = makePart("Part", string.format("Fur%02d", i), V3(2 * r, 2 * r, 2 * r), BODY_CENTER * CF(p), isTip and "Secondary" or "Primary", tailFolder, "Ball")
 			weld(tailBone, ball)
 			-- Doublure crème à l'intérieur de la boucle (une sphère sur deux suffit)
-			if t > 0.22 and not isTip and i % 2 == 0 then
+			if tail.Lining and t > 0.22 and not isTip and i % 2 == 0 then
 				local inward = (c - p).Unit
 				local lr = r * 0.72
 				local lining = makePart("Part", string.format("Lining%02d", i), V3(2 * lr, 2 * lr, 2 * lr), BODY_CENTER * CF(p + inward * (r * 0.42)), "Secondary", tailFolder, "Ball")
@@ -415,7 +530,6 @@ function Builder.build(options, rbx)
 		Eye = rgb(pal.Eye),
 		Sclera = rgb(pal.Sclera),
 		Shine = rgb(pal.Shine),
-		Brow = rgb(pal.Brow),
 		Cheek = rgb(pal.Cheek),
 		Primary = rgb(pal.Primary),
 		Secondary = rgb(pal.Secondary),
@@ -472,50 +586,67 @@ function Builder.build(options, rbx)
 		return g
 	end
 
-	local F = FACE
+	local F = spec.Face
+	local STROKE = 0.045 -- épaisseur des traits (bouche)
 	local canvas = shape(gui, canvasSpace, "Canvas", 0, 0, FW, FH, nil, 1, { clip = true })
 
-	-- Fond : pelage orange, masque crème (bas du visage) et bosse du museau
+	-- Fond : pelage, masque crème du bas, museau (et liste blanche pour le chien)
 	local background = shape(canvas, canvasSpace, "Background", 0, 0, FW, FH, nil, 1)
 	tint(shape(background, canvasSpace, "Fur", 0, 0, FW, FH, C.Primary, 1), "Primary")
 	local maskH = SPLIT_Y + FH / 2
 	tint(shape(background, canvasSpace, "Mask", 0, SPLIT_Y - maskH / 2, FW, maskH, C.Secondary, 2), "Secondary")
-	tint(shape(background, canvasSpace, "Muzzle", 0, MUZZLE_Y, 2 * MUZZLE_R, 2 * MUZZLE_R, C.Secondary, 3, { round = true }), "Secondary")
-
-	-- Joues
-	local cheeks = shape(canvas, canvasSpace, "Cheeks", 0, 0, FW, FH, nil, 2)
-	for _, sx in { -1, 1 } do
-		shape(cheeks, canvasSpace, sx < 0 and "CheekR" or "CheekL", sx * F.CheekX, F.CheekY, F.CheekW, F.CheekH, C.Cheek, 1, { round = true })
+	local m = F.Muzzle
+	if m.Shape == "Circle" then
+		tint(shape(background, canvasSpace, "Muzzle", 0, m.Y, 2 * m.R, 2 * m.R, C.Secondary, 3, { round = true }), "Secondary")
+	else
+		tint(shape(background, canvasSpace, "Muzzle", 0, m.Y, m.W, m.H, C.Secondary, 3, { round = true }), "Secondary")
+	end
+	if F.Blaze then
+		local top = FH / 2
+		local bottom = m.Y
+		tint(shape(background, canvasSpace, "Blaze", 0, (top + bottom) / 2, F.Blaze.W, top - bottom, C.Secondary, 3), "Secondary")
 	end
 
-	-- Sourcils (taches claires typiques du shiba)
-	local brows = shape(canvas, canvasSpace, "Brows", 0, 0, FW, FH, nil, 3)
+	-- Joues
+	local ch = F.Cheeks
+	local cheeks = shape(canvas, canvasSpace, "Cheeks", 0, 0, FW, FH, nil, 2)
 	for _, sx in { -1, 1 } do
-		shape(brows, canvasSpace, sx < 0 and "BrowR" or "BrowL", sx * F.BrowX, F.BrowY, F.BrowW, F.BrowH, C.Brow, 1, { round = true, rotation = -sx * F.BrowTilt })
+		shape(cheeks, canvasSpace, sx < 0 and "CheekR" or "CheekL", sx * ch.X, ch.Y, ch.W, ch.H, C.Cheek, 1, { round = true })
+	end
+
+	-- Sourcils (taches claires du shiba)
+	if F.Brows then
+		local b = F.Brows
+		local brows = shape(canvas, canvasSpace, "Brows", 0, 0, FW, FH, nil, 3)
+		for _, sx in { -1, 1 } do
+			shape(brows, canvasSpace, sx < 0 and "BrowR" or "BrowL", sx * b.X, b.Y, b.W, b.H, rgb(pal.Brow), 1, { round = true, rotation = -sx * b.Tilt })
+		end
 	end
 
 	-- Yeux : blanc + rond noir (sans reflet)
+	local e = F.Eyes
 	local eyes = shape(canvas, canvasSpace, "Eyes", 0, 0, FW, FH, nil, 3)
 	for _, sx in { -1, 1 } do
-		local eye, es = shape(eyes, canvasSpace, sx < 0 and "EyeR" or "EyeL", sx * F.EyeX, F.EyeY, F.Sclera, F.Sclera, nil, 1)
-		shape(eye, es, "Sclera", es.cx, es.cy, F.Sclera, F.Sclera, C.Sclera, 1, { round = true })
-		shape(eye, es, "Pupil", es.cx - sx * F.PupilInward, es.cy - F.PupilDown, F.Pupil, F.Pupil, C.Eye, 2, { round = true })
+		local eye, es = shape(eyes, canvasSpace, sx < 0 and "EyeR" or "EyeL", sx * e.X, e.Y, e.Sclera, e.Sclera, nil, 1)
+		shape(eye, es, "Sclera", es.cx, es.cy, e.Sclera, e.Sclera, C.Sclera, 1, { round = true })
+		shape(eye, es, "Pupil", es.cx - sx * e.Inward, es.cy - e.Down, e.Pupil, e.Pupil, C.Eye, 2, { round = true })
 	end
 
 	-- Bouche « ω » + philtrum
-	local noseBottom = F.NoseY - 0.1
+	local noseY = F.Nose.Y
+	local mo = F.Mouth
 	local mouth = shape(canvas, canvasSpace, "Mouth", 0, 0, FW, FH, nil, 4)
-	line(mouth, canvasSpace, "Philtrum", 0, noseBottom + 0.02, 0, F.MouthY, F.Stroke, C.Eye, 1)
-	arc(mouth, canvasSpace, "LipL", -F.MouthR, F.MouthY, F.MouthR, 180, 360, F.Stroke, C.Eye, 1, 10)
-	arc(mouth, canvasSpace, "LipR", F.MouthR, F.MouthY, F.MouthR, 180, 360, F.Stroke, C.Eye, 1, 10)
+	line(mouth, canvasSpace, "Philtrum", 0, noseY - 0.08, 0, mo.Y, STROKE, C.Eye, 1)
+	arc(mouth, canvasSpace, "LipL", -mo.R, mo.Y, mo.R, 180, 360, STROKE, C.Eye, 1, 10)
+	arc(mouth, canvasSpace, "LipR", mo.R, mo.Y, mo.R, 180, 360, STROKE, C.Eye, 1, 10)
 
 	-- Truffe
-	local nose, ns = shape(canvas, canvasSpace, "Nose", 0, F.NoseY, 0.24, 0.2, nil, 5)
-	shape(nose, ns, "Top", 0, F.NoseY + 0.03, 0.22, 0.1, C.Eye, 1, { round = true })
-	shape(nose, ns, "Tip", 0, F.NoseY - 0.01, 0.13, 0.13, C.Eye, 1, { round = 4, rotation = 45 })
-	shape(nose, ns, "Shine", -0.045, F.NoseY + 0.05, 0.06, 0.03, C.Shine, 2, { round = true, transparency = 0.35 })
+	local nose, ns = shape(canvas, canvasSpace, "Nose", 0, noseY, 0.24, 0.2, nil, 5)
+	shape(nose, ns, "Top", 0, noseY + 0.03, 0.22, 0.1, C.Eye, 1, { round = true })
+	shape(nose, ns, "Tip", 0, noseY - 0.01, 0.13, 0.13, C.Eye, 1, { round = 4, rotation = 45 })
+	shape(nose, ns, "Shine", -0.045, noseY + 0.05, 0.06, 0.03, C.Shine, 2, { round = true, transparency = 0.35 })
 
-	-- ── Contour cartoon (comme les traits noirs de la planche) ───────────────
+	-- ── Contour cartoon (comme les traits noirs des planches) ────────────────
 	local outline = Instance.new("Highlight")
 	outline.Name = "Outline"
 	outline.FillTransparency = 1
@@ -531,7 +662,8 @@ function Builder.build(options, rbx)
 	local animator = Instance.new("Animator")
 	animator.Parent = animController
 
-	model:SetAttribute("PetName", "Cube Shiba")
+	model:SetAttribute("PetName", spec.PetName)
+	model:SetAttribute("Species", speciesName)
 	model:SetAttribute("Variant", variant)
 	model:SetAttribute("BuilderVersion", Builder.Version)
 

@@ -1,4 +1,4 @@
-// Viewer three.js du Cube Shiba : reproduit la géométrie des primitives Roblox
+// Viewer three.js des Cube Pets : reproduit la géométrie des primitives Roblox
 // (Block / Ball / Cylinder / Wedge), le rig Motor6D et le visage SurfaceGui à partir
 // de pet_data.json (exporté par tools/preview_export.luau).
 //
@@ -224,7 +224,7 @@ export async function createViewer(container, data, opts = {}) {
   quadScene.add(quad);
 
   const state = {
-    variant: opts.variant || "Normal",
+    variant: opts.variant || "Shiba/Normal",
     outline: opts.outline !== false,
     pose: null, // fonction(t) -> {bone: Matrix4 additionnelle}
     t0: performance.now(),

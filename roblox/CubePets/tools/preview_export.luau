@@ -1,5 +1,5 @@
 --[[
-	Exporte la géométrie + le visage d'un pet construit par CubeShibaBuilder
+	Exporte la géométrie + le visage d'un pet construit par CubePetBuilder
 	en JSON, pour le viewer three.js (tools/viewer.html).
 
 	Utilisation : lune run tools/preview_export.luau <dossier_sortie>
@@ -9,7 +9,7 @@ local fs = require("@lune/fs")
 local serde = require("@lune/serde")
 local process = require("@lune/process")
 
-local Builder = require("../src/CubeShibaBuilder")
+local Builder = require("../src/CubePetBuilder")
 
 local outDir = process.args[1] or "tools"
 
@@ -121,11 +121,11 @@ local function export(model)
 end
 
 local all = {}
-for _, variant in { "Normal", "Golden" } do
-	local model = Builder.build({ variant = variant }, roblox)
+for _, job in { { "Shiba", "Normal" }, { "Shiba", "Golden" }, { "Dog", "Normal" }, { "Dog", "Golden" } } do
+	local model = Builder.build({ species = job[1], variant = job[2] }, roblox)
 	-- aller-retour par le format fichier : le viewer voit exactement ce que Studio chargera
 	local loaded = roblox.deserializeModel(roblox.serializeModel({ model }, true))[1]
-	all[variant] = export(loaded)
+	all[job[1] .. "/" .. job[2]] = export(loaded)
 end
 fs.writeFile(outDir .. "/pet_data.json", serde.encode("json", all, false))
 print("pet_data.json written to " .. outDir)

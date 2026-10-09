@@ -1,17 +1,17 @@
 --[[
-	Génère les modèles Roblox à partir de src/CubeShibaBuilder.luau.
+	Génère les modèles Roblox à partir de src/CubePetBuilder.luau.
 
 	    lune run tools/build.luau
 
-	Sorties (à la racine du dossier CubeShiba/) :
-	  CubeShiba.rbxmx          variante normale
-	  CubeShiba_Golden.rbxmx   variante dorée
+	Sorties (à la racine du dossier CubePets/) :
+	  CubeShiba.rbxmx, CubeShiba_Golden.rbxmx
+	  CubeDog.rbxmx,   CubeDog_Golden.rbxmx
 ]]
 local roblox = require("@lune/roblox")
 local fs = require("@lune/fs")
 local process = require("@lune/process")
 
-local Builder = require("../src/CubeShibaBuilder")
+local Builder = require("../src/CubePetBuilder")
 
 local OUT = "."
 
@@ -60,8 +60,8 @@ local function stats(model)
 end
 
 local failures = 0
-for _, variant in { "Normal", "Golden" } do
-	local model = Builder.build({ variant = variant }, roblox)
+for _, job in { { "Shiba", "Normal" }, { "Shiba", "Golden" }, { "Dog", "Normal" }, { "Dog", "Golden" } } do
+	local model = Builder.build({ species = job[1], variant = job[2] }, roblox)
 	failures += checkJoints(model)
 
 	local xml = roblox.serializeModel({ model }, true)
