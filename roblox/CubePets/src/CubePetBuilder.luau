@@ -297,8 +297,6 @@ local SPECIES = {
 			Mouth = { Y = -0.09, R = 0.1, Split = 0.082 }, -- arcs écartés : les dents pendent au milieu
 			Teeth = { W = 0.074, H = 0.11, Gap = 0.012 },
 			Cheeks = { X = 0.84, Y = -0.12, W = 0.3, H = 0.25 },
-			-- Graine de tournesol tenue par les deux pattes
-			Seed = { Y = -0.6, W = 0.3, H = 0.44 },
 		},
 		Palettes = {
 			Normal = {
@@ -309,9 +307,6 @@ local SPECIES = {
 				Eye = { 58, 27, 24 },
 				Nose = { 250, 156, 156 },
 				Feet = { 252, 206, 204 },
-				Paw = { 252, 196, 196 },
-				Seed = { 44, 30, 28 },
-				SeedStripe = { 250, 246, 240 },
 				Sclera = { 255, 255, 255 },
 				Shine = { 255, 255, 255 },
 				Outline = { 58, 30, 22 },
@@ -325,9 +320,6 @@ local SPECIES = {
 				Eye = { 96, 54, 12 },
 				Nose = { 232, 120, 60 },
 				Feet = { 255, 214, 110 },
-				Paw = { 255, 214, 110 },
-				Seed = { 96, 54, 12 },
-				SeedStripe = { 255, 246, 214 },
 				Sclera = { 255, 255, 255 },
 				Shine = { 255, 255, 255 },
 				Outline = { 122, 74, 8 },
@@ -886,22 +878,6 @@ function Builder.build(options, rbx)
 		for _, sx in { -1, 1 } do
 			local tx = sx * (t.W / 2 + t.Gap / 2)
 			shape(teeth, canvasSpace, sx < 0 and "ToothR" or "ToothL", tx, ty, t.W, t.H - 0.012, rgb(pal.Sclera), 2, { round = 4 })
-		end
-	end
-
-	-- Graine de tournesol tenue par les pattes (hamster)
-	if F.Seed then
-		local sd = F.Seed
-		local seed = shape(canvas, canvasSpace, "Seed", 0, 0, FW, FH, nil, 6)
-		shape(seed, canvasSpace, "Shell", 0, sd.Y, sd.W, sd.H, rgb(pal.Seed), 1, { round = true })
-		for i, dx in { -0.065, 0.065 } do
-			shape(seed, canvasSpace, "Stripe" .. i, dx, sd.Y, 0.045, sd.H * 0.72, rgb(pal.SeedStripe), 2, { round = true })
-		end
-		for _, sx in { -1, 1 } do
-			local px, py = sx * (sd.W / 2 + 0.01), sd.Y - 0.06
-			local name = sx < 0 and "PawR" or "PawL"
-			shape(seed, canvasSpace, name .. "Line", px, py, 0.24, 0.17, C.Eye, 3, { round = true, rotation = sx * 22 })
-			shape(seed, canvasSpace, name, px, py, 0.2, 0.13, rgb(pal.Paw), 4, { round = true, rotation = sx * 22 })
 		end
 	end
 
