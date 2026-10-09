@@ -3,7 +3,7 @@
 	EggStandBuilder
 	===============
 	Construit le socle d'un œuf (style Pet Simulator) uniquement avec des
-	primitives Roblox : base lavande en forme de fleur, tige lumineuse, nom de
+	primitives Roblox : base ronde lavande, tige lumineuse, nom de
 	l'œuf écrit au sol, et l'emplacement de l'œuf (EggSlot) avec ses trois
 	ProximityPrompt (« Éclosion 1x » / « Éclosion 3x » / « MAXIMUM »).
 
@@ -19,14 +19,13 @@
 
 local Builder = {}
 
-Builder.Version = "1.0.0"
+Builder.Version = "1.1.0"
 
 -- Dimensions (studs)
 local EGG_W, EGG_H = 4.335, 5 -- taille de l'œuf (cf. tools/egg_generate.py)
 local BASE_H = 0.5 -- hauteur de la base
 local TOP_H = 0.08 -- couche claire du dessus
-local CORE_D = 2.7 -- disque central
-local LOBE_D, LOBE_R, LOBES = 1.55, 1.35, 6 -- lobes de la fleur
+local BASE_D = 4.4 -- diamètre de la base
 local POLE_D = 0.16
 local POLE_H = 2.2
 local EGG_Y = BASE_H + TOP_H + POLE_H + EGG_H / 2 -- centre de l'œuf
@@ -105,17 +104,9 @@ function Builder.build(options, rbx)
 		return p
 	end
 
-	-- ── Base en forme de fleur ────────────────────────────────────────────────
-	local base = disc("Base", CORE_D, BASE_H, 0, BASE_H / 2, 0, COLORS.Base, { CanCollide = true, CanQuery = true })
-	local topY = BASE_H + TOP_H / 2 - 0.001
-	disc("BaseTop", CORE_D - 0.3, TOP_H, 0, topY, 0, COLORS.Top)
-	for i = 1, LOBES do
-		local a = math.rad(30 + (i - 1) * 360 / LOBES)
-		local x, z = math.sin(a) * LOBE_R, -math.cos(a) * LOBE_R
-		disc("Lobe" .. i, LOBE_D, BASE_H, x, BASE_H / 2, z, COLORS.Base, { CanCollide = true, CanQuery = true })
-		local xi, zi = math.sin(a) * (LOBE_R - 0.05), -math.cos(a) * (LOBE_R - 0.05)
-		disc("LobeTop" .. i, LOBE_D - 0.3, TOP_H, xi, topY, zi, COLORS.Top)
-	end
+	-- ── Base ronde ────────────────────────────────────────────────────────────
+	local base = disc("Base", BASE_D, BASE_H, 0, BASE_H / 2, 0, COLORS.Base, { CanCollide = true, CanQuery = true })
+	disc("BaseTop", BASE_D - 0.3, TOP_H, 0, BASE_H + TOP_H / 2 - 0.001, 0, COLORS.Top)
 	disc("Socket", 0.62, 0.05, 0, BASE_H + TOP_H + 0.02, 0, COLORS.Socket)
 
 	-- ── Tige lumineuse ────────────────────────────────────────────────────────
@@ -156,7 +147,7 @@ function Builder.build(options, rbx)
 
 	-- ── Nom de l'œuf au sol, devant le socle ──────────────────────────────────
 	-- Face avant tournée vers le haut : le texte se lit depuis l'avant (-Z).
-	local label = part("NameLabel", V3(7, 1.5, 0.05), CF(0, 0.03, -3.35) * CFrame.Angles(math.pi / 2, 0, 0), { 255, 255, 255 }, {
+	local label = part("NameLabel", V3(7, 1.5, 0.05), CF(0, 0.03, -3.25) * CFrame.Angles(math.pi / 2, 0, 0), { 255, 255, 255 }, {
 		Transparency = 1,
 		CastShadow = false,
 	})

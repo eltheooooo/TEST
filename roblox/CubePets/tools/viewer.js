@@ -362,7 +362,7 @@ export async function createViewer(container, data, opts = {}) {
     scene.background = new THREE.Color(0x000000);
     scene.overrideMaterial = maskMaterial;
     const hidden = [];
-    scene.traverse((o) => { if ((o === ground || o.material?.map) && o.visible) { hidden.push(o); o.visible = false; } });
+    scene.traverse((o) => { if ((o === ground || o.material?.map || o.userData.noOutline) && o.visible) { hidden.push(o); o.visible = false; } });
     renderer.setRenderTarget(maskTarget);
     renderer.render(scene, camera);
     hidden.forEach((o) => (o.visible = true));

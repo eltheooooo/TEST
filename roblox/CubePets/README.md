@@ -28,7 +28,7 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 | `egg/` | Œuf de la Prairie : mesh texturé (`OeufPrairie.glb`, ou `.obj` + `.mtl` + texture), socle (`OeufPrairie_Socle.rbxmx`), cinématique d'ouverture (`EggOpening.rbxmx`) et démo (`EggHatchDemo.rbxmx`) |
 | `src/EggOpening.luau`, `src/EggStandBuilder.luau`, `src/EggStand.client.luau`, `src/EggHatchDemo.client.luau` | Sources des scripts et du socle de l'œuf |
 | `tools/` | Export (Lune), génération du mesh de l'œuf (Python), vérifications, viewer 3D web |
-| `preview/` | Rendus des modèles et maquettes d'UI (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `parametres.png`, `bouton_parametres.png`, `oeuf_prairie_modele.png`, `oeuf_prairie_ouverture.png` / `.gif` / `.mp4`, `shiba_*.png`, `chien_*.png`, `chat_*.png`, `hamster_*.png`) |
+| `preview/` | Rendus des modèles et maquettes d'UI (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `parametres.png`, `bouton_parametres.png`, `oeuf_prairie_modele.png`, `oeuf_prairie_planche.png`, `oeuf_prairie_ouverture.gif` / `.mp4`, `shiba_*.png`, `chien_*.png`, `chat_*.png`, `hamster_*.png`) |
 
 ## Importer dans Roblox Studio
 
@@ -90,17 +90,23 @@ L'œuf est un **mesh texturé**, comme les œufs de Pet Simulator :
 - coquille crème, avec de l'herbe et des fleurs (marguerites, fleurs roses, boutons d'or) sur le bas ;
 - deux moitiés de coquille séparées par une fissure en zigzag (`ShellTop` et `ShellBottom`). Elles ont une épaisseur, avec l'intérieur et la tranche crème, et servent pour l'ouverture.
 
-Le socle est fait de pièces Roblox : une base lavande en forme de fleur, une tige lumineuse et le nom de l'œuf écrit au sol. L'œuf flotte et tourne doucement au-dessus.
+Le socle est fait de pièces Roblox : une base ronde lavande, une tige lumineuse et le nom de l'œuf écrit au sol. L'œuf flotte et tourne doucement au-dessus.
+
+### Planche : l'œuf, le menu et l'ouverture
+
+![L'œuf, le menu des probabilités et les phases d'ouverture](preview/oeuf_prairie_planche.png)
+
+La vue « en jeu » montre le menu des probabilités affiché devant l'œuf quand le joueur s'approche. Ce menu est pour l'instant une maquette (`preview/oeuf_prairie.png`) : il n'est pas encore construit en GUI Roblox.
 
 ### L'ouverture
 
 ![Ouverture de l'œuf](preview/oeuf_prairie_ouverture.gif)
 
-![Étapes de l'ouverture](preview/oeuf_prairie_ouverture.png)
+La vidéo est aussi disponible en MP4 dans `preview/oeuf_prairie_ouverture.mp4`.
 
-1. **Apparition** : les œufs arrivent devant la caméra avec un rebond, entourés d'étincelles. Le décor est légèrement flouté.
+1. **Apparition** : les œufs arrivent devant la caméra avec un rebond, entourés d'étincelles.
 2. **Attente** : « Cliquer pour ouvrir ! » s'affiche (clic, toucher, E ou Espace). Le bouton « Automatique ! » ouvre sans clic : ses flèches sont vertes quand il est activé, et le réglage est gardé pour les ouvertures suivantes.
-3. **Tremblements** : trois secousses de plus en plus fortes, et la fissure en zigzag s'ouvre.
+3. **Tremblements** : trois secousses de plus en plus fortes, et la fissure en zigzag s'ouvre. Avant ça, c'est l'œuf entier (`Egg`) qui est affiché, donc la jointure entre les deux moitiés ne se voit pas.
 4. **Éclosion** : flash blanc, le haut de la coquille s'envole et le bas tombe.
 5. **Révélation** : le pet apparaît en tournant, devant des rayons de la couleur de sa rareté. Son nom, sa rareté et sa chance s'affichent dessous.
 6. **Sortie** : tout rétrécit et la partie reprend.
@@ -109,7 +115,7 @@ Pour un **BIG**, le pet sort 1,75 × plus grand, les rayons sont dorés et plus 
 
 Éclosion 1x, 3x et MAXIMUM (8 œufs) : les œufs se placent tout seuls sur une ou deux rangées.
 
-Tout se passe sur le client du joueur : rien n'est répliqué, et le personnage local est masqué pendant l'animation.
+Aucun fond n'est dessiné : les œufs et les pets s'affichent par-dessus le décor, sans flou, et le joueur voit toujours où il est. Pour flouter légèrement le décor au loin, passe `blur = true` à `EggOpening.play`. Tout se passe sur le client du joueur : rien n'est répliqué, et le personnage local est masqué pendant l'animation.
 
 ### Installer l'œuf dans Studio
 

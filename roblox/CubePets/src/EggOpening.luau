@@ -12,8 +12,10 @@
 	                   avec son nom, sa rareté et sa chance. Effet spécial pour les BIG.
 	  6. Sortie        tout rétrécit et la partie reprend.
 
-	Tout est local au joueur (pièces sous la caméra, GUI dans le PlayerGui) : rien n'est
-	répliqué. Les œufs suivent la caméra, le personnage local est masqué pendant l'animation.
+	Aucun fond n'est dessiné : les œufs et les pets s'affichent par-dessus le décor, le
+	joueur voit toujours où il est. Tout est local au joueur (pièces sous la caméra, GUI dans
+	le PlayerGui) : rien n'est répliqué. Les œufs suivent la caméra, le personnage local est
+	masqué pendant l'animation.
 
 	Usage :
 	    local EggOpening = require(ReplicatedStorage.EggOpening)
@@ -35,6 +37,7 @@
 	  auto      ouvre sans attendre de clic (sinon : état du bouton « Automatique ! »).
 	  onStage   fonction(stage) appelée à chaque étape ("appear", "shake", "burst",
 	            "reveal", "done") : pratique pour jouer des sons.
+	  blur      true : floute légèrement le décor au loin (désactivé par défaut).
 ]]
 
 local Players = game:GetService("Players")
@@ -185,8 +188,15 @@ local function eggTemplate(egg)
 	local top = egg:FindFirstChild("ShellTop", true)
 	local bottom = egg:FindFirstChild("ShellBottom", true)
 	local pieces
+	local display
 	if top and bottom and top:IsA("BasePart") and bottom:IsA("BasePart") then
 		pieces = { { part = top, role = "Top" }, { part = bottom, role = "Bottom" } }
+		-- l'œuf entier (s'il existe) est affiché tant que la fissure n'est pas ouverte :
+		-- pas de ligne de jointure visible entre les deux moitiés
+		local whole = egg:FindFirstChild("Egg", true)
+		if whole and whole:IsA("BasePart") then
+			display = { part = whole, role = "Display" }
+		end
 	else
 		local whole = if egg:IsA("BasePart")
 			then egg
@@ -204,7 +214,13 @@ local function eggTemplate(egg)
 		pc.rel = center:ToObjectSpace(pc.part.CFrame)
 		pc.size = pc.part.Size
 	end
-	return { pieces = pieces, height = maxV.Y - minV.Y }
+	if display then
+		local lo, hi = worldBounds({ display.part })
+		display.rel = CFrame.new((lo + hi) / 2):ToObjectSpace(display.part.CFrame)
+		display.size = display.part.Size * ((maxV.Y - minV.Y) / (hi.Y - lo.Y))
+		table.insert(pieces, display)
+	end
+	return { pieces = pieces, height = maxV.Y - minV.Y, hasDisplay = display ~= nil }
 end
 
 -- Disposition des œufs (unités : hauteur d'écran = REF_SCREEN_H)
@@ -476,15 +492,17 @@ function EggOpening.play(options)
 		controls:Disable()
 	end)
 
-	-- Flou d'arrière-plan léger (les œufs restent nets)
-	local dof = track(new("DepthOfFieldEffect", {
-		Name = "EggOpeningBlur",
-		FarIntensity = 0,
-		NearIntensity = 0,
-		FocusDistance = DIST,
-		InFocusRadius = 9,
-		Parent = Lighting,
-	}))
+	-- Flou du décor au loin, seulement si demandé (par défaut le décor reste net)
+	local dof = if options.blur
+		then track(new("DepthOfFieldEffect", {
+			Name = "EggOpeningBlur",
+			FarIntensity = 0,
+			NearIntensity = 0,
+			FocusDistance = DIST,
+			InFocusRadius = 9,
+			Parent = Lighting,
+		}))
+		else nil
 
 	local fx = track(new("Folder", { Name = "EggOpeningFX", Parent = camera }))
 	local gui = track(new("ScreenGui", {
@@ -664,6 +682,12 @@ function EggOpening.play(options)
 				sh.part.Size = Vector3.new(math.max(size.X, 0.01), math.max(size.Y, 0.01), math.max(size.Z, 0.01))
 				sh.part.CFrame = cf
 				local vis = if slot.eggScale <= 0.001 then 0 else 1 - math.clamp((b - 0.25) / 0.6, 0, 1)
+				if template.hasDisplay then
+					local cracked = slot.gap > 0 or b > 0
+					if (sh.role == "Display") == cracked then
+						vis = 0
+					end
+				end
 				sh.part.Transparency = 1 - (1 - sh.alpha) * vis
 			end
 			-- pet
@@ -714,11 +738,13 @@ function EggOpening.play(options)
 	local ok, err = pcall(function()
 		-- 1. Apparition
 		onStage("appear")
-		task.spawn(function()
-			animate(0.5, function(p)
-				dof.FarIntensity = 0.35 * p
+		if dof then
+			task.spawn(function()
+				animate(0.5, function(p)
+					dof.FarIntensity = 0.35 * p
+				end)
 			end)
-		end)
+		end
 		for i, slot in slots do
 			task.delay((i - 1) * 0.07, function()
 				animate(0.5, function(p)
@@ -886,7 +912,9 @@ function EggOpening.play(options)
 				end
 			end
 			fade(autoBtn, 1 - p)
-			dof.FarIntensity = 0.35 * (1 - p)
+			if dof then
+				dof.FarIntensity = 0.35 * (1 - p)
+			end
 		end)
 		onStage("done")
 	end)
