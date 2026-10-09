@@ -121,7 +121,7 @@ local function export(model)
 end
 
 local all = {}
-for _, job in { { "Shiba", "Normal" }, { "Shiba", "Golden" }, { "Dog", "Normal" }, { "Dog", "Golden" } } do
+for _, job in { { "Shiba", "Normal" }, { "Shiba", "Golden" }, { "Dog", "Normal" }, { "Dog", "Golden" }, { "Cat", "Normal" }, { "Cat", "Golden" } } do
 	local model = Builder.build({ species = job[1], variant = job[2] }, roblox)
 	-- aller-retour par le format fichier : le viewer voit exactement ce que Studio chargera
 	local loaded = roblox.deserializeModel(roblox.serializeModel({ model }, true))[1]

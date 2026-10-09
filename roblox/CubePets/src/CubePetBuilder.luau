@@ -6,7 +6,7 @@
 	primitives Roblox + une SurfaceGui pour le visage : aucun asset à uploader,
 	aucun MeshId, les modèles marchent tels quels dans n'importe quel jeu.
 
-	Espèces : "Shiba" (Cube Shiba), "Dog" (Cube Dog). Même corps, mêmes
+	Espèces : "Shiba" (Cube Shiba), "Dog" (Cube Dog), "Cat" (Cube Cat). Même corps, mêmes
 	proportions ; seuls les oreilles, la queue, le visage et les couleurs changent.
 
 	Ce module est la *source* des fichiers .rbxmx fournis. Il tourne :
@@ -187,6 +187,80 @@ local SPECIES = {
 			},
 		},
 	},
+
+	Cat = {
+		ModelName = "CubeCat",
+		PetName = "Cube Cat",
+		SplitY = -0.1, -- dessus gris, dessous blanc
+		BellyTint = "Secondary",
+		-- Bande blanche tout autour du bas du corps, limite ondulée (petites bosses)
+		LowerBand = {
+			SideBumps = { { -0.55, 0.17 }, { 0.0, 0.2 }, { 0.5, 0.16 } }, -- { z, rayon }
+			BackBumps = { { -0.5, 0.16 }, { 0.35, 0.19 } }, -- { x, rayon }
+		},
+		Ears = {
+			Type = "Pointy",
+			Base = 0.8,
+			Height = 0.8,
+			Thickness = 0.3,
+			X = 0.72,
+			Z = -0.1,
+			Embed = 0.08,
+			OutTilt = 5,
+			BackTilt = 6,
+			Inner = { Base = 0.56, Height = 0.6, Thickness = 0.06, Y = 0.06 },
+		},
+		-- Longue queue dressée vers le haut et l'arrière (courbe de Bézier), pointe blanche
+		Tail = {
+			Path = { { -0.45, -0.15, 0.9 }, { -0.5, 0.85, 1.5 }, { -0.5, 1.72, 1.86 } },
+			Count = 10,
+			Smooth = true, -- tube lisse : boules + cylindres entre elles
+			Thickness = { 0.19, 0.2, 0.19 },
+			TipStart = 0.78,
+			Lining = false,
+		},
+		Face = {
+			Base = "Secondary", -- face blanche...
+			Patches = { -- ...avec deux taches grises en haut (cercles coupés par le bord)
+				{ X = -1.15, Y = 0.95, R = 1.0 },
+				{ X = 1.2, Y = 0.75, R = 1.12 },
+			},
+			Eyes = { X = 0.58, Y = 0.02, Sclera = 0.66, Pupil = 0.42, Inward = 0.02, Down = 0 },
+			Nose = { Y = -0.17, Scale = 0.72, Color = "Nose" },
+			Mouth = { Y = -0.27, R = 0.115 },
+			Cheeks = { X = 0.84, Y = -0.36, W = 0.3, H = 0.24 },
+			Whiskers = { -- { x0, y0, x1, y1 } côté droit de l'écran, recopiés en miroir
+				{ 0.7, -0.33, 0.98, -0.28 },
+				{ 0.7, -0.44, 0.98, -0.49 },
+			},
+		},
+		Palettes = {
+			Normal = {
+				Primary = { 152, 150, 178 },
+				Secondary = { 246, 245, 249 },
+				EarInner = { 248, 184, 226 },
+				Cheek = { 251, 206, 224 },
+				Eye = { 32, 30, 46 },
+				Nose = { 238, 168, 212 },
+				Sclera = { 255, 255, 255 },
+				Shine = { 255, 255, 255 },
+				Outline = { 40, 36, 58 },
+				Reflectance = 0,
+			},
+			Golden = {
+				Primary = { 255, 193, 48 },
+				Secondary = { 255, 236, 150 },
+				EarInner = { 255, 212, 104 },
+				Cheek = { 255, 160, 92 },
+				Eye = { 96, 54, 12 },
+				Nose = { 232, 120, 60 },
+				Sclera = { 255, 255, 255 },
+				Shine = { 255, 255, 255 },
+				Outline = { 122, 74, 8 },
+				Reflectance = 0.15,
+			},
+		},
+	},
 }
 Builder.Species = SPECIES
 
@@ -206,7 +280,7 @@ end
 
 --[[
 	options :
-	  species   "Shiba" | "Dog"                     (défaut "Shiba")
+	  species   "Shiba" | "Dog" | "Cat"             (défaut "Shiba")
 	  variant   "Normal" | "Golden"                 (défaut "Normal")
 	  name      nom du Model                        (défaut "CubeShiba", "CubeDog_Golden"...)
 	  outline   contour cartoon (Highlight)         (défaut true)
@@ -319,6 +393,16 @@ function Builder.build(options, rbx)
 	local AY = CFrame.Angles(0, 0, math.pi / 2)
 	local AZ = CFrame.Angles(0, math.pi / 2, 0)
 
+	-- Repère centré en pos dont l'axe X suit dir (pour orienter un cylindre).
+	-- Matrice construite à la main (repère direct, X × Y = Z).
+	local function alongX(pos, dir)
+		local x = dir.Unit
+		local up = if math.abs(x.Y) < 0.99 then V3(0, 1, 0) else V3(1, 0, 0)
+		local z = x:Cross(up).Unit
+		local y = z:Cross(x).Unit
+		return CF(pos.X, pos.Y, pos.Z, x.X, y.X, z.X, x.Y, y.Y, z.Y, x.Z, y.Z, z.Z)
+	end
+
 	-- ── Racine / hitbox ──────────────────────────────────────────────────────
 	local rootH = LEG_H + H
 	local root = makePart("Part", "RootPart", V3(W, rootH, D), CF(0, rootH / 2, 0), nil, model, "Block")
@@ -378,32 +462,60 @@ function Builder.build(options, rbx)
 	end
 	edge("EdgeTopBack", W - 2 * R, 0, hy, hz, CF(), "Primary")
 	edge("EdgeBottomFront", W - 2 * R, 0, -hy, -hz, CF(), "Secondary")
-	edge("EdgeBottomBack", W - 2 * R, 0, -hy, hz, CF(), "Primary")
+	local band = spec.LowerBand -- bas du corps entièrement clair (chat)
+	edge("EdgeBottomBack", W - 2 * R, 0, -hy, hz, CF(), band and "Secondary" or "Primary")
 
-	local patchDepth, rc = spec.Patch.Depth, spec.Patch.Radius
-	local zPatch = -hz + patchDepth
-	for _, sx in { -1, 1 } do
-		local s = sx < 0 and "L" or "R"
-		local x = sx * hx
-		edge("EdgeFront" .. s .. "Lower", lowerH, x, SPLIT_Y - lowerH / 2, -hz, AY, "Secondary")
-		edge("EdgeFront" .. s .. "Upper", upperH, x, SPLIT_Y + upperH / 2, -hz, AY, "Primary")
-		edge("EdgeBack" .. s, H - 2 * R, x, 0, hz, AY, "Primary")
-		edge("EdgeTop" .. s, D - 2 * R, x, hy, 0, AZ, "Primary")
-		edge("EdgeBottom" .. s .. "Front", patchDepth, x, -hy, -hz + patchDepth / 2, AZ, "Secondary")
-		local backLen = hz - zPatch
-		edge("EdgeBottom" .. s .. "Back", backLen, x, -hy, zPatch + backLen / 2, AZ, "Primary")
-
-		corner("Corner" .. s .. "TopFront", x, hy, -hz, "Primary")
-		corner("Corner" .. s .. "TopBack", x, hy, hz, "Primary")
-		corner("Corner" .. s .. "BottomFront", x, -hy, -hz, "Secondary")
-		corner("Corner" .. s .. "BottomBack", x, -hy, hz, "Primary")
-	end
-
-	-- Taches crème des flancs (bas-avant, coin haut-arrière arrondi)
 	local pw = W + 2 * LIP
-	bodyPiece("SidePatchFront", "Block", V3(pw, lowerH, patchDepth - rc), CF(0, SPLIT_Y - lowerH / 2, -hz + (patchDepth - rc) / 2), "Secondary")
-	bodyPiece("SidePatchBack", "Block", V3(pw, lowerH - rc, rc), CF(0, -hy + (lowerH - rc) / 2, zPatch - rc / 2), "Secondary")
-	bodyPiece("SidePatchRound", "Cylinder", V3(pw, 2 * rc, 2 * rc), CF(0, SPLIT_Y - rc, zPatch - rc), "Secondary")
+	if band then
+		for _, sx in { -1, 1 } do
+			local s = sx < 0 and "L" or "R"
+			local x = sx * hx
+			edge("EdgeFront" .. s .. "Lower", lowerH, x, SPLIT_Y - lowerH / 2, -hz, AY, "Secondary")
+			edge("EdgeFront" .. s .. "Upper", upperH, x, SPLIT_Y + upperH / 2, -hz, AY, "Primary")
+			edge("EdgeBack" .. s .. "Lower", lowerH, x, SPLIT_Y - lowerH / 2, hz, AY, "Secondary")
+			edge("EdgeBack" .. s .. "Upper", upperH, x, SPLIT_Y + upperH / 2, hz, AY, "Primary")
+			edge("EdgeTop" .. s, D - 2 * R, x, hy, 0, AZ, "Primary")
+			edge("EdgeBottom" .. s, D - 2 * R, x, -hy, 0, AZ, "Secondary")
+
+			corner("Corner" .. s .. "TopFront", x, hy, -hz, "Primary")
+			corner("Corner" .. s .. "TopBack", x, hy, hz, "Primary")
+			corner("Corner" .. s .. "BottomFront", x, -hy, -hz, "Secondary")
+			corner("Corner" .. s .. "BottomBack", x, -hy, hz, "Secondary")
+		end
+		-- bande claire sur les flancs et le dos, limite ondulée
+		bodyPiece("SideBand", "Block", V3(pw, lowerH, D - 2 * R), CF(0, SPLIT_Y - lowerH / 2, 0), "Secondary")
+		bodyPiece("BackBand", "Block", V3(W - 2 * R, lowerH, 0.02), CF(0, SPLIT_Y - lowerH / 2, D / 2 + LIP - 0.01), "Secondary")
+		for i, b in band.SideBumps do
+			bodyPiece("SideWave" .. i, "Cylinder", V3(pw, 2 * b[2], 2 * b[2]), CF(0, SPLIT_Y, b[1]), "Secondary")
+		end
+		for i, b in band.BackBumps do
+			bodyPiece("BackWave" .. i, "Cylinder", V3(0.02, 2 * b[2], 2 * b[2]), CF(b[1], SPLIT_Y, D / 2 + LIP - 0.01) * AZ, "Secondary")
+		end
+	else
+		local patchDepth, rc = spec.Patch.Depth, spec.Patch.Radius
+		local zPatch = -hz + patchDepth
+		for _, sx in { -1, 1 } do
+			local s = sx < 0 and "L" or "R"
+			local x = sx * hx
+			edge("EdgeFront" .. s .. "Lower", lowerH, x, SPLIT_Y - lowerH / 2, -hz, AY, "Secondary")
+			edge("EdgeFront" .. s .. "Upper", upperH, x, SPLIT_Y + upperH / 2, -hz, AY, "Primary")
+			edge("EdgeBack" .. s, H - 2 * R, x, 0, hz, AY, "Primary")
+			edge("EdgeTop" .. s, D - 2 * R, x, hy, 0, AZ, "Primary")
+			edge("EdgeBottom" .. s .. "Front", patchDepth, x, -hy, -hz + patchDepth / 2, AZ, "Secondary")
+			local backLen = hz - zPatch
+			edge("EdgeBottom" .. s .. "Back", backLen, x, -hy, zPatch + backLen / 2, AZ, "Primary")
+
+			corner("Corner" .. s .. "TopFront", x, hy, -hz, "Primary")
+			corner("Corner" .. s .. "TopBack", x, hy, hz, "Primary")
+			corner("Corner" .. s .. "BottomFront", x, -hy, -hz, "Secondary")
+			corner("Corner" .. s .. "BottomBack", x, -hy, hz, "Primary")
+		end
+
+		-- Taches crème des flancs (bas-avant, coin haut-arrière arrondi)
+		bodyPiece("SidePatchFront", "Block", V3(pw, lowerH, patchDepth - rc), CF(0, SPLIT_Y - lowerH / 2, -hz + (patchDepth - rc) / 2), "Secondary")
+		bodyPiece("SidePatchBack", "Block", V3(pw, lowerH - rc, rc), CF(0, -hy + (lowerH - rc) / 2, zPatch - rc / 2), "Secondary")
+		bodyPiece("SidePatchRound", "Cylinder", V3(pw, 2 * rc, 2 * rc), CF(0, SPLIT_Y - rc, zPatch - rc), "Secondary")
+	end
 
 	-- ── Oreilles ─────────────────────────────────────────────────────────────
 	local ears = spec.Ears
@@ -471,12 +583,22 @@ function Builder.build(options, rbx)
 	-- ── Queue ────────────────────────────────────────────────────────────────
 	do
 		local tail = spec.Tail
-		local c = V3(tail.Center[1], tail.Center[2], tail.Center[3])
-		local eOut = V3(tail.Out[1], tail.Out[2], tail.Out[3]).Unit
-		local eUp = V3(0, 1, 0)
-		local function at(t)
-			local th = rad(tail.From + (tail.To - tail.From) * t)
-			return c + (eOut * math.cos(th) + eUp * math.sin(th)) * tail.Radius
+		local at, c
+		if tail.Path then
+			-- courbe de Bézier quadratique (queue dressée)
+			local P0, P1, P2 = V3(table.unpack(tail.Path[1])), V3(table.unpack(tail.Path[2])), V3(table.unpack(tail.Path[3]))
+			at = function(t)
+				return P0 * ((1 - t) ^ 2) + P1 * (2 * (1 - t) * t) + P2 * (t ^ 2)
+			end
+		else
+			-- arc de cercle (queue enroulée)
+			c = V3(tail.Center[1], tail.Center[2], tail.Center[3])
+			local eOut = V3(tail.Out[1], tail.Out[2], tail.Out[3]).Unit
+			local eUp = V3(0, 1, 0)
+			at = function(t)
+				local th = rad(tail.From + (tail.To - tail.From) * t)
+				return c + (eOut * math.cos(th) + eUp * math.sin(th)) * tail.Radius
+			end
 		end
 		local r0, r1, r2 = tail.Thickness[1], tail.Thickness[2], tail.Thickness[3]
 		local function radiusAt(t)
@@ -493,6 +615,7 @@ function Builder.build(options, rbx)
 		motor("Tail", body, tailBone, CF(rootPos))
 		local tailFolder = folder("Tail", visual)
 
+		local prevP, prevR
 		for i = 1, tail.Count do
 			local t = (i - 1) / (tail.Count - 1)
 			local p = at(t)
@@ -500,8 +623,15 @@ function Builder.build(options, rbx)
 			local isTip = t >= tail.TipStart
 			local ball = makePart("Part", string.format("Fur%02d", i), V3(2 * r, 2 * r, 2 * r), BODY_CENTER * CF(p), isTip and "Secondary" or "Primary", tailFolder, "Ball")
 			weld(tailBone, ball)
+			if tail.Smooth and prevP then
+				-- cylindre entre deux boules : axe X aligné sur le segment
+				local mid = (prevP + p) / 2
+				local seg = makePart("Part", string.format("Seg%02d", i - 1), V3((p - prevP).Magnitude, 2 * math.min(r, prevR), 2 * math.min(r, prevR)), BODY_CENTER * alongX(mid, p - prevP), (t - 0.5 / (tail.Count - 1)) >= tail.TipStart and "Secondary" or "Primary", tailFolder, "Cylinder")
+				weld(tailBone, seg)
+			end
+			prevP, prevR = p, r
 			-- Doublure crème à l'intérieur de la boucle (une sphère sur deux suffit)
-			if tail.Lining and t > 0.22 and not isTip and i % 2 == 0 then
+			if tail.Lining and c and t > 0.22 and not isTip and i % 2 == 0 then
 				local inward = (c - p).Unit
 				local lr = r * 0.72
 				local lining = makePart("Part", string.format("Lining%02d", i), V3(2 * lr, 2 * lr, 2 * lr), BODY_CENTER * CF(p + inward * (r * 0.42)), "Secondary", tailFolder, "Ball")
@@ -590,15 +720,21 @@ function Builder.build(options, rbx)
 	local STROKE = 0.045 -- épaisseur des traits (bouche)
 	local canvas = shape(gui, canvasSpace, "Canvas", 0, 0, FW, FH, nil, 1, { clip = true })
 
-	-- Fond : pelage, masque crème du bas, museau (et liste blanche pour le chien)
+	-- Fond : pelage, masque crème du bas, museau (liste blanche du chien, taches du chat)
 	local background = shape(canvas, canvasSpace, "Background", 0, 0, FW, FH, nil, 1)
-	tint(shape(background, canvasSpace, "Fur", 0, 0, FW, FH, C.Primary, 1), "Primary")
-	local maskH = SPLIT_Y + FH / 2
-	tint(shape(background, canvasSpace, "Mask", 0, SPLIT_Y - maskH / 2, FW, maskH, C.Secondary, 2), "Secondary")
+	local base = F.Base or "Primary"
+	tint(shape(background, canvasSpace, "Fur", 0, 0, FW, FH, C[base], 1), base)
+	if base == "Primary" then
+		local maskH = SPLIT_Y + FH / 2
+		tint(shape(background, canvasSpace, "Mask", 0, SPLIT_Y - maskH / 2, FW, maskH, C.Secondary, 2), "Secondary")
+	end
+	for i, pt in F.Patches or {} do
+		tint(shape(background, canvasSpace, "Patch" .. i, pt.X, pt.Y, 2 * pt.R, 2 * pt.R, C.Primary, 2, { round = true }), "Primary")
+	end
 	local m = F.Muzzle
-	if m.Shape == "Circle" then
+	if m and m.Shape == "Circle" then
 		tint(shape(background, canvasSpace, "Muzzle", 0, m.Y, 2 * m.R, 2 * m.R, C.Secondary, 3, { round = true }), "Secondary")
-	else
+	elseif m then
 		tint(shape(background, canvasSpace, "Muzzle", 0, m.Y, m.W, m.H, C.Secondary, 3, { round = true }), "Secondary")
 	end
 	if F.Blaze then
@@ -612,6 +748,16 @@ function Builder.build(options, rbx)
 	local cheeks = shape(canvas, canvasSpace, "Cheeks", 0, 0, FW, FH, nil, 2)
 	for _, sx in { -1, 1 } do
 		shape(cheeks, canvasSpace, sx < 0 and "CheekR" or "CheekL", sx * ch.X, ch.Y, ch.W, ch.H, C.Cheek, 1, { round = true })
+	end
+
+	-- Moustaches (chat)
+	if F.Whiskers then
+		local whiskers = shape(canvas, canvasSpace, "Whiskers", 0, 0, FW, FH, nil, 4)
+		for _, sx in { -1, 1 } do
+			for i, wk in F.Whiskers do
+				line(whiskers, canvasSpace, (sx < 0 and "R" or "L") .. i, sx * wk[1], wk[2], sx * wk[3], wk[4], 0.04, C.Eye, 1)
+			end
+		end
 	end
 
 	-- Sourcils (taches claires du shiba)
@@ -634,17 +780,19 @@ function Builder.build(options, rbx)
 
 	-- Bouche « ω » + philtrum
 	local noseY = F.Nose.Y
+	local ns_ = F.Nose.Scale or 1
+	local noseColor = F.Nose.Color and rgb(pal[F.Nose.Color]) or C.Eye
 	local mo = F.Mouth
 	local mouth = shape(canvas, canvasSpace, "Mouth", 0, 0, FW, FH, nil, 4)
-	line(mouth, canvasSpace, "Philtrum", 0, noseY - 0.08, 0, mo.Y, STROKE, C.Eye, 1)
+	line(mouth, canvasSpace, "Philtrum", 0, noseY - 0.08 * ns_, 0, mo.Y, STROKE, C.Eye, 1)
 	arc(mouth, canvasSpace, "LipL", -mo.R, mo.Y, mo.R, 180, 360, STROKE, C.Eye, 1, 10)
 	arc(mouth, canvasSpace, "LipR", mo.R, mo.Y, mo.R, 180, 360, STROKE, C.Eye, 1, 10)
 
 	-- Truffe
-	local nose, ns = shape(canvas, canvasSpace, "Nose", 0, noseY, 0.24, 0.2, nil, 5)
-	shape(nose, ns, "Top", 0, noseY + 0.03, 0.22, 0.1, C.Eye, 1, { round = true })
-	shape(nose, ns, "Tip", 0, noseY - 0.01, 0.13, 0.13, C.Eye, 1, { round = 4, rotation = 45 })
-	shape(nose, ns, "Shine", -0.045, noseY + 0.05, 0.06, 0.03, C.Shine, 2, { round = true, transparency = 0.35 })
+	local nose, ns = shape(canvas, canvasSpace, "Nose", 0, noseY, 0.24 * ns_, 0.2 * ns_, nil, 5)
+	shape(nose, ns, "Top", 0, noseY + 0.03 * ns_, 0.22 * ns_, 0.1 * ns_, noseColor, 1, { round = true })
+	shape(nose, ns, "Tip", 0, noseY - 0.01 * ns_, 0.13 * ns_, 0.13 * ns_, noseColor, 1, { round = 4, rotation = 45 })
+	shape(nose, ns, "Shine", -0.045 * ns_, noseY + 0.05 * ns_, 0.06 * ns_, 0.03 * ns_, C.Shine, 2, { round = true, transparency = 0.35 })
 
 	-- ── Contour cartoon (comme les traits noirs des planches) ────────────────
 	local outline = Instance.new("Highlight")

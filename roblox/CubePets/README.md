@@ -1,14 +1,17 @@
 # Cube Pets : pets Roblox (style Pet Simulator)
 
-Deux pets cubiques qui partagent **exactement les mêmes proportions** (corps, pattes, arêtes arrondies). Seuls les oreilles, la queue, le visage et les couleurs changent.
+Trois pets cubiques qui partagent **exactement les mêmes proportions** (corps, pattes, arêtes arrondies) : Shiba, chien et chat. Seuls les oreilles, la queue, le visage et les couleurs changent.
 
 ![Comparaison Shiba / Chien](preview/comparaison.png)
 
-En rareté **BIG**, un pet est simplement agrandi ×2 avec `pet:ScaleTo(2)`, depuis son pivot au sol, donc les pattes restent sur le sol. Son cube de tête passe alors à 4,8 × 4 × 4 studs :
+En rareté **BIG**, un pet est simplement agrandi ×2 avec `pet:ScaleTo(2)`, depuis son pivot au sol, donc les pattes restent sur le sol. Son cube de tête passe alors à 4,8 × 4 × 4 studs. Sur la planche, le chien et le chat sont à taille normale :
 
-![Shiba BIG ×2 à côté du chien normal](preview/comparaison_big.png)
+![Shiba BIG ×2 à côté du chien et du chat](preview/comparaison_big.png)
 
-La colonne de droite montre l'affichage de l'œuf « Œuf de la Prairie » : le chien basique (commun) à 1/2 et le Shiba BIG à 1/10 000. Le Shiba BIG remplit toute sa case, et ses oreilles dépassent du cadre pour bien montrer qu'il est plus gros. L'UI seule est aussi disponible dans `preview/oeuf_prairie.png`.
+La colonne « Affichage de l'œuf » montre l'« Œuf de la Prairie » :
+- le chien (commun) à 1/2 ;
+- le chat (peu commun) à 1/3 ;
+- le Shiba BIG à 1/10 000. Le Shiba BIG remplit toute sa case, et ses oreilles dépassent du cadre pour bien montrer qu'il est plus gros. L'UI seule est aussi disponible dans `preview/oeuf_prairie.png`.
 
 La dernière colonne montre le menu « Paramètres » et le bouton du HUD qui l'ouvre. Le menu contient : Musique, Effets sonores, Échanges, Notifications et Pets des autres. Une coche verte veut dire activé, une croix rouge désactivé. Ces UI sont aussi disponibles seules dans `preview/parametres.png` et `preview/bouton_parametres.png`.
 
@@ -18,9 +21,10 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 |---|---|
 | `CubeShiba.rbxmx` / `CubeShiba_Golden.rbxmx` | Shiba, version normale et dorée |
 | `CubeDog.rbxmx` / `CubeDog_Golden.rbxmx` | Chien, version normale et dorée |
+| `CubeCat.rbxmx` / `CubeCat_Golden.rbxmx` | Chat, version normale et dorée |
 | `src/CubePetBuilder.luau` | Source qui génère les modèles (dimensions, couleurs, visages) |
 | `tools/` | Export (Lune), vérifications, viewer 3D web |
-| `preview/` | Rendus des modèles et maquettes d'UI (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `parametres.png`, `bouton_parametres.png`, `shiba_*.png`, `chien_*.png`) |
+| `preview/` | Rendus des modèles et maquettes d'UI (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `parametres.png`, `bouton_parametres.png`, `shiba_*.png`, `chien_*.png`, `chat_*.png`) |
 
 ## Importer dans Roblox Studio
 
@@ -45,11 +49,20 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 - Oreilles tombantes marron : un rabat posé sur la tête et un pan qui pend en biais, avec des plis arrondis.
 - Queue relevée en croissant, pointe blanche.
 
-### Commun aux deux
+### Cube Cat
+![Planche Chat](preview/chat_planche.png)
+
+- Dessus gris lavande et dessous blanc, avec une limite ondulée sur les flancs et le dos.
+- Face blanche avec deux taches grises en haut.
+- Oreilles pointues grises à l'intérieur rose.
+- Grands yeux, truffe rose, bouche « ω », moustaches et joues roses.
+- Longue queue dressée vers l'arrière, pointe blanche.
+
+### Commun aux trois
 - **Corps** : cube 2,4 × 2 × 2 studs aux arêtes arrondies, taches crème sur le bas des flancs, 4 pattes « blocky » crème.
 - **Visage** : SurfaceGui vectorielle posée directement sur la face avant (`Visual/Body/CoreFront/Face`). Elle contient le pelage, les zones crème, les yeux (blanc + pupille noire, sans reflet), la truffe, la bouche « ω » et les joues. L'éclairage est le même que sur le reste du corps, et le rendu reste net à toutes les distances.
 - **Contour cartoon** : `Highlight` nommé `Outline` (contour seul), comme les traits noirs des planches.
-- **Taille** : environ 3 studs de haut, 74 à 78 pièces.
+- **Taille** : environ 3 studs de haut (la queue du chat monte à environ 3,4), de 71 à 78 pièces.
 - Les pets ont seulement le visage neutre : ni expressions, ni poses.
 
 ## Structure et rig
@@ -75,7 +88,7 @@ CubeDog (Model)              PrimaryPart = RootPart, pivot au sol
 - Toutes les pièces sont `CanCollide = false`, `CanTouch = false`, `Massless = true` : le pet ne gêne ni la physique ni les joueurs.
 - `RootPart` est ancrée, ce qui convient aux systèmes de pets qui déplacent le modèle par `PivotTo` côté client (le cas le plus courant). Si ton système utilise la physique (`AlignPosition`…), désancre-la.
 - Le rig Motor6D + `AnimationController` permet d'animer le pet avec l'Animation Editor (ou Moon Animator) si tu le souhaites.
-- Attributs sur le Model : `PetName`, `Species` (`Shiba` / `Dog`), `Variant` (`Normal` / `Golden`).
+- Attributs sur le Model : `PetName`, `Species` (`Shiba` / `Dog` / `Cat`), `Variant` (`Normal` / `Golden`).
 
 ### Exemple minimal (LocalScript)
 
@@ -105,7 +118,7 @@ end)
   - `Primary` = pelage ;
   - `Secondary` = crème ;
   - `Accent` = oreilles du chien ;
-  - `EarInner` = intérieur des oreilles du Shiba.
+  - `EarInner` = intérieur des oreilles (Shiba, chat).
 
   Pour une nouvelle variante par script :
 
@@ -125,7 +138,7 @@ end)
 Les `.rbxmx` sont générés à partir de `src/CubePetBuilder.luau` avec [Lune](https://lune-org.github.io/docs) :
 
 ```bash
-lune run tools/build.luau            # écrit les 4 fichiers .rbxmx
+lune run tools/build.luau            # écrit les 6 fichiers .rbxmx
 lune run tools/preview_export.luau   # met à jour tools/pet_data.json pour le viewer
 ```
 
