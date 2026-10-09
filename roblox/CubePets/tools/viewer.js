@@ -156,7 +156,7 @@ export async function createViewer(container, data, opts = {}) {
   controls.target.set(0, 1.45, 0);
   controls.enableDamping = true;
   controls.minDistance = 4;
-  controls.maxDistance = 30;
+  controls.maxDistance = 60;
   controls.update();
 
   const hemi = new THREE.HemisphereLight(0xffffff, 0xc9c2b6, 1.85);
@@ -165,8 +165,8 @@ export async function createViewer(container, data, opts = {}) {
   sun.position.set(-4, 9, -6);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
-  sun.shadow.camera.left = -5; sun.shadow.camera.right = 5;
-  sun.shadow.camera.top = 5; sun.shadow.camera.bottom = -5;
+  sun.shadow.camera.left = -9; sun.shadow.camera.right = 9;
+  sun.shadow.camera.top = 9; sun.shadow.camera.bottom = -9;
   sun.shadow.bias = -0.0004;
   sun.shadow.radius = 4;
   scene.add(sun);
@@ -241,11 +241,13 @@ export async function createViewer(container, data, opts = {}) {
     pets = [];
   }
 
-  // Ajoute un pet dans la scène, décalé de x studs (plusieurs pets = vue côte à côte)
-  function buildPet(variantName, x = 0) {
+  // Ajoute un pet dans la scène, décalé de x studs et mis à l'échelle depuis son pivot
+  // au sol (comme Model:ScaleTo dans Roblox). Plusieurs pets = vue côte à côte.
+  function buildPet(variantName, x = 0, scale = 1) {
     const d = data[variantName];
     const group = new THREE.Group();
     group.position.x = x;
+    group.scale.setScalar(scale);
     const boneRest = {};
     const boneGroups = {};
     for (const [name, b] of Object.entries(d.bones)) {
@@ -384,8 +386,8 @@ export async function createViewer(container, data, opts = {}) {
   const api = {
     THREE, angles, cfn, renderer, scene, camera, controls,
     setVariant(v) { state.variant = v; clearPets(); buildPet(v); },
-    // ex. setLineup([{ key: "Shiba/Normal", x: 2.4 }, { key: "Dog/Normal", x: -2.4 }])
-    setLineup(list) { clearPets(); for (const it of list) buildPet(it.key, it.x || 0); },
+    // ex. setLineup([{ key: "Shiba/Normal", x: 2.6, scale: 2 }, { key: "Dog/Normal", x: -3.9 }])
+    setLineup(list) { clearPets(); for (const it of list) buildPet(it.key, it.x || 0, it.scale || 1); },
     // position écran (pixels CSS) d'un point du monde
     project(p) {
       const v = new THREE.Vector3(...p).project(camera);

@@ -26,6 +26,7 @@
   <button data-variant="Dog/Normal" aria-pressed="false">Chien</button>
   <button data-variant="Dog/Golden" aria-pressed="false">Chien Golden</button>
   <button data-variant="lineup" aria-pressed="false">Côte à côte</button>
+  <button data-variant="lineupBig" aria-pressed="false">Shiba BIG ×2</button>
   <button id="outline" aria-pressed="true">Contour</button>
 </div>
 <script type="module">
@@ -39,6 +40,9 @@
       if (b.dataset.variant === "lineup") {
         viewer.setLineup([{ key: "Shiba/Normal", x: 2.3 }, { key: "Dog/Normal", x: -2.1 }]);
         viewer.setView([-1.5, 5, -16], [0, 1.45, 0]);
+      } else if (b.dataset.variant === "lineupBig") {
+        viewer.setLineup([{ key: "Shiba/Normal", x: 2.6, scale: 2 }, { key: "Dog/Normal", x: -3.9 }]);
+        viewer.setView([-3, 8, -26], [-0.4, 2.4, 0]);
       } else {
         viewer.setVariant(b.dataset.variant);
       }

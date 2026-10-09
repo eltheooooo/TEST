@@ -4,6 +4,10 @@ Deux pets cubiques qui partagent **exactement les mêmes proportions** (corps, p
 
 ![Comparaison Shiba / Chien](preview/comparaison.png)
 
+En rareté **BIG**, un pet est simplement agrandi ×2 avec `pet:ScaleTo(2)`, depuis son pivot au sol, donc les pattes restent sur le sol. Son cube de tête passe alors à 4,8 × 4 × 4 studs :
+
+![Shiba BIG ×2 à côté du chien normal](preview/comparaison_big.png)
+
 Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visage** : aucun mesh ni aucune image à uploader. Tu glisses le fichier dans Studio et c'est prêt.
 
 | Fichier | Contenu |
@@ -12,7 +16,7 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 | `CubeDog.rbxmx` / `CubeDog_Golden.rbxmx` | Chien, version normale et dorée |
 | `src/CubePetBuilder.luau` | Source qui génère les modèles (dimensions, couleurs, visages) |
 | `tools/` | Export (Lune), vérifications, viewer 3D web |
-| `preview/` | Rendus des modèles (`comparaison.png`, `shiba_*.png`, `chien_*.png`) |
+| `preview/` | Rendus des modèles (`comparaison.png`, `comparaison_big.png`, `shiba_*.png`, `chien_*.png`) |
 
 ## Importer dans Roblox Studio
 
@@ -128,4 +132,4 @@ lune run tools/preview_export.luau   # met à jour tools/pet_data.json pour le v
 
 Le builder marche aussi dans Studio : mets `CubePetBuilder.luau` dans un ModuleScript, puis lance dans la barre de commande `require(workspace.CubePetBuilder).build({ species = "Dog", variant = "Golden" }).Parent = workspace`.
 
-**Viewer 3D** : dans `tools/`, lance `python3 -m http.server`, puis ouvre `http://localhost:8000/viewer.html` (bouton « Côte à côte » pour voir les deux pets ensemble). Le viewer recrée les primitives Roblox et la SurfaceGui à partir du fichier relu, pour vérifier les modèles hors de Studio.
+**Viewer 3D** : dans `tools/`, lance `python3 -m http.server`, puis ouvre `http://localhost:8000/viewer.html` (boutons « Côte à côte » et « Shiba BIG ×2 » pour voir les deux pets ensemble). Le viewer recrée les primitives Roblox et la SurfaceGui à partir du fichier relu, pour vérifier les modèles hors de Studio.
