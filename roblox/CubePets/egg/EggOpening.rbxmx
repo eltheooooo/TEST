@@ -1,0 +1,926 @@
+<roblox version="4">
+  <Item class="ModuleScript" referent="0">
+    <Properties>
+      <string name="Name">EggOpening</string>
+      <string name="Source"><![CDATA[--!nonstrict
+--[[
+	EggOpening (ModuleScript, côté client)
+	======================================
+	Cinématique d'ouverture d'œufs, style Pet Simulator :
+
+	  1. Apparition    les œufs arrivent devant la caméra avec un rebond, entourés d'étincelles.
+	  2. Attente       « Cliquer pour ouvrir ! » + bouton « Automatique ! » (ouverture sans clic).
+	  3. Tremblements  trois secousses de plus en plus fortes ; la fissure en zigzag s'ouvre.
+	  4. Éclosion      flash blanc, le chapeau de la coquille s'envole, le bas tombe.
+	  5. Révélation    le pet apparaît en tournant devant des rayons de la couleur de sa rareté,
+	                   avec son nom, sa rareté et sa chance. Effet spécial pour les BIG.
+	  6. Sortie        tout rétrécit et la partie reprend.
+
+	Tout est local au joueur (pièces sous la caméra, GUI dans le PlayerGui) : rien n'est
+	répliqué. Les œufs suivent la caméra, le personnage local est masqué pendant l'animation.
+
+	Usage :
+	    local EggOpening = require(ReplicatedStorage.EggOpening)
+	    EggOpening.play({
+	        egg = ReplicatedStorage.Eggs.OeufPrairie,  -- modèle importé (ShellTop + ShellBottom)
+	        results = {
+	            { model = ReplicatedStorage.Pets.CubeDog, name = "Chien", rarity = "Common", chance = "1/2" },
+	        },
+	    }) -- bloque jusqu'à la fin de l'animation
+
+	⚠ Le tirage des pets doit être fait par le serveur : ce module ne fait qu'afficher
+	les résultats qu'on lui donne.
+
+	Options de play :
+	  egg       Model contenant les MeshParts « ShellTop » et « ShellBottom » (œuf importé),
+	            ou à défaut une seule pièce « Egg » (elle grossit et disparaît à l'éclosion).
+	  results   liste de { model, name, rarity, chance, big? } (1 entrée par œuf).
+	            rarity : clé de EggOpening.Rarities. big = true (ou rarity = "Big") : pet agrandi.
+	  auto      ouvre sans attendre de clic (sinon : état du bouton « Automatique ! »).
+	  onStage   fonction(stage) appelée à chaque étape ("appear", "shake", "burst",
+	            "reveal", "done") : pratique pour jouer des sons.
+]]
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+
+local EggOpening = {}
+
+-- État du bouton « Automatique ! » (conservé d'une ouverture à l'autre)
+EggOpening.AutoOpen = false
+
+EggOpening.Rarities = {
+	Common = { Label = "COMMUN", Color = Color3.fromRGB(128, 134, 146), Rays = Color3.fromRGB(255, 255, 255) },
+	Uncommon = { Label = "PEU COMMUN", Color = Color3.fromRGB(76, 168, 60), Rays = Color3.fromRGB(176, 240, 140) },
+	Rare = { Label = "RARE", Color = Color3.fromRGB(40, 120, 230), Rays = Color3.fromRGB(140, 200, 255) },
+	Big = { Label = "BIG", Color = Color3.fromRGB(232, 88, 52), Rays = Color3.fromRGB(255, 212, 80), Big = true },
+}
+
+-- Réglages (studs, secondes)
+local DIST = 12 -- distance œufs / caméra
+local REF_SCREEN_H = 16.8 -- hauteur visible à DIST pour un champ de vision de 70°
+local PET_REF_H = 3 -- hauteur standard d'un Cube Pet
+local BIG_SCALE = 1.75 -- agrandissement d'un pet BIG pendant la révélation
+local BIG_SPREAD = 1.25 -- écartement des œufs voisins quand un BIG sort
+local PET_TILT = 0.2 -- inclinaison vers la caméra (on voit le dessus du pet)
+local SHAKES = { { 0.34, 10 }, { 0.34, 16 }, { 0.42, 24 } } -- durée, amplitude (degrés)
+local HOLD, HOLD_BIG = 2.3, 3.4
+
+local FONT = Enum.Font.FredokaOne
+local WHITE = Color3.new(1, 1, 1)
+local STROKE = Color3.fromRGB(24, 28, 52)
+local AUTO_ON = Color3.fromRGB(64, 226, 70)
+local AUTO_OFF = Color3.fromRGB(205, 208, 214)
+
+local playing = false
+
+function EggOpening.isPlaying()
+	return playing
+end
+
+-- ─── Petits utilitaires ──────────────────────────────────────────────────────
+local function easeOutBack(p)
+	local c1, c3 = 1.70158, 2.70158
+	return 1 + c3 * (p - 1) ^ 3 + c1 * (p - 1) ^ 2
+end
+local function easeOutCubic(p)
+	return 1 - (1 - p) ^ 3
+end
+local function easeInCubic(p)
+	return p ^ 3
+end
+
+local function animate(duration, fn)
+	local t0 = os.clock()
+	while true do
+		local p = math.clamp((os.clock() - t0) / duration, 0, 1)
+		fn(p)
+		if p >= 1 then
+			break
+		end
+		RunService.RenderStepped:Wait()
+	end
+end
+
+local function new(className, props, children)
+	local inst = Instance.new(className)
+	for k, v in props do
+		if k ~= "Parent" then
+			inst[k] = v
+		end
+	end
+	for _, c in children or {} do
+		c.Parent = inst
+	end
+	if props.Parent then
+		inst.Parent = props.Parent
+	end
+	return inst
+end
+
+local function corner(r)
+	return new("UICorner", { CornerRadius = r or UDim.new(0.5, 0) })
+end
+
+local function textStroke(thickness, color)
+	return new("UIStroke", {
+		Thickness = thickness,
+		Color = color or STROKE,
+		LineJoinMode = Enum.LineJoinMode.Round,
+		ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+	})
+end
+
+-- Fondu d'une arborescence GUI : alpha = 1 visible, 0 invisible.
+-- Les transparences d'origine sont mémorisées au premier appel.
+local fadeBase = setmetatable({}, { __mode = "k" })
+local function fade(root, alpha)
+	local list = { root }
+	for _, d in root:GetDescendants() do
+		table.insert(list, d)
+	end
+	for _, d in list do
+		local props
+		if d:IsA("TextLabel") or d:IsA("TextButton") then
+			props = { "BackgroundTransparency", "TextTransparency" }
+		elseif d:IsA("GuiObject") then
+			props = { "BackgroundTransparency" }
+		elseif d:IsA("UIStroke") then
+			props = { "Transparency" }
+		end
+		if props then
+			local base = fadeBase[d]
+			if not base then
+				base = {}
+				for _, p in props do
+					base[p] = d[p]
+				end
+				fadeBase[d] = base
+			end
+			for _, p in props do
+				d[p] = 1 - (1 - base[p]) * alpha
+			end
+		end
+	end
+end
+
+-- Boîte englobante (repère monde) d'une liste de pièces
+local function worldBounds(parts)
+	local minV, maxV
+	for _, p in parts do
+		local cf, h = p.CFrame, p.Size / 2
+		local X, Y, Z = cf.XVector, cf.YVector, cf.ZVector
+		local e = Vector3.new(
+			math.abs(X.X) * h.X + math.abs(Y.X) * h.Y + math.abs(Z.X) * h.Z,
+			math.abs(X.Y) * h.X + math.abs(Y.Y) * h.Y + math.abs(Z.Y) * h.Z,
+			math.abs(X.Z) * h.X + math.abs(Y.Z) * h.Y + math.abs(Z.Z) * h.Z
+		)
+		local lo, hi = cf.Position - e, cf.Position + e
+		minV = minV and minV:Min(lo) or lo
+		maxV = maxV and maxV:Max(hi) or hi
+	end
+	return minV, maxV
+end
+
+-- Pièces de l'œuf et leur position relative au centre de l'œuf
+local function eggTemplate(egg)
+	local top = egg:FindFirstChild("ShellTop", true)
+	local bottom = egg:FindFirstChild("ShellBottom", true)
+	local pieces
+	if top and bottom and top:IsA("BasePart") and bottom:IsA("BasePart") then
+		pieces = { { part = top, role = "Top" }, { part = bottom, role = "Bottom" } }
+	else
+		local whole = if egg:IsA("BasePart")
+			then egg
+			else egg:FindFirstChild("Egg", true) or egg:FindFirstChild("EggPlaceholder", true) or egg:FindFirstChildWhichIsA("BasePart", true)
+		assert(whole, "EggOpening : aucune pièce d'œuf dans " .. egg:GetFullName())
+		pieces = { { part = whole, role = "Whole" } }
+	end
+	local parts = {}
+	for _, pc in pieces do
+		table.insert(parts, pc.part)
+	end
+	local minV, maxV = worldBounds(parts)
+	local center = CFrame.new((minV + maxV) / 2)
+	for _, pc in pieces do
+		pc.rel = center:ToObjectSpace(pc.part.CFrame)
+		pc.size = pc.part.Size
+	end
+	return { pieces = pieces, height = maxV.Y - minV.Y }
+end
+
+-- Disposition des œufs (unités : hauteur d'écran = REF_SCREEN_H)
+local function layout(n)
+	if n == 1 then
+		return { Vector2.new(0, 0.5) }, 6.2
+	end
+	local cols = if n <= 4 then n else math.ceil(n / math.ceil(n / 4))
+	local rows = math.ceil(n / cols)
+	local eggH = math.min(5.2, 21 / cols, 11.5 / rows)
+	local dx, dy = eggH * 1.08, eggH * 1.3
+	local out = {}
+	for i = 1, n do
+		local r = math.floor((i - 1) / cols)
+		local inRow = math.min(cols, n - r * cols)
+		local c = (i - 1) % cols
+		local x = (c - (inRow - 1) / 2) * dx
+		local y = 0.7 + ((rows - 1) / 2 - r) * dy
+		table.insert(out, Vector2.new(x, y))
+	end
+	return out, eggH
+end
+
+-- ─── Éléments GUI ────────────────────────────────────────────────────────────
+-- Étincelle à 4 branches : deux barres en dégradé + un point central
+local function makeSparkle(parent)
+	local s = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, Parent = parent })
+	local fadeEnds = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 1),
+		NumberSequenceKeypoint.new(0.5, 0),
+		NumberSequenceKeypoint.new(1, 1),
+	})
+	new("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(1, 0.14),
+		BackgroundColor3 = WHITE,
+		BorderSizePixel = 0,
+		Parent = s,
+	}, { corner(), new("UIGradient", { Transparency = fadeEnds }) })
+	new("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(0.14, 1),
+		BackgroundColor3 = WHITE,
+		BorderSizePixel = 0,
+		Parent = s,
+	}, { corner(), new("UIGradient", { Transparency = fadeEnds, Rotation = 90 }) })
+	new("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(0.26, 0.26),
+		BackgroundColor3 = WHITE,
+		BorderSizePixel = 0,
+		Parent = s,
+	}, { corner() })
+	return s
+end
+
+-- Icône « deux flèches qui tournent » du bouton Automatique
+local function makeAutoIcon(parent, thickness)
+	local icon = new("Frame", {
+		Name = "Icon",
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(0.62, 0.62),
+		BackgroundTransparency = 1,
+		Parent = parent,
+	})
+	local ring = new("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(0.72, 0.72),
+		BackgroundTransparency = 1,
+		Parent = icon,
+	}, { corner() })
+	local stroke = new("UIStroke", { Thickness = thickness, Color = AUTO_ON, Parent = ring })
+	-- deux coupures dans l'anneau (en haut à droite et en bas à gauche)
+	new("UIGradient", {
+		Rotation = 45,
+		Transparency = NumberSequence.new({
+			NumberSequenceKeypoint.new(0, 0),
+			NumberSequenceKeypoint.new(0.4, 0),
+			NumberSequenceKeypoint.new(0.401, 1),
+			NumberSequenceKeypoint.new(0.599, 1),
+			NumberSequenceKeypoint.new(0.6, 0),
+			NumberSequenceKeypoint.new(1, 0),
+		}),
+		Parent = stroke,
+	})
+	-- pointes de flèche (chevrons) au bout de chaque arc, sens horaire
+	local bars = {}
+	for _, gap in { -45, 135 } do
+		local a = math.rad(gap - 12)
+		local tip = Vector2.new(0.5 + math.cos(a) * 0.36, 0.5 + math.sin(a) * 0.36)
+		local tangent = Vector2.new(-math.sin(a), math.cos(a))
+		for _, side in { -1, 1 } do
+			local back = -tangent
+			local ang = math.rad(40 * side)
+			local dir = Vector2.new(back.X * math.cos(ang) - back.Y * math.sin(ang), back.X * math.sin(ang) + back.Y * math.cos(ang))
+			local len = 0.3
+			local c = tip + dir * len / 2
+			local bar = new("Frame", {
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromScale(c.X, c.Y),
+				Size = UDim2.fromScale(len + 0.06, 0.11),
+				Rotation = math.deg(math.atan2(dir.Y, dir.X)),
+				BackgroundColor3 = AUTO_ON,
+				BorderSizePixel = 0,
+				Parent = icon,
+			}, { corner() })
+			table.insert(bars, bar)
+		end
+	end
+	return icon, stroke, bars
+end
+
+-- Rayons lumineux derrière un pet (SurfaceGui sur une plaque face à la caméra)
+local function makeRays(fx, color, big)
+	local plate = new("Part", {
+		Name = "Rays",
+		Anchored = true,
+		CanCollide = false,
+		CanQuery = false,
+		CanTouch = false,
+		CastShadow = false,
+		Transparency = 1,
+		Size = Vector3.new(10, 10, 0.05),
+		Parent = fx,
+	})
+	local gui = new("SurfaceGui", {
+		Face = Enum.NormalId.Back, -- +Z de la plaque = vers la caméra
+		SizingMode = Enum.SurfaceGuiSizingMode.FixedSize,
+		CanvasSize = Vector2.new(512, 512),
+		LightInfluence = 0,
+		Brightness = 1.4,
+		Parent = plate,
+	})
+	local spin = new("Frame", {
+		Name = "Spin",
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(1, 1),
+		BackgroundTransparency = 1,
+		Parent = gui,
+	})
+	local rayFade = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 1),
+		NumberSequenceKeypoint.new(0.2, 0.7),
+		NumberSequenceKeypoint.new(0.5, 0.1),
+		NumberSequenceKeypoint.new(0.8, 0.7),
+		NumberSequenceKeypoint.new(1, 1),
+	})
+	local count = if big then 12 else 9
+	for i = 1, count do
+		new("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromScale(if big then 0.085 else 0.07, 1),
+			Rotation = (i - 1) * 180 / count,
+			BackgroundColor3 = color,
+			BorderSizePixel = 0,
+			Parent = spin,
+		}, { corner(), new("UIGradient", { Rotation = 90, Transparency = rayFade }) })
+	end
+	-- halo : disques concentriques de plus en plus opaques vers le centre
+	for i, sz in { 0.62, 0.46, 0.32, 0.2 } do
+		new("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromScale(sz, sz),
+			BackgroundColor3 = if i >= 3 then WHITE else color,
+			BackgroundTransparency = 0.86 - i * 0.05,
+			BorderSizePixel = 0,
+			Parent = gui,
+		}, { corner() })
+	end
+	return plate, gui, spin
+end
+
+-- Étiquette sous le pet : nom, rareté, chance
+local function makeLabel(parent, result, rarity, vh)
+	local h = math.floor(vh * 0.05)
+	local frame = new("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0),
+		Size = UDim2.fromOffset(h * 7, h * 2.9),
+		BackgroundTransparency = 1,
+		Parent = parent,
+	})
+	new("UIListLayout", {
+		FillDirection = Enum.FillDirection.Vertical,
+		HorizontalAlignment = Enum.HorizontalAlignment.Center,
+		Padding = UDim.new(0, math.floor(h * 0.12)),
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Parent = frame,
+	})
+	new("TextLabel", {
+		LayoutOrder = 1,
+		Size = UDim2.new(1, 0, 0, h),
+		BackgroundTransparency = 1,
+		Font = FONT,
+		Text = result.name or (result.model and result.model.Name) or "?",
+		TextColor3 = WHITE,
+		TextScaled = true,
+		Parent = frame,
+	}, { textStroke(math.max(2, h * 0.09)) })
+	local pill = new("Frame", {
+		LayoutOrder = 2,
+		Size = UDim2.fromOffset(h * (#rarity.Label * 0.42 + 1.1), math.floor(h * 0.78)),
+		BackgroundColor3 = rarity.Color,
+		BorderSizePixel = 0,
+		Parent = frame,
+	}, { corner(UDim.new(0.5, 0)), new("UIStroke", { Thickness = math.max(2, h * 0.07), Color = STROKE, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }) })
+	new("TextLabel", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(0.86, 0.76),
+		BackgroundTransparency = 1,
+		Font = FONT,
+		Text = rarity.Label,
+		TextColor3 = WHITE,
+		TextScaled = true,
+		Parent = pill,
+	})
+	if result.chance then
+		new("TextLabel", {
+			LayoutOrder = 3,
+			Size = UDim2.new(1, 0, 0, math.floor(h * 0.72)),
+			BackgroundTransparency = 1,
+			Font = FONT,
+			Text = tostring(result.chance),
+			TextColor3 = WHITE,
+			TextScaled = true,
+			Parent = frame,
+		}, { textStroke(math.max(2, h * 0.07)) })
+	end
+	return frame
+end
+
+-- ─── Cinématique ─────────────────────────────────────────────────────────────
+function EggOpening.play(options)
+	assert(not playing, "EggOpening : une ouverture est déjà en cours")
+	assert(options and options.egg and options.results and #options.results > 0, "EggOpening.play : egg et results requis")
+	playing = true
+
+	local player = Players.LocalPlayer
+	local camera = workspace.CurrentCamera
+	local template = eggTemplate(options.egg)
+	local onStage = options.onStage or function() end
+	local cleanup = {}
+	local function track(x)
+		table.insert(cleanup, x)
+		return x
+	end
+
+	-- Masque le personnage local et bloque ses déplacements
+	local hidden = {}
+	if player.Character then
+		for _, d in player.Character:GetDescendants() do
+			if d:IsA("BasePart") or d:IsA("Decal") then
+				hidden[d] = d.LocalTransparencyModifier
+				d.LocalTransparencyModifier = 1
+			end
+		end
+	end
+	local controls
+	pcall(function()
+		controls = require(player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule", 2)):GetControls()
+		controls:Disable()
+	end)
+
+	-- Flou d'arrière-plan léger (les œufs restent nets)
+	local dof = track(new("DepthOfFieldEffect", {
+		Name = "EggOpeningBlur",
+		FarIntensity = 0,
+		NearIntensity = 0,
+		FocusDistance = DIST,
+		InFocusRadius = 9,
+		Parent = Lighting,
+	}))
+
+	local fx = track(new("Folder", { Name = "EggOpeningFX", Parent = camera }))
+	local gui = track(new("ScreenGui", {
+		Name = "EggOpening",
+		IgnoreGuiInset = true,
+		ResetOnSpawn = false,
+		DisplayOrder = 50,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+		Parent = player:WaitForChild("PlayerGui"),
+	}))
+	local vh = camera.ViewportSize.Y
+
+	local sparkleLayer = new("Frame", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 2, Parent = gui })
+	local labelLayer = new("Frame", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 3, Parent = gui })
+	local flash = new("Frame", {
+		Size = UDim2.fromScale(1, 1),
+		BackgroundColor3 = WHITE,
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		ZIndex = 10,
+		Parent = gui,
+	})
+
+	-- « Cliquer pour ouvrir ! »
+	local prompt = new("TextLabel", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.8),
+		Size = UDim2.fromOffset(vh * 0.62, vh * 0.075),
+		BackgroundTransparency = 1,
+		Font = FONT,
+		Text = "Cliquer pour ouvrir !",
+		TextColor3 = WHITE,
+		TextScaled = true,
+		ZIndex = 4,
+		Parent = gui,
+	}, { textStroke(math.max(2, vh * 0.006)) })
+	fade(prompt, 0)
+
+	-- Bouton « Automatique ! »
+	local autoBtn = new("TextButton", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.905),
+		Size = UDim2.fromOffset(vh * 0.085, vh * 0.085),
+		BackgroundColor3 = Color3.fromRGB(38, 40, 52),
+		BackgroundTransparency = 0.35,
+		Text = "",
+		AutoButtonColor = false,
+		ZIndex = 4,
+		Parent = gui,
+	}, { corner() })
+	local autoIcon, autoStroke, autoBars = makeAutoIcon(autoBtn, math.max(2, vh * 0.0045))
+	new("TextLabel", {
+		AnchorPoint = Vector2.new(0.5, 0),
+		Position = UDim2.new(0.5, 0, 1, vh * 0.004),
+		Size = UDim2.fromOffset(vh * 0.2, vh * 0.032),
+		BackgroundTransparency = 1,
+		Font = FONT,
+		Text = "Automatique !",
+		TextColor3 = WHITE,
+		TextScaled = true,
+		ZIndex = 4,
+		Parent = autoBtn,
+	}, { textStroke(math.max(2, vh * 0.004)) })
+	local function refreshAuto()
+		local c = if EggOpening.AutoOpen then AUTO_ON else AUTO_OFF
+		autoStroke.Color = c
+		for _, b in autoBars do
+			b.BackgroundColor3 = c
+		end
+	end
+	refreshAuto()
+	local clicked = false
+	track(autoBtn.Activated:Connect(function()
+		EggOpening.AutoOpen = not EggOpening.AutoOpen
+		refreshAuto()
+	end))
+	track(UserInputService.InputBegan:Connect(function(input, processed)
+		if processed then
+			return
+		end
+		local t = input.UserInputType
+		if t == Enum.UserInputType.MouseButton1 or t == Enum.UserInputType.Touch or input.KeyCode == Enum.KeyCode.E or input.KeyCode == Enum.KeyCode.Space then
+			clicked = true
+		end
+	end))
+
+	-- Emplacements
+	local positions, eggH = layout(#options.results)
+	local slots = {}
+	for i, result in options.results do
+		local rarity = EggOpening.Rarities[result.rarity] or EggOpening.Rarities.Common
+		local slot = {
+			result = result,
+			rarity = rarity,
+			big = result.big or rarity.Big or false,
+			pos = positions[i],
+			eggH = eggH,
+			eggScale = 0,
+			squash = Vector3.one,
+			roll = 0,
+			gap = 0,
+			burst = 0,
+			bobPhase = i * 1.3,
+			shells = {},
+			petPop = 0,
+			petYaw = 0,
+			rays = 0,
+			sparkles = {},
+		}
+		for _, pc in template.pieces do
+			local p = pc.part:Clone()
+			for _, d in p:GetDescendants() do
+				if d:IsA("LuaSourceContainer") or d:IsA("ProximityPrompt") or d:IsA("JointInstance") then
+					d:Destroy()
+				end
+			end
+			p.Anchored = true
+			p.CanCollide = false
+			p.CanQuery = false
+			p.CanTouch = false
+			p.CastShadow = false
+			p.Parent = fx
+			table.insert(slot.shells, { part = p, rel = pc.rel, size = pc.size, role = pc.role, alpha = p.Transparency })
+		end
+		for k = 1, 10 do
+			local sp = makeSparkle(sparkleLayer)
+			local a = (k / 10) * math.pi * 2 + i
+			table.insert(slot.sparkles, {
+				gui = sp,
+				offset = Vector2.new(math.cos(a), math.sin(a) * 1.15) * (0.45 + (k % 4) * 0.09),
+				phase = k * 1.7 + i,
+				size = 0.04 + (k % 3) * 0.015,
+			})
+		end
+		slots[i] = slot
+	end
+
+	local U = 1
+	local shake = Vector2.zero
+	local spread = 1
+	local t0 = os.clock()
+	local sparkleAlpha = 1
+
+	-- Placement de tout à chaque image (les œufs suivent la caméra)
+	local function render()
+		local now = os.clock() - t0
+		local camCF = camera.CFrame
+		U = 2 * DIST * math.tan(math.rad(camera.FieldOfView) / 2) / REF_SCREEN_H
+		for _, slot in slots do
+			local x, y = (slot.pos.X * spread + shake.X) * U, (slot.pos.Y + shake.Y) * U
+			local h = slot.eggH * U
+			local bob = math.sin(now * 2.2 + slot.bobPhase) * 0.06 * h
+			local center = camCF * CFrame.new(x, y + bob, -DIST)
+			slot.worldCenter = center.Position
+			-- œuf : bascule autour d'un point bas, puis tourné vers la caméra
+			local pivot = CFrame.new(0, -0.35 * h, 0)
+			local eggCF = center * pivot * CFrame.Angles(0, 0, slot.roll) * pivot:Inverse() * CFrame.Angles(0, math.pi + math.sin(now * 0.9 + slot.bobPhase) * 0.12, 0)
+			local s = h / template.height * slot.eggScale
+			for _, sh in slot.shells do
+				local sq = slot.squash
+				local rel = sh.rel
+				local pos = rel.Position * s * sq
+				local cf
+				local b = slot.burst
+				local grow = 1
+				if sh.role == "Top" then
+					pos += Vector3.new(0, slot.gap * h, 0)
+					local side = if slot.pos.X > 0.01 then 1 elseif slot.pos.X < -0.01 then -1 else 1
+					cf = eggCF * CFrame.new(side * 0.5 * h * b, 0.9 * h * easeOutCubic(b), 0) * CFrame.Angles(0, 0, -side * 1.3 * b) * CFrame.new(pos) * rel.Rotation
+				elseif sh.role == "Bottom" then
+					cf = eggCF * CFrame.new(0, -0.35 * h * easeInCubic(b), 0) * CFrame.new(pos) * rel.Rotation
+				else
+					grow = 1 + 0.5 * b
+					cf = eggCF * CFrame.new(pos * grow) * rel.Rotation
+				end
+				local size = sh.size * s * sq * grow
+				sh.part.Size = Vector3.new(math.max(size.X, 0.01), math.max(size.Y, 0.01), math.max(size.Z, 0.01))
+				sh.part.CFrame = cf
+				local vis = if slot.eggScale <= 0.001 then 0 else 1 - math.clamp((b - 0.25) / 0.6, 0, 1)
+				sh.part.Transparency = 1 - (1 - sh.alpha) * vis
+			end
+			-- pet
+			if slot.pet then
+				local k = math.max(0.02, slot.petBase * slot.petPop)
+				if math.abs(k - slot.petApplied) > 1e-4 then
+					slot.pet:ScaleTo(k)
+					slot.petApplied = k
+				end
+				-- un BIG recule pour que sa face avant reste au niveau des autres pets
+				local back = if slot.big then (BIG_SCALE - 1) * k / BIG_SCALE else 0
+				local rot = CFrame.Angles(PET_TILT, 0, 0) * CFrame.Angles(0, math.pi + 0.28 + slot.petYaw, 0)
+				slot.pet:PivotTo(center * CFrame.new(0, 0, -back) * rot * CFrame.new(-slot.petCenter * k))
+				local outline = slot.pet:FindFirstChildWhichIsA("Highlight")
+				if outline then
+					outline.OutlineTransparency = 1 - math.clamp(slot.petPop * 1.5, 0, 1)
+				end
+			end
+			-- rayons derrière le pet
+			if slot.raysPlate then
+				local size = h * (if slot.big then 2.9 else 2.1) * math.max(0.05, slot.rays)
+				slot.raysPlate.Size = Vector3.new(size, size, 0.05)
+				slot.raysPlate.CFrame = camCF * CFrame.new(x, y, -DIST - (if slot.big then 4.5 else 2.6) * U)
+				slot.raysSpin.Rotation = (now * (if slot.big then 40 else 25)) % 360
+				fade(slot.raysGui, math.clamp(slot.rays, 0, 1))
+			end
+			-- étincelles et étiquette (repère écran)
+			local scr = camera:WorldToViewportPoint(center.Position)
+			local px = vh * h / (2 * DIST * math.tan(math.rad(camera.FieldOfView) / 2))
+			for _, sp in slot.sparkles do
+				local tw = math.max(0, math.sin(now * 3.1 + sp.phase))
+				local sz = vh * sp.size * tw * sparkleAlpha * (if slot.big and slot.pet then 1.4 else 1)
+				local o = sp.offset * px * (if slot.pet then 0.9 else 0.62)
+				sp.gui.Position = UDim2.fromOffset(scr.X + o.X, scr.Y + o.Y)
+				sp.gui.Size = UDim2.fromOffset(sz, sz)
+				sp.gui.Rotation = math.sin(now + sp.phase) * 20
+			end
+			if slot.label then
+				local below = (if slot.big then 0.8 else 0.5) * px + vh * 0.01
+				slot.label.Position = UDim2.fromOffset(scr.X, scr.Y + below)
+			end
+		end
+	end
+
+	local bindName = "EggOpening" .. tostring(os.clock())
+	RunService:BindToRenderStep(bindName, Enum.RenderPriority.Camera.Value + 1, render)
+
+	local ok, err = pcall(function()
+		-- 1. Apparition
+		onStage("appear")
+		task.spawn(function()
+			animate(0.5, function(p)
+				dof.FarIntensity = 0.35 * p
+			end)
+		end)
+		for i, slot in slots do
+			task.delay((i - 1) * 0.07, function()
+				animate(0.5, function(p)
+					slot.eggScale = easeOutBack(p)
+				end)
+			end)
+		end
+		task.wait(0.5 + (#slots - 1) * 0.07)
+
+		-- 2. Attente du clic (ou ouverture automatique)
+		local auto = options.auto or EggOpening.AutoOpen
+		if not auto then
+			clicked = false
+			local start = os.clock()
+			while not clicked and not EggOpening.AutoOpen do
+				local a = math.clamp((os.clock() - start) / 0.25, 0, 1)
+				fade(prompt, a)
+				local pulse = 1 + math.sin((os.clock() - start) * 5) * 0.035
+				prompt.Size = UDim2.fromOffset(vh * 0.62 * pulse, vh * 0.075 * pulse)
+				autoIcon.Rotation = 0
+				RunService.RenderStepped:Wait()
+			end
+		else
+			task.wait(0.3)
+		end
+		fade(prompt, 0)
+
+		-- 3. Tremblements + fissure
+		onStage("shake")
+		for n, sh in SHAKES do
+			local dur, amp = sh[1], math.rad(sh[2])
+			animate(dur, function(p)
+				if EggOpening.AutoOpen then
+					autoIcon.Rotation = (os.clock() * 360) % 360
+				end
+				for i, slot in slots do
+					local q = math.clamp(p * 1.05 - (i - 1) * 0.02, 0, 1)
+					slot.roll = amp * math.sin(q * math.pi * 4) * (1 - q) ^ 0.6
+				end
+			end)
+			for _, slot in slots do
+				slot.roll = 0
+				slot.gap = if n == 1 then 0.012 elseif n == 2 then 0.028 else slot.gap
+			end
+			task.wait(0.1)
+		end
+		animate(0.13, function(p)
+			for _, slot in slots do
+				slot.squash = Vector3.new(1 + 0.1 * p, 1 - 0.14 * p, 1 + 0.1 * p)
+			end
+		end)
+
+		-- 4. Éclosion
+		onStage("burst")
+		local anyBig = false
+		for _, slot in slots do
+			slot.squash = Vector3.one
+			anyBig = anyBig or slot.big
+			-- le pet
+			local pet = slot.result.model:Clone()
+			for _, d in pet:GetDescendants() do
+				if d:IsA("BasePart") then
+					d.CanQuery = false
+					d.CanTouch = false
+					d.CanCollide = false
+					d.CastShadow = false
+				elseif d:IsA("LuaSourceContainer") then
+					d:Destroy()
+				end
+			end
+			if pet.PrimaryPart then
+				pet.PrimaryPart.Anchored = true
+			end
+			local pivot = pet:GetPivot()
+			local bbCF = pet:GetBoundingBox()
+			slot.petCenter = pivot:PointToObjectSpace(bbCF.Position)
+			slot.petBase = slot.eggH * U * 0.8 / PET_REF_H * (if slot.big then BIG_SCALE else 1) * (slot.result.displayScale or 1)
+			slot.petApplied = pet:GetScale()
+			pet.Parent = fx
+			slot.pet = pet
+			slot.raysPlate, slot.raysGui, slot.raysSpin = makeRays(fx, slot.rarity.Rays, slot.big)
+			fade(slot.raysGui, 0)
+		end
+		task.spawn(function()
+			animate(0.12, function(p)
+				flash.BackgroundTransparency = 1 - 0.75 * p
+			end)
+			animate(0.45, function(p)
+				flash.BackgroundTransparency = 0.25 + 0.75 * p
+			end)
+		end)
+		task.spawn(function()
+			animate(0.55, function(p)
+				for _, slot in slots do
+					slot.burst = p
+				end
+			end)
+			for _, slot in slots do
+				slot.eggScale = 0
+			end
+		end)
+
+		-- 5. Révélation
+		onStage("reveal")
+		if anyBig then
+			-- secousse d'écran + bandeau « BIG ! »
+			local banner = new("TextLabel", {
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromScale(0.5, 0.13),
+				Size = UDim2.fromOffset(vh * 0.4, vh * 0.12),
+				Rotation = -6,
+				BackgroundTransparency = 1,
+				Font = FONT,
+				Text = "BIG !",
+				TextColor3 = Color3.fromRGB(255, 214, 64),
+				TextScaled = true,
+				ZIndex = 5,
+				Parent = gui,
+			}, { textStroke(math.max(3, vh * 0.008), Color3.fromRGB(150, 50, 20)) })
+			task.spawn(function()
+				animate(0.45, function(p)
+					local sc = easeOutBack(p)
+					banner.Size = UDim2.fromOffset(vh * 0.4 * sc, vh * 0.12 * sc)
+					shake = Vector2.new(math.random() - 0.5, math.random() - 0.5) * 0.5 * (1 - p)
+				end)
+				shake = Vector2.zero
+			end)
+		end
+		animate(0.55, function(p)
+			if anyBig and #slots <= 4 then
+				spread = 1 + (BIG_SPREAD - 1) * easeOutCubic(p)
+			end
+			for _, slot in slots do
+				slot.petPop = easeOutBack(p)
+				slot.petYaw = (1 - easeOutCubic(p)) * math.pi * 1.5
+				slot.rays = easeOutCubic(p)
+			end
+		end)
+		for i, slot in slots do
+			task.delay((i - 1) * 0.12, function()
+				slot.label = makeLabel(labelLayer, slot.result, slot.rarity, vh)
+				animate(0.3, function(p)
+					fade(slot.label, p)
+					local sc = easeOutBack(p)
+					slot.label.Size = UDim2.fromOffset(vh * 0.05 * 7 * sc, vh * 0.05 * 2.9)
+				end)
+			end)
+		end
+		task.wait(if anyBig then HOLD_BIG else HOLD)
+
+		-- 6. Sortie
+		animate(0.35, function(p)
+			local e = easeInCubic(p)
+			sparkleAlpha = 1 - p
+			for _, slot in slots do
+				slot.petPop = 1 - e
+				slot.rays = 1 - p
+				if slot.label then
+					fade(slot.label, 1 - p)
+				end
+			end
+			for _, d in gui:GetChildren() do
+				if d:IsA("TextLabel") and d ~= prompt then
+					fade(d, 1 - p)
+				end
+			end
+			fade(autoBtn, 1 - p)
+			dof.FarIntensity = 0.35 * (1 - p)
+		end)
+		onStage("done")
+	end)
+
+	RunService:UnbindFromRenderStep(bindName)
+	for _, c in cleanup do
+		if typeof(c) == "RBXScriptConnection" then
+			c:Disconnect()
+		else
+			c:Destroy()
+		end
+	end
+	for d, v in hidden do
+		if d.Parent then
+			d.LocalTransparencyModifier = v
+		end
+	end
+	if controls then
+		pcall(function()
+			controls:Enable()
+		end)
+	end
+	playing = false
+	if not ok then
+		warn("EggOpening : " .. tostring(err))
+	end
+end
+
+return EggOpening
+]]></string>
+    </Properties>
+  </Item>
+</roblox>

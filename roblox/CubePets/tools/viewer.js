@@ -388,6 +388,8 @@ export async function createViewer(container, data, opts = {}) {
     setVariant(v) { state.variant = v; clearPets(); buildPet(v); },
     // ex. setLineup([{ key: "Shiba/Normal", x: 2.6, scale: 2 }, { key: "Dog/Normal", x: -3.9 }])
     setLineup(list) { clearPets(); for (const it of list) buildPet(it.key, it.x || 0, it.scale || 1); },
+    // groupes three.js des pets affichés (pour les animer de l'extérieur)
+    petGroups() { return pets.map((p) => p.group); },
     // position écran (pixels CSS) d'un point du monde
     project(p) {
       const v = new THREE.Vector3(...p).project(camera);

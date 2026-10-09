@@ -25,8 +25,10 @@ Les pets sont faits **uniquement de pièces Roblox + une SurfaceGui pour le visa
 | `CubeCat.rbxmx` / `CubeCat_Golden.rbxmx` | Chat, version normale et dorée |
 | `CubeHamster.rbxmx` / `CubeHamster_Golden.rbxmx` | Hamster, version normale et dorée |
 | `src/CubePetBuilder.luau` | Source qui génère les modèles (dimensions, couleurs, visages) |
-| `tools/` | Export (Lune), vérifications, viewer 3D web |
-| `preview/` | Rendus des modèles et maquettes d'UI (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `parametres.png`, `bouton_parametres.png`, `shiba_*.png`, `chien_*.png`, `chat_*.png`, `hamster_*.png`) |
+| `egg/` | Œuf de la Prairie : mesh texturé (`OeufPrairie.glb`, ou `.obj` + `.mtl` + texture), socle (`OeufPrairie_Socle.rbxmx`), cinématique d'ouverture (`EggOpening.rbxmx`) et démo (`EggHatchDemo.rbxmx`) |
+| `src/EggOpening.luau`, `src/EggStandBuilder.luau`, `src/EggStand.client.luau`, `src/EggHatchDemo.client.luau` | Sources des scripts et du socle de l'œuf |
+| `tools/` | Export (Lune), génération du mesh de l'œuf (Python), vérifications, viewer 3D web |
+| `preview/` | Rendus des modèles et maquettes d'UI (`comparaison.png`, `comparaison_big.png`, `oeuf_prairie.png`, `parametres.png`, `bouton_parametres.png`, `oeuf_prairie_modele.png`, `oeuf_prairie_ouverture.png` / `.gif` / `.mp4`, `shiba_*.png`, `chien_*.png`, `chat_*.png`, `hamster_*.png`) |
 
 ## Importer dans Roblox Studio
 
@@ -78,6 +80,61 @@ Il respecte les mêmes règles de taille que le chien et le chat :
 - **Contour cartoon** : `Highlight` nommé `Outline` (contour seul), comme les traits noirs des planches.
 - **Taille** : environ 3 studs de haut (la queue du chat monte à environ 3,4), de 49 à 78 pièces.
 - Les pets ont seulement le visage neutre : ni expressions, ni poses.
+
+## Œuf de la Prairie
+
+![Modèle de l'œuf](preview/oeuf_prairie_modele.png)
+
+L'œuf est un **mesh texturé**, comme les œufs de Pet Simulator :
+- 5 studs de haut et 4,3 de large ;
+- coquille crème, avec de l'herbe et des fleurs (marguerites, fleurs roses, boutons d'or) sur le bas ;
+- deux moitiés de coquille séparées par une fissure en zigzag (`ShellTop` et `ShellBottom`). Elles ont une épaisseur, avec l'intérieur et la tranche crème, et servent pour l'ouverture.
+
+Le socle est fait de pièces Roblox : une base lavande en forme de fleur, une tige lumineuse et le nom de l'œuf écrit au sol. L'œuf flotte et tourne doucement au-dessus.
+
+### L'ouverture
+
+![Ouverture de l'œuf](preview/oeuf_prairie_ouverture.gif)
+
+![Étapes de l'ouverture](preview/oeuf_prairie_ouverture.png)
+
+1. **Apparition** : les œufs arrivent devant la caméra avec un rebond, entourés d'étincelles. Le décor est légèrement flouté.
+2. **Attente** : « Cliquer pour ouvrir ! » s'affiche (clic, toucher, E ou Espace). Le bouton « Automatique ! » ouvre sans clic : ses flèches sont vertes quand il est activé, et le réglage est gardé pour les ouvertures suivantes.
+3. **Tremblements** : trois secousses de plus en plus fortes, et la fissure en zigzag s'ouvre.
+4. **Éclosion** : flash blanc, le haut de la coquille s'envole et le bas tombe.
+5. **Révélation** : le pet apparaît en tournant, devant des rayons de la couleur de sa rareté. Son nom, sa rareté et sa chance s'affichent dessous.
+6. **Sortie** : tout rétrécit et la partie reprend.
+
+Pour un **BIG**, le pet sort 1,75 × plus grand, les rayons sont dorés et plus nombreux, l'écran tremble et le bandeau « BIG ! » apparaît. Les œufs voisins s'écartent pour lui laisser la place.
+
+Éclosion 1x, 3x et MAXIMUM (8 œufs) : les œufs se placent tout seuls sur une ou deux rangées.
+
+Tout se passe sur le client du joueur : rien n'est répliqué, et le personnage local est masqué pendant l'animation.
+
+### Installer l'œuf dans Studio
+
+1. **Importer le mesh** : *Fichier → Importer 3D* (3D Importer), choisis `egg/OeufPrairie.glb`. Tu obtiens un modèle avec 3 MeshParts : `Egg`, `ShellTop` et `ShellBottom`. Renomme-le `OeufPrairie` et range-le dans `ReplicatedStorage/Eggs/`.
+   - Si la texture n'apparaît pas, importe `egg/OeufPrairie_texture.png` comme image et mets son ID dans `TextureID` des 3 MeshParts.
+   - L'unité choisie à l'import n'a pas d'importance : les scripts remettent l'œuf à la bonne taille.
+2. **Le socle** : insère `egg/OeufPrairie_Socle.rbxmx` dans le Workspace. Son script `EggFloat` (RunContext *Client*) pose l'œuf sur la tige et le fait flotter. Tant que le mesh n'est pas importé, un œuf provisoire crème est affiché.
+3. **L'ouverture** : mets `egg/EggOpening.rbxmx` dans `ReplicatedStorage` et les pets dans `ReplicatedStorage/Pets/`.
+4. **La démo** : mets `egg/EggHatchDemo.rbxmx` dans `StarterPlayer/StarterPlayerScripts`. Lance le jeu, approche-toi du socle, puis utilise les prompts : E = Éclosion 1x, Q = Éclosion 3x, R = MAXIMUM.
+
+⚠ La démo tire les pets **sur le client**, pour tester l'animation. Dans ton jeu, c'est le serveur qui vérifie l'argent, tire les pets et les ajoute à l'inventaire. Il renvoie ensuite les résultats au client, qui les affiche :
+
+```lua
+local EggOpening = require(ReplicatedStorage.EggOpening)
+-- results renvoyés par le serveur (RemoteFunction)
+EggOpening.play({
+	egg = ReplicatedStorage.Eggs.OeufPrairie,
+	results = {
+		{ model = ReplicatedStorage.Pets.CubeHamster, name = "Hamster", rarity = "Rare", chance = "1/10" },
+	},
+	onStage = function(stage) end, -- "appear", "shake", "burst", "reveal", "done" (pour jouer des sons)
+})
+```
+
+Raretés disponibles (`EggOpening.Rarities`) : `Common` (gris), `Uncommon` (vert), `Rare` (bleu) et `Big` (rouge, effet BIG).
 
 ## Structure et rig
 
@@ -161,6 +218,13 @@ lune run tools/preview_export.luau   # met à jour tools/pet_data.json pour le v
 - que chaque `Weld` et `Motor6D` reproduit exactement la pose ;
 - que toutes les pièces visibles sont soudées à un os ;
 - que chaque fichier se relit à l'identique.
+
+L'œuf se régénère avec :
+
+```bash
+python3 tools/egg_generate.py        # mesh + texture : egg/OeufPrairie.glb, .obj, .mtl, _texture.png (numpy + Pillow)
+lune run tools/build_egg.luau        # socle + scripts : egg/*.rbxmx
+```
 
 Le builder marche aussi dans Studio : mets `CubePetBuilder.luau` dans un ModuleScript, puis lance dans la barre de commande `require(workspace.CubePetBuilder).build({ species = "Dog", variant = "Golden" }).Parent = workspace`.
 
